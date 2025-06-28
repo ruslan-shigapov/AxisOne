@@ -1,5 +1,5 @@
 //
-//  SubgoalView.swift
+//  DetailSubgoalView.swift
 //  AxisOne
 //
 //  Created by Ruslan Shigapov on 28.06.2025.
@@ -7,7 +7,9 @@
 
 import SwiftUI
 
-struct SubgoalView: View {
+struct DetailSubgoalView: View {
+    
+    var subgoal: Subgoal?
     
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
@@ -15,5 +17,5 @@ struct SubgoalView: View {
 }
 
 #Preview {
-    SubgoalView()
+    DetailSubgoalView()
 }

@@ -8,9 +8,44 @@
 import SwiftUI
 
 struct GoalsView: View {
+        
+    @FetchRequest(
+        entity: Goal.entity(),
+        sortDescriptors: [.init(key: "createdAt", ascending: true)])
+    private var goals: FetchedResults<Goal>
+    
+    @State private var isModalViewPresented = false
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            ForEach(Constants.LifeAreas.allCases) { lifeArea in
+                Section {
+                    ForEach(goals.filter { $0.lifeArea == lifeArea.rawValue }) {
+                        GoalView(goal: $0)
+                    }
+                } header: {
+                    LabeledContent {
+                        ProgressView(value: 0) // TODO: add calculation
+                            .frame(width: 150)
+                    } label: {
+                        Text(lifeArea.rawValue)
+                            .font(.footnote)
+                    }
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem {
+                Button {
+                    isModalViewPresented = true
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
+        }
+        .sheet(isPresented: $isModalViewPresented) {
+            DetailGoalView()
+        }
     }
 }
 

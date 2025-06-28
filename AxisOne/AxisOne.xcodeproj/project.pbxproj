@@ -7,26 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E40E86CE2E10035800ED6DCA /* DetailSubgoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40E86CD2E10035800ED6DCA /* DetailSubgoalView.swift */; };
+		E40E86D02E1025A900ED6DCA /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40E86CF2E1025A900ED6DCA /* GoalView.swift */; };
 		E4563B1A2E0FE4CA0075B178 /* GoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B192E0FE4CA0075B178 /* GoalsView.swift */; };
 		E4563B1C2E0FE4D30075B178 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B1B2E0FE4D30075B178 /* MainView.swift */; };
 		E4563B1E2E0FE4DE0075B178 /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B1D2E0FE4DE0075B178 /* JournalView.swift */; };
 		E4563B222E0FE5450075B178 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B212E0FE5450075B178 /* Constants.swift */; };
 		E4563B242E0FE96A0075B178 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B232E0FE96A0075B178 /* SettingsView.swift */; };
-		E4563B262E0FE9930075B178 /* SubgoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B252E0FE9930075B178 /* SubgoalView.swift */; };
 		E4EF52422E0FCFB400D5B7FE /* AxisOne.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523B2E0FCFB400D5B7FE /* AxisOne.xcdatamodeld */; };
 		E4EF52432E0FCFB400D5B7FE /* AxisOneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523C2E0FCFB400D5B7FE /* AxisOneApp.swift */; };
 		E4EF52442E0FCFB400D5B7FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523D2E0FCFB400D5B7FE /* ContentView.swift */; };
 		E4EF52452E0FCFB400D5B7FE /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523F2E0FCFB400D5B7FE /* Persistence.swift */; };
 		E4EF52462E0FCFB400D5B7FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EF52392E0FCFB400D5B7FE /* Assets.xcassets */; };
+		E4F8124C2E0FF539007CDA87 /* DetailGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F8124B2E0FF539007CDA87 /* DetailGoalView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E40E86CD2E10035800ED6DCA /* DetailSubgoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSubgoalView.swift; sourceTree = "<group>"; };
+		E40E86CF2E1025A900ED6DCA /* GoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalView.swift; sourceTree = "<group>"; };
 		E4563B192E0FE4CA0075B178 /* GoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsView.swift; sourceTree = "<group>"; };
 		E4563B1B2E0FE4D30075B178 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		E4563B1D2E0FE4DE0075B178 /* JournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalView.swift; sourceTree = "<group>"; };
 		E4563B212E0FE5450075B178 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E4563B232E0FE96A0075B178 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		E4563B252E0FE9930075B178 /* SubgoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalView.swift; sourceTree = "<group>"; };
 		E4EF52232E0EF53A00D5B7FE /* AxisOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AxisOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4EF52392E0FCFB400D5B7FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4EF523A2E0FCFB400D5B7FE /* AxisOne.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AxisOne.entitlements; sourceTree = "<group>"; };
@@ -35,6 +38,7 @@
 		E4EF523E2E0FCFB400D5B7FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4EF523F2E0FCFB400D5B7FE /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		E4EF52412E0FCFB400D5B7FE /* AxisOne.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AxisOne.xcdatamodel; sourceTree = "<group>"; };
+		E4F8124B2E0FF539007CDA87 /* DetailGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGoalView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +66,9 @@
 			isa = PBXGroup;
 			children = (
 				E4563B192E0FE4CA0075B178 /* GoalsView.swift */,
-				E4563B252E0FE9930075B178 /* SubgoalView.swift */,
+				E40E86CF2E1025A900ED6DCA /* GoalView.swift */,
+				E4F8124B2E0FF539007CDA87 /* DetailGoalView.swift */,
+				E40E86CD2E10035800ED6DCA /* DetailSubgoalView.swift */,
 			);
 			path = GoalsModule;
 			sourceTree = "<group>";
@@ -221,14 +227,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4EF52422E0FCFB400D5B7FE /* AxisOne.xcdatamodeld in Sources */,
+				E40E86CE2E10035800ED6DCA /* DetailSubgoalView.swift in Sources */,
 				E4563B1C2E0FE4D30075B178 /* MainView.swift in Sources */,
 				E4563B1A2E0FE4CA0075B178 /* GoalsView.swift in Sources */,
 				E4563B242E0FE96A0075B178 /* SettingsView.swift in Sources */,
 				E4563B222E0FE5450075B178 /* Constants.swift in Sources */,
 				E4EF52432E0FCFB400D5B7FE /* AxisOneApp.swift in Sources */,
+				E40E86D02E1025A900ED6DCA /* GoalView.swift in Sources */,
 				E4563B1E2E0FE4DE0075B178 /* JournalView.swift in Sources */,
 				E4EF52442E0FCFB400D5B7FE /* ContentView.swift in Sources */,
-				E4563B262E0FE9930075B178 /* SubgoalView.swift in Sources */,
+				E4F8124C2E0FF539007CDA87 /* DetailGoalView.swift in Sources */,
 				E4EF52452E0FCFB400D5B7FE /* Persistence.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -34,4 +34,14 @@ enum Constants {
         
         var id: Self { self }
     }
+    // MARK: Life Areas
+    enum LifeAreas: String, CaseIterable, Identifiable {
+        
+        case health = "Здоровье"
+        case relationships = "Отношения"
+        case wealth = "Достаток"
+        case personal = "Личное"
+        
+        var id: Self { self }
+    }
 }
