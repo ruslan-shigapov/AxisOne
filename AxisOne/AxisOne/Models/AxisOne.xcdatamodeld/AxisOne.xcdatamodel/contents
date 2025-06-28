@@ -9,6 +9,7 @@
     <entity name="Goal" representedClassName="Goal" syncable="YES" codeGenerationType="class">
         <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="isActive" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isCompleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="lifeArea" optional="YES" attributeType="String"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>

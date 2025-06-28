@@ -25,11 +25,13 @@ struct GoalsView: View {
                     }
                 } header: {
                     LabeledContent {
-                        ProgressView(value: 0) // TODO: add calculation
+                        ProgressView(value: calculateProgress(for: lifeArea))
                             .frame(width: 150)
+                            .tint(lifeArea.color)
                     } label: {
                         Text(lifeArea.rawValue)
-                            .font(.footnote)
+                            .font(.callout)
+                            .foregroundColor(lifeArea.color)
                     }
                 }
             }
@@ -46,6 +48,15 @@ struct GoalsView: View {
         .sheet(isPresented: $isModalViewPresented) {
             DetailGoalView()
         }
+    }
+    
+    private func calculateProgress(
+        for lifeArea: Constants.LifeAreas
+    ) -> Double {
+        let filteredGoals = goals.filter { $0.lifeArea == lifeArea.rawValue }
+        let completedGoals = filteredGoals.filter(\.isCompleted)
+        return Double(completedGoals.count) / Double(filteredGoals.count)
+        // TODO: add subgoals calculation ?
     }
 }
 

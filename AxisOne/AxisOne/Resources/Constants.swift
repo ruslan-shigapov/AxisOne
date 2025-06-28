@@ -38,9 +38,18 @@ enum Constants {
     enum LifeAreas: String, CaseIterable, Identifiable {
         
         case health = "Здоровье"
-        case relationships = "Отношения"
+        case relations = "Отношения"
         case wealth = "Достаток"
         case personal = "Личное"
+        
+        var color: Color {
+            switch self {
+            case .health: .green
+            case .relations: .orange
+            case .wealth: .cyan
+            case .personal: .brown
+            }
+        }
         
         var id: Self { self }
     }

@@ -117,6 +117,7 @@ struct DetailGoalView: View {
         goalToSave.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
         goalToSave.notes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
         goalToSave.isActive = goal?.isActive ?? false
+        goalToSave.isCompleted = goal?.isCompleted ?? false
         if goal == nil {
             goalToSave.createdAt = Date()
         }
