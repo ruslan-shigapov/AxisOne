@@ -1,0 +1,469 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E4563B1A2E0FE4CA0075B178 /* GoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B192E0FE4CA0075B178 /* GoalsView.swift */; };
+		E4563B1C2E0FE4D30075B178 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B1B2E0FE4D30075B178 /* MainView.swift */; };
+		E4563B1E2E0FE4DE0075B178 /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B1D2E0FE4DE0075B178 /* JournalView.swift */; };
+		E4563B222E0FE5450075B178 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B212E0FE5450075B178 /* Constants.swift */; };
+		E4563B242E0FE96A0075B178 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B232E0FE96A0075B178 /* SettingsView.swift */; };
+		E4563B262E0FE9930075B178 /* SubgoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B252E0FE9930075B178 /* SubgoalView.swift */; };
+		E4EF52422E0FCFB400D5B7FE /* AxisOne.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523B2E0FCFB400D5B7FE /* AxisOne.xcdatamodeld */; };
+		E4EF52432E0FCFB400D5B7FE /* AxisOneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523C2E0FCFB400D5B7FE /* AxisOneApp.swift */; };
+		E4EF52442E0FCFB400D5B7FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523D2E0FCFB400D5B7FE /* ContentView.swift */; };
+		E4EF52452E0FCFB400D5B7FE /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523F2E0FCFB400D5B7FE /* Persistence.swift */; };
+		E4EF52462E0FCFB400D5B7FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EF52392E0FCFB400D5B7FE /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		E4563B192E0FE4CA0075B178 /* GoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsView.swift; sourceTree = "<group>"; };
+		E4563B1B2E0FE4D30075B178 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		E4563B1D2E0FE4DE0075B178 /* JournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalView.swift; sourceTree = "<group>"; };
+		E4563B212E0FE5450075B178 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		E4563B232E0FE96A0075B178 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E4563B252E0FE9930075B178 /* SubgoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalView.swift; sourceTree = "<group>"; };
+		E4EF52232E0EF53A00D5B7FE /* AxisOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AxisOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4EF52392E0FCFB400D5B7FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E4EF523A2E0FCFB400D5B7FE /* AxisOne.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AxisOne.entitlements; sourceTree = "<group>"; };
+		E4EF523C2E0FCFB400D5B7FE /* AxisOneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AxisOneApp.swift; sourceTree = "<group>"; };
+		E4EF523D2E0FCFB400D5B7FE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E4EF523E2E0FCFB400D5B7FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4EF523F2E0FCFB400D5B7FE /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		E4EF52412E0FCFB400D5B7FE /* AxisOne.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AxisOne.xcdatamodel; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E4EF52202E0EF53A00D5B7FE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E4563B272E0FE9B10075B178 /* MainModule */ = {
+			isa = PBXGroup;
+			children = (
+				E4EF523D2E0FCFB400D5B7FE /* ContentView.swift */,
+				E4563B1B2E0FE4D30075B178 /* MainView.swift */,
+				E4563B232E0FE96A0075B178 /* SettingsView.swift */,
+			);
+			path = MainModule;
+			sourceTree = "<group>";
+		};
+		E4563B282E0FE9C90075B178 /* GoalsModule */ = {
+			isa = PBXGroup;
+			children = (
+				E4563B192E0FE4CA0075B178 /* GoalsView.swift */,
+				E4563B252E0FE9930075B178 /* SubgoalView.swift */,
+			);
+			path = GoalsModule;
+			sourceTree = "<group>";
+		};
+		E4563B292E0FEA050075B178 /* JournalModule */ = {
+			isa = PBXGroup;
+			children = (
+				E4563B1D2E0FE4DE0075B178 /* JournalView.swift */,
+			);
+			path = JournalModule;
+			sourceTree = "<group>";
+		};
+		E4EF521A2E0EF53A00D5B7FE = {
+			isa = PBXGroup;
+			children = (
+				E4EF52402E0FCFB400D5B7FE /* AxisOne */,
+				E4EF52242E0EF53A00D5B7FE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E4EF52242E0EF53A00D5B7FE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E4EF52232E0EF53A00D5B7FE /* AxisOne.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E4EF52402E0FCFB400D5B7FE /* AxisOne */ = {
+			isa = PBXGroup;
+			children = (
+				E4EF52482E0FCFB900D5B7FE /* App */,
+				E4EF52492E0FCFC900D5B7FE /* Models */,
+				E4EF524A2E0FCFD800D5B7FE /* Views */,
+				E4EF524B2E0FCFE600D5B7FE /* Services */,
+				E4EF524C2E0FCFED00D5B7FE /* Resources */,
+			);
+			path = AxisOne;
+			sourceTree = "<group>";
+		};
+		E4EF52482E0FCFB900D5B7FE /* App */ = {
+			isa = PBXGroup;
+			children = (
+				E4EF523C2E0FCFB400D5B7FE /* AxisOneApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		E4EF52492E0FCFC900D5B7FE /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E4EF523B2E0FCFB400D5B7FE /* AxisOne.xcdatamodeld */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E4EF524A2E0FCFD800D5B7FE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E4563B272E0FE9B10075B178 /* MainModule */,
+				E4563B282E0FE9C90075B178 /* GoalsModule */,
+				E4563B292E0FEA050075B178 /* JournalModule */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E4EF524B2E0FCFE600D5B7FE /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E4EF523F2E0FCFB400D5B7FE /* Persistence.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		E4EF524C2E0FCFED00D5B7FE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E4563B212E0FE5450075B178 /* Constants.swift */,
+				E4EF52392E0FCFB400D5B7FE /* Assets.xcassets */,
+				E4EF523A2E0FCFB400D5B7FE /* AxisOne.entitlements */,
+				E4EF523E2E0FCFB400D5B7FE /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E4EF52222E0EF53A00D5B7FE /* AxisOne */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E4EF52342E0EF53C00D5B7FE /* Build configuration list for PBXNativeTarget "AxisOne" */;
+			buildPhases = (
+				E4EF521F2E0EF53A00D5B7FE /* Sources */,
+				E4EF52202E0EF53A00D5B7FE /* Frameworks */,
+				E4EF52212E0EF53A00D5B7FE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AxisOne;
+			packageProductDependencies = (
+			);
+			productName = AxisOne;
+			productReference = E4EF52232E0EF53A00D5B7FE /* AxisOne.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E4EF521B2E0EF53A00D5B7FE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					E4EF52222E0EF53A00D5B7FE = {
+						CreatedOnToolsVersion = 16.4;
+					};
+				};
+			};
+			buildConfigurationList = E4EF521E2E0EF53A00D5B7FE /* Build configuration list for PBXProject "AxisOne" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E4EF521A2E0EF53A00D5B7FE;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = E4EF52242E0EF53A00D5B7FE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E4EF52222E0EF53A00D5B7FE /* AxisOne */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E4EF52212E0EF53A00D5B7FE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4EF52462E0FCFB400D5B7FE /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E4EF521F2E0EF53A00D5B7FE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4EF52422E0FCFB400D5B7FE /* AxisOne.xcdatamodeld in Sources */,
+				E4563B1C2E0FE4D30075B178 /* MainView.swift in Sources */,
+				E4563B1A2E0FE4CA0075B178 /* GoalsView.swift in Sources */,
+				E4563B242E0FE96A0075B178 /* SettingsView.swift in Sources */,
+				E4563B222E0FE5450075B178 /* Constants.swift in Sources */,
+				E4EF52432E0FCFB400D5B7FE /* AxisOneApp.swift in Sources */,
+				E4563B1E2E0FE4DE0075B178 /* JournalView.swift in Sources */,
+				E4EF52442E0FCFB400D5B7FE /* ContentView.swift in Sources */,
+				E4563B262E0FE9930075B178 /* SubgoalView.swift in Sources */,
+				E4EF52452E0FCFB400D5B7FE /* Persistence.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E4EF52352E0EF53C00D5B7FE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AxisOne/Resources/AxisOne.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X7QDNJU74Z;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AxisOne/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Axis One";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.RuslanShigapov.AxisOne;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		E4EF52362E0EF53C00D5B7FE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AxisOne/Resources/AxisOne.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X7QDNJU74Z;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AxisOne/Resources/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Axis One";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.RuslanShigapov.AxisOne;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		E4EF52372E0EF53C00D5B7FE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = X7QDNJU74Z;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		E4EF52382E0EF53C00D5B7FE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = X7QDNJU74Z;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E4EF521E2E0EF53A00D5B7FE /* Build configuration list for PBXProject "AxisOne" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4EF52372E0EF53C00D5B7FE /* Debug */,
+				E4EF52382E0EF53C00D5B7FE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E4EF52342E0EF53C00D5B7FE /* Build configuration list for PBXNativeTarget "AxisOne" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4EF52352E0EF53C00D5B7FE /* Debug */,
+				E4EF52362E0EF53C00D5B7FE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		E4EF523B2E0FCFB400D5B7FE /* AxisOne.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				E4EF52412E0FCFB400D5B7FE /* AxisOne.xcdatamodel */,
+			);
+			currentVersion = E4EF52412E0FCFB400D5B7FE /* AxisOne.xcdatamodel */;
+			path = AxisOne.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = E4EF521B2E0EF53A00D5B7FE /* Project object */;
+}
