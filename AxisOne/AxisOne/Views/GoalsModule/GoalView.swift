@@ -27,7 +27,9 @@ struct GoalView: View {
         HStack {
             CheckmarkImageView()
                 .onTapGesture {
-                    complete()
+                    withAnimation {
+                        toggleCompletion()
+                    }
                 }
             TitleView()
                 .onTapGesture {
@@ -46,10 +48,24 @@ struct GoalView: View {
     }
     
     // MARK: - Private Methods
-    private func complete() {
+    private func toggleCompletion() {
         goal.isCompleted.toggle()
-        goal.isActive = false
+        if goal.isCompleted {
+            goal.isActive = false
+            goal.order = getOrder()
+        }
         try? context.save()
+    }
+    
+    private func getOrder() -> Int16 {
+        guard let lifeArea = goal.lifeArea else { return 0 }
+        let fetchRequest = Goal.fetchRequest()
+        fetchRequest.predicate = .init(
+            format: "lifeArea == %@",
+            argumentArray: [lifeArea])
+        fetchRequest.sortDescriptors = [.init(key: "order", ascending: true)]
+        let lastGoal = try? context.fetch(fetchRequest).last
+        return (lastGoal?.order ?? 0) + 1
     }
 }
 
@@ -66,6 +82,7 @@ private extension GoalView {
         VStack(alignment: .leading) {
             Text(goal.title ?? "")
                 .lineLimit(2)
+                .fontWeight(.medium)
                 .foregroundStyle(goal.isActive
                                  ? activationColor
                                  : goal.isCompleted ? .secondary : .primary)
@@ -81,8 +98,10 @@ private extension GoalView {
     
     func ToggleActivationButtonView() -> some View {
         Button {
-            goal.isActive.toggle()
-            try? context.save()
+            withAnimation {
+                goal.isActive.toggle()
+                try? context.save()
+            }
         } label: {
             Image(systemName: goal.isActive ? "bookmark.slash" : "bookmark")
         }
@@ -91,8 +110,10 @@ private extension GoalView {
     
     func DeleteButtonView() -> some View {
         Button(role: .destructive) {
-            context.delete(goal)
-            try? context.save()
+            withAnimation {
+                context.delete(goal)
+                try? context.save()
+            }
         } label: {
             Image(systemName: "trash")
         }

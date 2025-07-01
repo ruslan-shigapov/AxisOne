@@ -9,20 +9,113 @@ import SwiftUI
 
 struct GoalsView: View {
         
-    @FetchRequest(
-        entity: Goal.entity(),
-        sortDescriptors: [.init(key: "createdAt", ascending: true)])
+    // MARK: - Private Properties
+    @FetchRequest(entity: Goal.entity(), sortDescriptors: [])
     private var goals: FetchedResults<Goal>
+    
+    @State private var isEditing = false
+    @State private var editMode: EditMode = .inactive
     
     @State private var isModalViewPresented = false
     
+    @AppStorage("isHealthSectionExpanded")
+    private var isHealthSectionExpanded = true
+    @AppStorage("isRelationsSectionExpanded")
+    private var isRelationsSectionExpanded = true
+    @AppStorage("isWealthSectionExpanded")
+    private var isWealthSectionExpanded = true
+    @AppStorage("isPersonalSectionExpanded")
+    private var isPersonalSectionExpanded = true
+            
+    @Environment(\.managedObjectContext) private var context
+    
+    // MARK: - Body
     var body: some View {
+        ZStack {
+            if goals.isEmpty {
+                EmptyStateView()
+            } else {
+                GoalListView()
+            }
+        }
+        .toolbar {
+            ToolbarItem {
+                if !goals.isEmpty {
+                    EditButtonView()
+                }
+            }
+            ToolbarItem {
+                AddButtonView()
+            }
+        }
+        .sheet(isPresented: $isModalViewPresented) {
+            DetailGoalView()
+        }
+        .environment(\.editMode, $editMode)
+    }
+    
+    // MARK: - Private Methods
+    private func getSectionExpansionState(
+        for lifeArea: Constants.LifeAreas
+    ) -> Binding<Bool> {
+        switch lifeArea {
+        case .health:
+            return $isHealthSectionExpanded
+        case .relations:
+            return $isRelationsSectionExpanded
+        case .wealth:
+            return $isWealthSectionExpanded
+        case .personal:
+            return $isPersonalSectionExpanded
+        }
+    }
+    
+    private func getGoals(for lifeArea: Constants.LifeAreas) -> [Goal] {
+        goals.filter { $0.lifeArea == lifeArea.rawValue }
+    }
+    
+    private func calculateProgress(
+        for lifeArea: Constants.LifeAreas
+    ) -> Double {
+        let filteredGoals = getGoals(for: lifeArea)
+        let completedGoals = filteredGoals.filter(\.isCompleted)
+        return Double(completedGoals.count) / Double(filteredGoals.count)
+        // TODO: add subgoals calculation ?
+    }
+}
+
+// MARK: - Views
+private extension GoalsView {
+    
+    func EmptyStateView() -> some View {
+        VStack {
+            Text("Добавьте свою первую цель")
+                .fontWeight(.medium)
+            Text("Для этого коснитесь кнопки с плюсом.")
+                .foregroundStyle(.secondary)
+        }
+        .multilineTextAlignment(.center)
+    }
+    
+    func GoalListView() -> some View {
         List {
-            ForEach(Constants.LifeAreas.allCases) { lifeArea in
-                Section {
-                    ForEach(goals.filter { $0.lifeArea == lifeArea.rawValue }) {
+            ForEach(Constants.LifeAreas.allCases.filter { lifeArea in
+                goals.contains { $0.lifeArea == lifeArea.rawValue }
+            }) { lifeArea in
+                var filteredGoals = getGoals(for: lifeArea)
+                    .sorted { $0.order < $1.order }
+                Section(isExpanded: getSectionExpansionState(for: lifeArea)) {
+                    ForEach(filteredGoals) {
                         GoalView(goal: $0)
                     }
+                    .onMove {
+                        filteredGoals.move(fromOffsets: $0, toOffset: $1)
+                        for (index, goal) in filteredGoals.enumerated() {
+                            goal.order = Int16(index)
+                        }
+                        try? context.save()
+                    }
+                    .moveDisabled(!isEditing)
                 } header: {
                     LabeledContent {
                         ProgressView(value: calculateProgress(for: lifeArea))
@@ -31,32 +124,38 @@ struct GoalsView: View {
                     } label: {
                         Text(lifeArea.rawValue)
                             .font(.callout)
+                            .fontWeight(.medium)
                             .foregroundColor(lifeArea.color)
                     }
+                    Spacer()
                 }
             }
         }
-        .toolbar {
-            ToolbarItem {
-                Button {
-                    isModalViewPresented = true
-                } label: {
-                    Image(systemName: "plus")
-                }
+        .listStyle(.sidebar)
+    }
+    
+    func EditButtonView() -> some View {
+        Button {
+            DispatchQueue.main.async {
+                isEditing.toggle()
             }
-        }
-        .sheet(isPresented: $isModalViewPresented) {
-            DetailGoalView()
+            withAnimation {
+                editMode = editMode == .inactive
+                ? .active
+                : .inactive
+            }
+        } label: {
+            Image(systemName: "shuffle")
         }
     }
     
-    private func calculateProgress(
-        for lifeArea: Constants.LifeAreas
-    ) -> Double {
-        let filteredGoals = goals.filter { $0.lifeArea == lifeArea.rawValue }
-        let completedGoals = filteredGoals.filter(\.isCompleted)
-        return Double(completedGoals.count) / Double(filteredGoals.count)
-        // TODO: add subgoals calculation ?
+    func AddButtonView() -> some View {
+        Button {
+            isModalViewPresented = true
+        } label: {
+            Image(systemName: "plus")
+                .fontWeight(.medium)
+        }
     }
 }
 

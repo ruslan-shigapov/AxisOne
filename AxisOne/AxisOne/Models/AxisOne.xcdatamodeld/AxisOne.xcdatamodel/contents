@@ -7,11 +7,11 @@
         <relationship name="reflection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Reflection" inverseName="answers" inverseEntity="Reflection"/>
     </entity>
     <entity name="Goal" representedClassName="Goal" syncable="YES" codeGenerationType="class">
-        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="isActive" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="isCompleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="lifeArea" optional="YES" attributeType="String"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <relationship name="reflections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Reflection" inverseName="goal" inverseEntity="Reflection"/>
         <relationship name="subgoals" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Subgoal" inverseName="goal" inverseEntity="Subgoal"/>

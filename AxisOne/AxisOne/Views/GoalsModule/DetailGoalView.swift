@@ -34,14 +34,10 @@ struct DetailGoalView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Picker("Сфера жизни", selection: $selectedLifeArea) {
-                    ForEach(Constants.LifeAreas.allCases) {
-                        Text($0.rawValue)
+                LifeAreaPickerView()
+                    .onChange(of: selectedLifeArea) {
+                        isModified = true
                     }
-                }
-                .onChange(of: selectedLifeArea) { _ in 
-                    isModified = true
-                }
                 Section {
                     TextFieldView(
                         placeholder: "Сформулируйте цель",
@@ -64,34 +60,19 @@ struct DetailGoalView: View {
                     }
                 }
                 if let goal {
-                    Button("Удалить цель") {
-                        context.delete(goal)
-                        try? context.save()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            dismiss()
-                        }
-                    }
-                    .foregroundStyle(.red)
+                    DeleteButtonView(goal)
                 }
             }
             .navigationTitle(goal == nil ? "Новая цель" : "Детали")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Отмена") {
-                        dismiss()
-                    }
-                    .foregroundStyle(.red)
+                    CancelButtonView()
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Готово") {
-                        save()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            dismiss()
-                        }
-                    }
-                    .disabled(!isFormValid)
-                    .foregroundStyle(isFormValid ? .blue : .secondary)
+                    DoneButtonView()
+                        .disabled(!isFormValid)
+                        .foregroundStyle(isFormValid ? .blue : .secondary)
                 }
             }
         }
@@ -118,25 +99,40 @@ struct DetailGoalView: View {
         goalToSave.notes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
         goalToSave.isActive = goal?.isActive ?? false
         goalToSave.isCompleted = goal?.isCompleted ?? false
-        if goal == nil {
-            goalToSave.createdAt = Date()
-        }
+        goalToSave.order = getOrder()
         try? context.save()
+    }
+    
+    private func getOrder() -> Int16 {
+        let fetchRequest = Goal.fetchRequest()
+        fetchRequest.predicate = .init(
+            format: "lifeArea == %@",
+            argumentArray: [selectedLifeArea.rawValue])
+        fetchRequest.sortDescriptors = [.init(key: "order", ascending: true)]
+        let lastGoal = try? context.fetch(fetchRequest).last
+        return (lastGoal?.order ?? 0) + 1
     }
 }
 
 // MARK: - Views
 private extension DetailGoalView {
     
+    func LifeAreaPickerView() -> some View {
+        Picker("Сфера жизни", selection: $selectedLifeArea) {
+            ForEach(Constants.LifeAreas.allCases) {
+                Text($0.rawValue)
+            }
+        }
+    }
+    
     func TextFieldView(
         placeholder: String,
         text: Binding<String>
     ) -> some View {
-        TextField(placeholder, text: text, axis: .horizontal)
-            .onChange(of: text.wrappedValue) { _ in
+        TextField(placeholder, text: text)
+            .onChange(of: text.wrappedValue) { 
                 isModified = true
             }
-        // TODO: SETUP
     }
     
     func SubgoalListView() -> some View {
@@ -148,6 +144,33 @@ private extension DetailGoalView {
                     Text(subgoal.title ?? "")
                     // TODO: SETUP
                 }
+            }
+        }
+    }
+    
+    func DeleteButtonView(_ goal: Goal) -> some View {
+        Button("Удалить цель") {
+            context.delete(goal)
+            try? context.save()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                dismiss()
+            }
+        }
+        .foregroundStyle(.red)
+    }
+    
+    func CancelButtonView() -> some View {
+        Button("Отмена") {
+            dismiss()
+        }
+        .foregroundStyle(.red)
+    }
+    
+    func DoneButtonView() -> some View {
+        Button("Готово") {
+            save()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                dismiss()
             }
         }
     }

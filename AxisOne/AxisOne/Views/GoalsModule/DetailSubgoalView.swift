@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct DetailSubgoalView: View {
-    
+        
     var subgoal: Subgoal?
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+                .navigationTitle(subgoal == nil ? "Новая подцель" : "Детали")
+                .navigationBarTitleDisplayMode(.inline)
+        }
     }
 }
 
