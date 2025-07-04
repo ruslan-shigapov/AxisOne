@@ -31,7 +31,7 @@ struct GoalView: View {
                         toggleCompletion()
                     }
                 }
-            TitleView()
+            TextView()
                 .onTapGesture {
                     isModalViewPresented = true
                 }
@@ -78,7 +78,7 @@ private extension GoalView {
             .foregroundStyle(.secondary)
     }
     
-    func TitleView() -> some View {
+    func TextView() -> some View {
         VStack(alignment: .leading) {
             Text(goal.title ?? "")
                 .lineLimit(2)

@@ -12,15 +12,15 @@ struct DetailGoalView: View {
     // MARK: - Private Properties
     @State private var selectedLifeArea: Constants.LifeAreas
     
+    @State private var isModified = false
+    
     @State private var title: String
     @State private var notes: String
     
-    @State private var isModified = false
-    
     @State private var subgoals: [Subgoal]
-    
-    @Environment(\.dismiss) private var dismiss
+        
     @Environment(\.managedObjectContext) private var context
+    @Environment(\.dismiss) private var dismiss
     
     private var isFormValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
@@ -50,7 +50,10 @@ struct DetailGoalView: View {
                 }
                 Section("Подцели") {
                     NavigationLink(
-                        destination: DetailSubgoalView()
+                        destination: DetailSubgoalView(
+                            lifeArea: selectedLifeArea,
+                            subgoals: $subgoals,
+                            isModified: $isModified)
                     ) {
                         Text("Добавить")
                             .foregroundStyle(.blue)
@@ -100,6 +103,7 @@ struct DetailGoalView: View {
         goalToSave.isActive = goal?.isActive ?? false
         goalToSave.isCompleted = goal?.isCompleted ?? false
         goalToSave.order = getOrder()
+        //
         try? context.save()
     }
     
@@ -139,7 +143,11 @@ private extension DetailGoalView {
         List {
             ForEach(subgoals) { subgoal in
                 NavigationLink(
-                    destination: DetailSubgoalView(subgoal: subgoal)
+                    destination: DetailSubgoalView(
+                        lifeArea: selectedLifeArea,
+                        subgoal: subgoal,
+                        subgoals: $subgoals,
+                        isModified: $isModified)
                 ) {
                     Text(subgoal.title ?? "")
                     // TODO: SETUP

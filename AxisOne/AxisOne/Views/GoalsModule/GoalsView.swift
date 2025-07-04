@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct GoalsView: View {
-        
+    
     // MARK: - Private Properties
     @FetchRequest(entity: Goal.entity(), sortDescriptors: [])
     private var goals: FetchedResults<Goal>
     
+    @State private var isModalViewPresented = false
+    
     @State private var isEditing = false
     @State private var editMode: EditMode = .inactive
-    
-    @State private var isModalViewPresented = false
     
     @AppStorage("isHealthSectionExpanded")
     private var isHealthSectionExpanded = true
@@ -26,7 +26,7 @@ struct GoalsView: View {
     private var isWealthSectionExpanded = true
     @AppStorage("isPersonalSectionExpanded")
     private var isPersonalSectionExpanded = true
-            
+    
     @Environment(\.managedObjectContext) private var context
     
     // MARK: - Body
@@ -55,6 +55,10 @@ struct GoalsView: View {
     }
     
     // MARK: - Private Methods
+    private func getGoals(for lifeArea: Constants.LifeAreas) -> [Goal] {
+        goals.filter { $0.lifeArea == lifeArea.rawValue }
+    }
+    
     private func getSectionExpansionState(
         for lifeArea: Constants.LifeAreas
     ) -> Binding<Bool> {
@@ -68,10 +72,6 @@ struct GoalsView: View {
         case .personal:
             return $isPersonalSectionExpanded
         }
-    }
-    
-    private func getGoals(for lifeArea: Constants.LifeAreas) -> [Goal] {
-        goals.filter { $0.lifeArea == lifeArea.rawValue }
     }
     
     private func calculateProgress(
@@ -117,21 +117,27 @@ private extension GoalsView {
                     }
                     .moveDisabled(!isEditing)
                 } header: {
-                    LabeledContent {
-                        ProgressView(value: calculateProgress(for: lifeArea))
-                            .frame(width: 150)
-                            .tint(lifeArea.color)
-                    } label: {
-                        Text(lifeArea.rawValue)
-                            .font(.callout)
-                            .fontWeight(.medium)
-                            .foregroundColor(lifeArea.color)
-                    }
+                    SectionHeaderView(for: lifeArea)
                     Spacer()
                 }
             }
         }
         .listStyle(.sidebar)
+    }
+    
+    func SectionHeaderView(
+        for lifeArea: Constants.LifeAreas
+    ) -> some View {
+        LabeledContent {
+            ProgressView(value: calculateProgress(for: lifeArea))
+                .frame(width: 150)
+                .tint(lifeArea.color)
+        } label: {
+            Text(lifeArea.rawValue)
+                .font(.callout)
+                .fontWeight(.medium)
+                .foregroundColor(lifeArea.color)
+        }
     }
     
     func EditButtonView() -> some View {
