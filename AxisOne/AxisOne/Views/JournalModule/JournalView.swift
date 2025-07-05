@@ -9,11 +9,61 @@ import SwiftUI
 
 struct JournalView: View {
     
+    @FetchRequest(
+        entity: Goal.entity(),
+        sortDescriptors: [],
+        predicate: NSPredicate(format: "isActive == true"))
+    private var goals: FetchedResults<Goal>
+    
+    private var subgoals: [Subgoal] {
+        goals
+            .compactMap { $0.subgoals as? Set<Subgoal> }
+            .flatMap { $0 }
+    }
+        
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            if subgoals.isEmpty {
+                EmptyStateView()
+            } else {
+                SubgoalListView()
+            }
+        }
+        .toolbar {
+            ToolbarItem {
+                NavigationLink(destination: HistoryView()) {
+                    Image(systemName: "clock")
+                }
+            }
+        }
+    }
+    
+    func EmptyStateView() -> some View {
+        Text("На сегодня нет активных подцелей для самоанализа")
+            .frame(width: 230)
+            .multilineTextAlignment(.center)
+            .fontWeight(.medium)
+    }
+    
+    func SubgoalListView() -> some View {
+        List {
+            Section("Активные подцели") {
+                // TODO: отсортировывать по расписанию
+                ForEach(subgoals) { subgoal in
+                    NavigationLink(
+                        destination: AnalysisView(subgoal: subgoal)
+                    ) {
+                        SubgoalView(subgoal: subgoal)
+                    }
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    JournalView()
+    ContentView()
+        .environment(
+            \.managedObjectContext,
+             PersistenceController.shared.container.viewContext)
 }

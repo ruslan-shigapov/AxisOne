@@ -103,7 +103,11 @@ struct DetailGoalView: View {
         goalToSave.isActive = goal?.isActive ?? false
         goalToSave.isCompleted = goal?.isCompleted ?? false
         goalToSave.order = getOrder()
-        //
+        goalToSave.subgoals = nil
+        for (index, subgoal) in subgoals.enumerated() {
+            goalToSave.addToSubgoals(subgoal)
+            subgoal.order = Int16(index)
+        }
         try? context.save()
     }
     
@@ -149,8 +153,7 @@ private extension DetailGoalView {
                         subgoals: $subgoals,
                         isModified: $isModified)
                 ) {
-                    Text(subgoal.title ?? "")
-                    // TODO: SETUP
+                    SubgoalView(subgoal: subgoal)
                 }
             }
         }

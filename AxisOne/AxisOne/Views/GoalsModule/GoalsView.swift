@@ -80,7 +80,6 @@ struct GoalsView: View {
         let filteredGoals = getGoals(for: lifeArea)
         let completedGoals = filteredGoals.filter(\.isCompleted)
         return Double(completedGoals.count) / Double(filteredGoals.count)
-        // TODO: add subgoals calculation ?
     }
 }
 

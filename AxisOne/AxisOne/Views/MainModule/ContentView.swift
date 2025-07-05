@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var selectedTab: Constants.Tabs = .goals
+    @State private var selectedTab: Constants.Tabs = .journal
     
     var body: some View {
         TabView(selection: $selectedTab) {
