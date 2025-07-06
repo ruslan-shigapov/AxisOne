@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788.4" systemVersion="24F74" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
-    <entity name="Answer" representedClassName="Answer" syncable="YES" codeGenerationType="class">
-        <attribute name="mood" optional="YES" attributeType="String"/>
-        <attribute name="question" optional="YES" attributeType="String"/>
-        <attribute name="text" optional="YES" attributeType="String"/>
-        <relationship name="reflection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Reflection" inverseName="answers" inverseEntity="Reflection"/>
-    </entity>
     <entity name="Goal" representedClassName="Goal" syncable="YES" codeGenerationType="class">
         <attribute name="isActive" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="isCompleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -13,13 +7,15 @@
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
-        <relationship name="reflections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Reflection" inverseName="goal" inverseEntity="Reflection"/>
         <relationship name="subgoals" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Subgoal" inverseName="goal" inverseEntity="Subgoal"/>
     </entity>
     <entity name="Reflection" representedClassName="Reflection" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="answers" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Answer" inverseName="reflection" inverseEntity="Answer"/>
-        <relationship name="goal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Goal" inverseName="reflections" inverseEntity="Goal"/>
+        <attribute name="emotions" optional="YES" attributeType="String"/>
+        <attribute name="extraEmotions" optional="YES" attributeType="String"/>
+        <attribute name="extraThough" optional="YES" attributeType="String"/>
+        <attribute name="mainThough" optional="YES" attributeType="String"/>
+        <relationship name="subgoal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Subgoal" inverseName="reflection" inverseEntity="Subgoal"/>
     </entity>
     <entity name="Subgoal" representedClassName="Subgoal" syncable="YES" codeGenerationType="class">
         <attribute name="completion" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -32,5 +28,6 @@
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="String"/>
         <relationship name="goal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Goal" inverseName="subgoals" inverseEntity="Goal"/>
+        <relationship name="reflection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Reflection" inverseName="subgoal" inverseEntity="Reflection"/>
     </entity>
 </model>
