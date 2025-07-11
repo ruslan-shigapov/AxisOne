@@ -9,17 +9,29 @@ import SwiftUI
 
 struct AnalysisView: View {
     
+    // MARK: - Private Properties
     @State private var mainThough = ""
     
     @State private var selectedFeeling: Constants.Feelings = .joy
-    @State private var selectedEmotions: [String] = []
+    @State private var selectedEmotions: [String]
     
+    @Environment(\.managedObjectContext) private var context
+    @Environment(\.dismiss) private var dismiss
+    
+    private var isFormValid: Bool {
+        !mainThough.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        selectedEmotions.count > 4
+    }
+    
+    // MARK: - Public Properties
     var subgoal: Subgoal
     
+    // MARK: - Body
     var body: some View {
         Form {
             Section(subgoal.type ?? "") {
                 Text(subgoal.title ?? "")
+                    .fontWeight(.medium)
             }
             Section("Размышления") {
                 MainTextEditorView()
@@ -28,15 +40,52 @@ struct AnalysisView: View {
                 FeelingPickerView()
                 EmotionsView()
             } header: {
-                Text("Эмоции")
+                HStack {
+                    Text("Эмоции")
+                    Spacer()
+                    Text(String(selectedEmotions.count))
+                        .fontWeight(.semibold)
+                }
             } footer: {
                 Text("Выберите хотя бы 5 эмоций для исчерпывающего анализа в будущем. Но и не переусердствуйте.")
             }
-
         }
+        .navigationTitle("Самоанализ")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("Готово") {
+                    save()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        dismiss()
+                    }
+                }
+                .disabled(!isFormValid)
+                .foregroundStyle(isFormValid ? .blue : .secondary)
+            }
+        }
+    }
+    
+    // MARK: - Initialize
+    init(subgoal: Subgoal) {
+        self.subgoal = subgoal
+        _mainThough = State(initialValue: subgoal.reflection?.mainThough ?? "")
+        _selectedEmotions = State(
+            initialValue: subgoal.reflection?.emotions?.components(
+                separatedBy: " ") ?? [])
+    }
+    
+    // MARK: - Private Methods
+    private func save() {
+        let reflection = Reflection(context: context)
+        reflection.date = Date()
+        reflection.mainThough = mainThough
+        reflection.emotions = selectedEmotions.joined(separator: " ")
+        subgoal.reflection = reflection
+        try? context.save()
     }
 }
 
+// MARK: - Views
 private extension AnalysisView {
     
     func MainTextEditorView() -> some View {
@@ -70,7 +119,8 @@ private extension AnalysisView {
                     .onTapGesture {
                         withAnimation(.easeInOut(duration: 0.2)) {
                             if selectedEmotions.contains(emotion) {
-                                selectedEmotions.removeAll(where: { $0 == emotion })
+                                selectedEmotions.removeAll(
+                                    where: { $0 == emotion })
                             } else {
                                 selectedEmotions.append(emotion)
                             }

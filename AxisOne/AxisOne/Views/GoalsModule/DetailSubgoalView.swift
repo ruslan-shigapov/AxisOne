@@ -13,13 +13,15 @@ struct DetailSubgoalView: View {
     @State private var selectedSubgoalType: Constants.SubgoalTypes
     
     @State private var title: String
+    @State private var notes: String
     
     @State private var isUrgent = false
+    @State private var isExact = false
     
     @State private var selectedDate: Date
+    @State private var selectedTime: Date
     
     @State private var partCompletion: Double
-    @State private var habitRepetition: Double
     
     @State private var selectedHabitFrequency: Constants.Frequencies
     
@@ -27,6 +29,10 @@ struct DetailSubgoalView: View {
     @Environment(\.dismiss) private var dismiss
     
     private let navigationTitle: String
+    
+    private var isFormValid: Bool {
+        !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
 
     // MARK: - Public Properties
     var lifeArea: Constants.LifeAreas
@@ -40,7 +46,7 @@ struct DetailSubgoalView: View {
         NavigationStack {
             Form {
                 if subgoal == nil {
-                    Section("Тип") {
+                    Section {
                         LazyVGrid(
                             columns: [
                                 GridItem(.flexible()),
@@ -50,13 +56,21 @@ struct DetailSubgoalView: View {
                                     ChooseButtonView(for: $0)
                                 }
                             }
+                    } header: {
+                            Text("Тип")
+                    } footer: {
+                        Text(selectedSubgoalType.description)
                     }
                 }
                 Section {
                     TextFieldWithImageView()
+                    TextField("Можете добавить уточнение", text: $notes)
                     if selectedSubgoalType == .task ||
                         selectedSubgoalType == .part {
                         DeadlineGroupView()
+                        if isUrgent {
+                            TimeGroupView()
+                        }
                     }
                     if selectedSubgoalType == .part {
                         CompletionView()
@@ -67,12 +81,20 @@ struct DetailSubgoalView: View {
                             selection: $selectedDate)
                         RepetitionView()
                     }
+                    if selectedSubgoalType == .habit ||
+                        selectedSubgoalType == .rule {
+                        TimeGroupView()
+                    }
                     SaveButtonView()
-                } footer: {
-                    Text(selectedSubgoalType.description)
+                        .disabled(!isFormValid)
                 }
                 if let subgoal {
                     DeleteButtonView(subgoal)
+                }
+            }
+            .onChange(of: isUrgent) { _, newValue in
+                if !newValue {
+                    isExact = false
                 }
             }
             .navigationTitle(navigationTitle)
@@ -96,13 +118,17 @@ struct DetailSubgoalView: View {
             initialValue: Constants.SubgoalTypes(
                 rawValue: subgoal?.type ?? "") ?? .task)
         _title = State(initialValue: subgoal?.title ?? "")
+        _notes = State(initialValue: subgoal?.notes ?? "")
         _selectedDate = State(initialValue: subgoal?.startDate ?? Date())
         if let deadline = subgoal?.deadline {
             isUrgent = true
             _selectedDate = State(initialValue: deadline)
         }
+        if let _ = subgoal?.time {
+            isExact = true
+        }
+        _selectedTime = State(initialValue: subgoal?.time ?? Date())
         _partCompletion = State(initialValue: subgoal?.completion ?? 25)
-        _habitRepetition = State(initialValue: subgoal?.repetition ?? 1)
         _selectedHabitFrequency = State(
             initialValue: Constants.Frequencies(
                 rawValue: subgoal?.frequency ?? "") ?? .daily)
@@ -113,6 +139,7 @@ struct DetailSubgoalView: View {
         let subgoalToSave = subgoal ?? Subgoal(context: context)
         subgoalToSave.type = selectedSubgoalType.rawValue
         subgoalToSave.title = title
+        subgoalToSave.notes = notes
         subgoalToSave.isCompleted = subgoal?.isCompleted ?? false
         if selectedSubgoalType == .task || selectedSubgoalType == .part {
             subgoalToSave.deadline = isUrgent ? selectedDate : nil
@@ -120,11 +147,11 @@ struct DetailSubgoalView: View {
         if selectedSubgoalType == .habit {
             subgoalToSave.startDate = selectedDate
         }
+        subgoalToSave.time = isExact ? selectedTime : nil
         if selectedSubgoalType == .part {
             subgoalToSave.completion = partCompletion
         }
         if selectedSubgoalType == .habit {
-            subgoalToSave.repetition = habitRepetition
             subgoalToSave.frequency = selectedHabitFrequency.rawValue
         }
         if let subgoal {
@@ -141,6 +168,7 @@ private extension DetailSubgoalView {
         Button {
             selectedSubgoalType = type
             isUrgent = false
+            isExact = false
             selectedDate = Date()
         } label: {
             LabeledContent(type.rawValue) {
@@ -157,7 +185,7 @@ private extension DetailSubgoalView {
                 lifeArea.color
                 if selectedSubgoalType == type {
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(.black, lineWidth: 3)
+                        .stroke(.primary, lineWidth: 3)
                 }
             })
         .cornerRadius(16)
@@ -205,7 +233,7 @@ private extension DetailSubgoalView {
     func RepetitionView() -> some View {
         VStack {
             LabeledContent(
-                "Повторять \(Int(habitRepetition)) р."
+                "Повторять"
             ) {
                 Picker(
                     "",
@@ -214,15 +242,6 @@ private extension DetailSubgoalView {
                     ForEach(Constants.Frequencies.allCases) {
                         Text($0.rawValue)
                     }
-                }
-            }
-            Slider(
-                value: $habitRepetition,
-                in: 0...5,
-                step: 1)
-            .onChange(of: habitRepetition) { _, value in
-                if value == 0 {
-                    habitRepetition = 1
                 }
             }
         }
@@ -240,6 +259,19 @@ private extension DetailSubgoalView {
         .environment(
             \.locale,
              Locale(identifier: "ru_RU"))
+    }
+    
+    func TimeGroupView() -> some View {
+        Group {
+            Toggle("Время", isOn: $isExact)
+                .tint(.blue)
+            if isExact {
+                DatePicker(
+                    "Напомнить",
+                    selection: $selectedTime,
+                    displayedComponents: .hourAndMinute)
+            }
+        }
     }
     
     func SaveButtonView() -> some View {

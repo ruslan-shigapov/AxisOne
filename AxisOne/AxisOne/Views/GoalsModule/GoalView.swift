@@ -52,6 +52,9 @@ struct GoalView: View {
         goal.isCompleted.toggle()
         if goal.isCompleted {
             goal.isActive = false
+            goal.subgoals?.forEach {
+                ($0 as? Subgoal)?.isActive = false
+            }
             goal.order = getOrder()
         }
         try? context.save()
@@ -93,13 +96,16 @@ private extension GoalView {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background()
+        .contentShape(Rectangle())
     }
     
     func ToggleActivationButtonView() -> some View {
         Button {
             withAnimation {
                 goal.isActive.toggle()
+                goal.subgoals?.forEach {
+                    ($0 as? Subgoal)?.isActive.toggle()
+                }
                 try? context.save()
             }
         } label: {

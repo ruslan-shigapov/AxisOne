@@ -10,16 +10,9 @@ import SwiftUI
 struct JournalView: View {
     
     @FetchRequest(
-        entity: Goal.entity(),
-        sortDescriptors: [],
-        predicate: NSPredicate(format: "isActive == true"))
-    private var goals: FetchedResults<Goal>
-    
-    private var subgoals: [Subgoal] {
-        goals
-            .compactMap { $0.subgoals as? Set<Subgoal> }
-            .flatMap { $0 }
-    }
+        entity: Subgoal.entity(),
+        sortDescriptors: [])
+    private var subgoals: FetchedResults<Subgoal>
         
     var body: some View {
         ZStack {
@@ -54,10 +47,24 @@ struct JournalView: View {
                         destination: AnalysisView(subgoal: subgoal)
                     ) {
                         SubgoalView(subgoal: subgoal)
+                            .foregroundStyle(getSubgoalColor(subgoal))
                     }
                 }
             }
         }
+    }
+    
+    private func getSubgoalColor(_ subgoal: Subgoal) -> Color {
+        let joyEmotions = Constants.Feelings.joy.emotions
+        let loveEmotions = Constants.Feelings.love.emotions
+        let positiveEmotions = joyEmotions + loveEmotions
+        let allEmotions = (subgoal.reflection?.emotions?.components(
+            separatedBy: " ") ?? [])
+        guard !allEmotions.isEmpty else { return .primary }
+        let positiveCount = allEmotions
+            .filter { positiveEmotions.contains($0) }
+            .count
+        return positiveCount > (allEmotions.count / 2) ? .blue : .red
     }
 }
 

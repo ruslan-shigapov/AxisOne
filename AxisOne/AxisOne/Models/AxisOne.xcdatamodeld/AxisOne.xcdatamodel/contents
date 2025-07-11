@@ -7,13 +7,11 @@
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
-        <relationship name="subgoals" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Subgoal" inverseName="goal" inverseEntity="Subgoal"/>
+        <relationship name="subgoals" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Subgoal" inverseName="goal" inverseEntity="Subgoal"/>
     </entity>
     <entity name="Reflection" representedClassName="Reflection" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="emotions" optional="YES" attributeType="String"/>
-        <attribute name="extraEmotions" optional="YES" attributeType="String"/>
-        <attribute name="extraThough" optional="YES" attributeType="String"/>
         <attribute name="mainThough" optional="YES" attributeType="String"/>
         <relationship name="subgoal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Subgoal" inverseName="reflection" inverseEntity="Subgoal"/>
     </entity>
@@ -21,13 +19,15 @@
         <attribute name="completion" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="deadline" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="frequency" optional="YES" attributeType="String"/>
+        <attribute name="isActive" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="isCompleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="repetition" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="time" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="String"/>
         <relationship name="goal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Goal" inverseName="subgoals" inverseEntity="Goal"/>
-        <relationship name="reflection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Reflection" inverseName="subgoal" inverseEntity="Reflection"/>
+        <relationship name="reflection" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Reflection" inverseName="subgoal" inverseEntity="Reflection"/>
     </entity>
 </model>

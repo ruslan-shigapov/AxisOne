@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SubgoalView: View {
     
-    var subgoal: Subgoal
+    @ObservedObject var subgoal: Subgoal
     
     var body: some View {
         HStack {

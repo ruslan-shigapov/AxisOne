@@ -58,9 +58,7 @@ struct DetailGoalView: View {
                         Text("Добавить")
                             .foregroundStyle(.blue)
                     }
-                    if !subgoals.isEmpty {
-                        SubgoalListView()
-                    }
+                    SubgoalListView()
                 }
                 if let goal {
                     DeleteButtonView(goal)
@@ -107,6 +105,7 @@ struct DetailGoalView: View {
         for (index, subgoal) in subgoals.enumerated() {
             goalToSave.addToSubgoals(subgoal)
             subgoal.order = Int16(index)
+            subgoal.isActive = goalToSave.isActive
         }
         try? context.save()
     }
@@ -153,7 +152,14 @@ private extension DetailGoalView {
                         subgoals: $subgoals,
                         isModified: $isModified)
                 ) {
-                    SubgoalView(subgoal: subgoal)
+                    if subgoal.type == Constants.SubgoalTypes.task.rawValue ||
+                       subgoal.type == Constants.SubgoalTypes.part.rawValue,
+                       subgoal.isCompleted {
+                        SubgoalView(subgoal: subgoal)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        SubgoalView(subgoal: subgoal)
+                    }
                 }
             }
         }

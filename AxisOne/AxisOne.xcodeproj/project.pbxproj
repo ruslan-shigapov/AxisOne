@@ -74,6 +74,7 @@
 				E4563B192E0FE4CA0075B178 /* GoalsView.swift */,
 				E40E86CF2E1025A900ED6DCA /* GoalView.swift */,
 				E4F8124B2E0FF539007CDA87 /* DetailGoalView.swift */,
+				E493E69C2E19264E009CDDDE /* SubgoalView.swift */,
 				E40E86CD2E10035800ED6DCA /* DetailSubgoalView.swift */,
 			);
 			path = GoalsModule;
@@ -136,7 +137,6 @@
 		E4EF524A2E0FCFD800D5B7FE /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E493E69C2E19264E009CDDDE /* SubgoalView.swift */,
 				E4563B272E0FE9B10075B178 /* MainModule */,
 				E4563B282E0FE9C90075B178 /* GoalsModule */,
 				E4563B292E0FEA050075B178 /* JournalModule */,
