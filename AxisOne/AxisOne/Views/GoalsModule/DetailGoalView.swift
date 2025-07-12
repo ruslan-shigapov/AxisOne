@@ -101,11 +101,15 @@ struct DetailGoalView: View {
         goalToSave.isActive = goal?.isActive ?? false
         goalToSave.isCompleted = goal?.isCompleted ?? false
         goalToSave.order = getOrder()
+        let oldSubgoals = goalToSave.subgoals as? Set<Subgoal> ?? []
         goalToSave.subgoals = nil
         for (index, subgoal) in subgoals.enumerated() {
             goalToSave.addToSubgoals(subgoal)
             subgoal.order = Int16(index)
             subgoal.isActive = goalToSave.isActive
+        }
+        for subgoal in oldSubgoals.subtracting(subgoals) {
+            context.delete(subgoal)
         }
         try? context.save()
     }

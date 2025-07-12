@@ -10,13 +10,14 @@ import SwiftUI
 struct JournalView: View {
     
     @FetchRequest(
-        entity: Subgoal.entity(),
-        sortDescriptors: [])
-    private var subgoals: FetchedResults<Subgoal>
+        entity: Goal.entity(),
+        sortDescriptors: [],
+        predicate: NSPredicate(format: "isActive == true"))
+    private var goals: FetchedResults<Goal>
         
     var body: some View {
         ZStack {
-            if subgoals.isEmpty {
+            if goals.isEmpty {
                 EmptyStateView()
             } else {
                 SubgoalListView()
@@ -40,31 +41,16 @@ struct JournalView: View {
     
     func SubgoalListView() -> some View {
         List {
-            Section("Активные подцели") {
-                // TODO: отсортировывать по расписанию
-                ForEach(subgoals) { subgoal in
+            Section("Активные цели") {
+                ForEach(goals) { goal in
                     NavigationLink(
-                        destination: AnalysisView(subgoal: subgoal)
+                        destination: AnalysisView(goal: goal)
                     ) {
-                        SubgoalView(subgoal: subgoal)
-                            .foregroundStyle(getSubgoalColor(subgoal))
+                        Text(goal.title ?? "")
                     }
                 }
             }
         }
-    }
-    
-    private func getSubgoalColor(_ subgoal: Subgoal) -> Color {
-        let joyEmotions = Constants.Feelings.joy.emotions
-        let loveEmotions = Constants.Feelings.love.emotions
-        let positiveEmotions = joyEmotions + loveEmotions
-        let allEmotions = (subgoal.reflection?.emotions?.components(
-            separatedBy: " ") ?? [])
-        guard !allEmotions.isEmpty else { return .primary }
-        let positiveCount = allEmotions
-            .filter { positiveEmotions.contains($0) }
-            .count
-        return positiveCount > (allEmotions.count / 2) ? .blue : .red
     }
 }
 

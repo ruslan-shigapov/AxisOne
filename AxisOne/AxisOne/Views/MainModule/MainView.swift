@@ -9,18 +9,21 @@ import SwiftUI
 
 struct MainView: View {
     
+    // MARK: - Private Properties
     @FetchRequest(
         entity: Subgoal.entity(),
-        sortDescriptors: [],
-        predicate: NSPredicate(format: "isActive == true"))
+        sortDescriptors: [.init(key: "time", ascending: true)])
     private var subgoals: FetchedResults<Subgoal>
-    
-    var filteredSubgoals: [Subgoal] {
-        subgoals.filter { $0.goal?.isActive == true }
+        
+    private var currentSubgoals: [Subgoal] {
+        subgoals.filter {
+            getTimeOfDay(from: $0.time) == getTimeOfDay(from: Date())
+        }
     }
         
     @Environment(\.managedObjectContext) private var context
     
+    // MARK: - Body
     var body: some View {
         SubgoalListView()
             .toolbar {
@@ -32,15 +35,87 @@ struct MainView: View {
             }
     }
     
+    // MARK: - Private Methods
+    private func getSubgoalColor(_ subgoal: Subgoal) -> Color {
+        guard let lifeArea = Constants.LifeAreas(
+            rawValue: subgoal.goal?.lifeArea ?? ""
+        ) else {
+            return .primary
+        }
+        return lifeArea.color
+    }
+    
+    private func getSubgoalCount(_ subgoalType: Constants.SubgoalTypes) -> Int {
+        subgoals.filter { $0.type == subgoalType.rawValue }.count
+    }
+    
+    private func getTimeOfDay(from date: Date?) -> String {
+        guard let date else { return "" }
+        return switch Calendar.current.component(.hour, from: date) {
+        case 5..<12: "Утро"
+        case 12..<18: "День"
+        case 18...23: "Вечер"
+        default: "Ночь"
+        }
+    }
+}
+
+// MARK: - Views
+private extension MainView {
+    
+    func SubgoalTypeGridView() -> some View {
+        LazyVGrid(
+            columns: [
+                GridItem(.flexible()),
+                GridItem(.flexible())
+            ]) {
+                ForEach(Constants.SubgoalTypes.allCases) {
+                    SubgoalTypeView($0, count: getSubgoalCount($0))
+                }
+            }
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color(.secondarySystemBackground))
+    }
+    
+    func SubgoalTypeView(
+        _ subgoalType: Constants.SubgoalTypes,
+        count: Int
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Image(systemName: subgoalType.imageName)
+                    .imageScale(.large)
+                    .foregroundStyle(.blue)
+                Spacer()
+                Text(String(count))
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary)
+            }
+            Text(subgoalType.rawValue)
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
+        }
+        .padding(12)
+        .background {
+            RoundedRectangle(cornerRadius: 16).fill(Color(.systemBackground))
+        }
+    }
+    
     func SubgoalListView() -> some View {
         List {
-            SubgoalListSectionView(
-                "Сегодня",
-                for: filteredSubgoals.filter { $0.isCompleted == false })
-            if !subgoals.filter({ $0.isCompleted == true }).isEmpty {
+            Section("Сегодня") {
+                SubgoalTypeGridView()
+            }
+            if !currentSubgoals.filter({ !$0.isCompleted }).isEmpty {
+                SubgoalListSectionView(
+                    "Текущие / \(getTimeOfDay(from: Date()))",
+                    for: currentSubgoals.filter { !$0.isCompleted })
+            }
+            if !currentSubgoals.filter({ $0.isCompleted }).isEmpty {
                 SubgoalListSectionView(
                     "Выполнено",
-                    for: filteredSubgoals.filter { $0.isCompleted == true })
+                    for: currentSubgoals.filter { $0.isCompleted })
             }
         }
     }
@@ -81,18 +156,9 @@ struct MainView: View {
                 .foregroundStyle(subgoal.isCompleted
                                  ? .secondary
                                  : getSubgoalColor(subgoal))
-            Text("\(subgoal.type ?? "") / \(subgoal.goal?.lifeArea ?? "")")
+            Text("\(subgoal.type ?? "") • \(subgoal.goal?.lifeArea ?? "")")
                 .foregroundStyle(.secondary)
         }
-    }
-
-    private func getSubgoalColor(_ subgoal: Subgoal) -> Color {
-        guard let lifeArea = Constants.LifeAreas(
-            rawValue: subgoal.goal?.lifeArea ?? ""
-        ) else {
-            return .primary
-        }
-        return lifeArea.color
     }
 }
 

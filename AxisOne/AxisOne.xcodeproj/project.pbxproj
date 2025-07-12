@@ -23,6 +23,7 @@
 		E4EF52452E0FCFB400D5B7FE /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523F2E0FCFB400D5B7FE /* Persistence.swift */; };
 		E4EF52462E0FCFB400D5B7FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EF52392E0FCFB400D5B7FE /* Assets.xcassets */; };
 		E4F8124C2E0FF539007CDA87 /* DetailGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F8124B2E0FF539007CDA87 /* DetailGoalView.swift */; };
+		E4FA15792E22919000AF7873 /* SubgoalFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FA15782E22919000AF7873 /* SubgoalFilter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		E4EF523F2E0FCFB400D5B7FE /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		E4EF52412E0FCFB400D5B7FE /* AxisOne.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AxisOne.xcdatamodel; sourceTree = "<group>"; };
 		E4F8124B2E0FF539007CDA87 /* DetailGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGoalView.swift; sourceTree = "<group>"; };
+		E4FA15782E22919000AF7873 /* SubgoalFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalFilter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 			children = (
 				E4EF523D2E0FCFB400D5B7FE /* ContentView.swift */,
 				E4563B1B2E0FE4D30075B178 /* MainView.swift */,
+				E4FA15782E22919000AF7873 /* SubgoalFilter.swift */,
 				E4563B232E0FE96A0075B178 /* SettingsView.swift */,
 			);
 			path = MainModule;
@@ -249,6 +252,7 @@
 				E4563B1E2E0FE4DE0075B178 /* JournalView.swift in Sources */,
 				E4EF52442E0FCFB400D5B7FE /* ContentView.swift in Sources */,
 				E4F8124C2E0FF539007CDA87 /* DetailGoalView.swift in Sources */,
+				E4FA15792E22919000AF7873 /* SubgoalFilter.swift in Sources */,
 				E4EF52452E0FCFB400D5B7FE /* Persistence.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

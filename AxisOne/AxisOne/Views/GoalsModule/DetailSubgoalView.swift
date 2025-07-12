@@ -56,6 +56,9 @@ struct DetailSubgoalView: View {
                                     ChooseButtonView(for: $0)
                                 }
                             }
+                            .listRowInsets(EdgeInsets())
+                            .listRowBackground(
+                                Color(.secondarySystemBackground))
                     } header: {
                             Text("Тип")
                     } footer: {

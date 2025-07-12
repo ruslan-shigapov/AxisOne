@@ -13,7 +13,6 @@
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="emotions" optional="YES" attributeType="String"/>
         <attribute name="mainThough" optional="YES" attributeType="String"/>
-        <relationship name="subgoal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Subgoal" inverseName="reflection" inverseEntity="Subgoal"/>
     </entity>
     <entity name="Subgoal" representedClassName="Subgoal" syncable="YES" codeGenerationType="class">
         <attribute name="completion" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -28,6 +27,5 @@
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="String"/>
         <relationship name="goal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Goal" inverseName="subgoals" inverseEntity="Goal"/>
-        <relationship name="reflection" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Reflection" inverseName="subgoal" inverseEntity="Reflection"/>
     </entity>
 </model>
