@@ -88,6 +88,15 @@ enum Constants {
             }
         }
         
+        var plural: String {
+            switch self {
+            case .task: "Задачи"
+            case .part: "Отрезки"
+            case .habit: "Привычки"
+            case .rule: "Правила"
+            }
+        }
+        
         var id: Self { self }
     }
     // MARK: Frequencies
@@ -97,6 +106,17 @@ enum Constants {
         case weekdays = "По будням"
         case weekends = "По выходным"
         case weekly = "Еженедельно"
+        
+        var id: Self { self }
+    }
+    // MARK: Feelings
+    enum TimesOfDay: String, CaseIterable, Identifiable {
+        
+        case morning = "Утро / 5:00-11:59"
+        case afternoon = "День / 12:00-17:59"
+        case evening = "Вечер / 18:00-22:59"
+        case night = "Ночь / 23:00-4:59"
+        case unknown = "Неизвестно"
         
         var id: Self { self }
     }

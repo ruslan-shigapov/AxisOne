@@ -102,14 +102,15 @@ struct DetailGoalView: View {
         goalToSave.isCompleted = goal?.isCompleted ?? false
         goalToSave.order = getOrder()
         let oldSubgoals = goalToSave.subgoals as? Set<Subgoal> ?? []
+        for subgoal in oldSubgoals.subtracting(subgoals) {
+            goalToSave.removeFromSubgoals(subgoal)
+            context.delete(subgoal)
+        }
         goalToSave.subgoals = nil
         for (index, subgoal) in subgoals.enumerated() {
             goalToSave.addToSubgoals(subgoal)
             subgoal.order = Int16(index)
             subgoal.isActive = goalToSave.isActive
-        }
-        for subgoal in oldSubgoals.subtracting(subgoals) {
-            context.delete(subgoal)
         }
         try? context.save()
     }
@@ -159,13 +160,25 @@ private extension DetailGoalView {
                     if subgoal.type == Constants.SubgoalTypes.task.rawValue ||
                        subgoal.type == Constants.SubgoalTypes.part.rawValue,
                        subgoal.isCompleted {
-                        SubgoalView(subgoal: subgoal)
+                        SubgoalRowView(subgoal)
                             .foregroundStyle(.secondary)
                     } else {
-                        SubgoalView(subgoal: subgoal)
+                        SubgoalRowView(subgoal)
                     }
                 }
             }
+        }
+    }
+    
+    func SubgoalRowView(_ subgoal: Subgoal) -> some View {
+        HStack {
+            Image(
+                systemName: (
+                    Constants.SubgoalTypes(
+                        rawValue: subgoal.type ?? "")?.imageName) ?? "")
+                .font(.system(size: 22))
+                .foregroundStyle(.secondary)
+            Text(subgoal.title ?? "")
         }
     }
     

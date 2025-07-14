@@ -10,18 +10,20 @@ import SwiftUI
 struct MainView: View {
     
     // MARK: - Private Properties
-    @FetchRequest(
-        entity: Subgoal.entity(),
-        sortDescriptors: [.init(key: "time", ascending: true)])
+    @FetchRequest(entity: Subgoal.entity(), sortDescriptors: [])
     private var subgoals: FetchedResults<Subgoal>
         
     private var currentSubgoals: [Subgoal] {
-        subgoals.filter {
+        let subgoalsByExactTime = subgoals.filter {
             getTimeOfDay(from: $0.time) == getTimeOfDay(from: Date())
         }
+        let subgoalsByTimeOfDay = subgoals.filter {
+            $0.timeOfDay == getTimeOfDay(from: Date()).rawValue
+        }
+        return subgoalsByExactTime + subgoalsByTimeOfDay
     }
-        
-    @Environment(\.managedObjectContext) private var context
+    
+    @State private var selectedSubgoalType: Constants.SubgoalTypes?
     
     // MARK: - Body
     var body: some View {
@@ -33,29 +35,23 @@ struct MainView: View {
                     }
                 }
             }
+            .sheet(item: $selectedSubgoalType) {
+                SubgoalTypeView(type: $0)
+            }
     }
     
     // MARK: - Private Methods
-    private func getSubgoalColor(_ subgoal: Subgoal) -> Color {
-        guard let lifeArea = Constants.LifeAreas(
-            rawValue: subgoal.goal?.lifeArea ?? ""
-        ) else {
-            return .primary
-        }
-        return lifeArea.color
-    }
-    
     private func getSubgoalCount(_ subgoalType: Constants.SubgoalTypes) -> Int {
         subgoals.filter { $0.type == subgoalType.rawValue }.count
     }
     
-    private func getTimeOfDay(from date: Date?) -> String {
-        guard let date else { return "" }
+    private func getTimeOfDay(from date: Date?) -> Constants.TimesOfDay {
+        guard let date else { return .unknown }
         return switch Calendar.current.component(.hour, from: date) {
-        case 5..<12: "Утро"
-        case 12..<18: "День"
-        case 18...23: "Вечер"
-        default: "Ночь"
+        case 5..<12: .morning
+        case 12..<18: .afternoon
+        case 18...23: .evening
+        default: .night
         }
     }
 }
@@ -69,15 +65,20 @@ private extension MainView {
                 GridItem(.flexible()),
                 GridItem(.flexible())
             ]) {
-                ForEach(Constants.SubgoalTypes.allCases) {
-                    SubgoalTypeView($0, count: getSubgoalCount($0))
+                ForEach(Constants.SubgoalTypes.allCases) { type in
+                    SubgoalTypeCardView(type, count: getSubgoalCount(type))
+                        .onTapGesture {
+                            if getSubgoalCount(type) > 0 {
+                                selectedSubgoalType = type
+                            }
+                        }
                 }
             }
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color(.secondarySystemBackground))
     }
     
-    func SubgoalTypeView(
+    func SubgoalTypeCardView(
         _ subgoalType: Constants.SubgoalTypes,
         count: Int
     ) -> some View {
@@ -92,13 +93,14 @@ private extension MainView {
                     .fontWeight(.semibold)
                     .foregroundStyle(.primary)
             }
-            Text(subgoalType.rawValue)
+            Text(subgoalType.plural)
                 .fontWeight(.medium)
                 .foregroundStyle(.secondary)
         }
         .padding(12)
         .background {
-            RoundedRectangle(cornerRadius: 16).fill(Color(.systemBackground))
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.systemBackground))
         }
     }
     
@@ -107,57 +109,22 @@ private extension MainView {
             Section("Сегодня") {
                 SubgoalTypeGridView()
             }
-            if !currentSubgoals.filter({ !$0.isCompleted }).isEmpty {
-                SubgoalListSectionView(
-                    "Текущие / \(getTimeOfDay(from: Date()))",
-                    for: currentSubgoals.filter { !$0.isCompleted })
-            }
-            if !currentSubgoals.filter({ $0.isCompleted }).isEmpty {
-                SubgoalListSectionView(
-                    "Выполнено",
-                    for: currentSubgoals.filter { $0.isCompleted })
-            }
-        }
-    }
-    
-    func SubgoalListSectionView(
-        _ title: String,
-        for subgoals: [Subgoal]
-    ) -> some View {
-        Section(title) {
-            ForEach(subgoals) { subgoal in
-                HStack {
-                    CheckmarkImageView(for: subgoal)
-                        .onTapGesture {
-                            withAnimation {
-                                subgoal.isCompleted.toggle()
-                                try? context.save()
-                            }
-                        }
-                    TextView(for: subgoal)
+            let uncompletedSubgoals = currentSubgoals.filter { !$0.isCompleted }
+            if !uncompletedSubgoals.isEmpty {
+                Section(getTimeOfDay(from: Date()).rawValue) {
+                    ForEach(uncompletedSubgoals) {
+                        SubgoalView(subgoal: $0)
+                    }
                 }
             }
-        }
-    }
-    
-    func CheckmarkImageView(for subgoal: Subgoal) -> some View {
-        Image(systemName: subgoal.isCompleted
-              ? "checkmark.circle.fill"
-              : "circle")
-        .font(.system(size: 22))
-        .foregroundStyle(.secondary)
-    }
-
-    func TextView(for subgoal: Subgoal) -> some View {
-        VStack(alignment: .leading) {
-            Text(subgoal.title ?? "")
-                .lineLimit(2)
-                .fontWeight(.medium)
-                .foregroundStyle(subgoal.isCompleted
-                                 ? .secondary
-                                 : getSubgoalColor(subgoal))
-            Text("\(subgoal.type ?? "") • \(subgoal.goal?.lifeArea ?? "")")
-                .foregroundStyle(.secondary)
+            let completedSubgoals = currentSubgoals.filter { $0.isCompleted }
+            if !completedSubgoals.isEmpty {
+                Section("Выполнено") {
+                    ForEach(completedSubgoals) {
+                        SubgoalView(subgoal: $0)
+                    }
+                }
+            }
         }
     }
 }

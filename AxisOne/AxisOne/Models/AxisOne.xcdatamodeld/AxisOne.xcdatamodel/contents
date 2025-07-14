@@ -7,12 +7,14 @@
         <attribute name="notes" optional="YES" attributeType="String"/>
         <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="reflections" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Reflection" inverseName="goal" inverseEntity="Reflection"/>
         <relationship name="subgoals" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Subgoal" inverseName="goal" inverseEntity="Subgoal"/>
     </entity>
     <entity name="Reflection" representedClassName="Reflection" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="emotions" optional="YES" attributeType="String"/>
         <attribute name="mainThough" optional="YES" attributeType="String"/>
+        <relationship name="goal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Goal" inverseName="reflections" inverseEntity="Goal"/>
     </entity>
     <entity name="Subgoal" representedClassName="Subgoal" syncable="YES" codeGenerationType="class">
         <attribute name="completion" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -24,6 +26,7 @@
         <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="time" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timeOfDay" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="type" optional="YES" attributeType="String"/>
         <relationship name="goal" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Goal" inverseName="subgoals" inverseEntity="Goal"/>

@@ -21,6 +21,8 @@ struct DetailSubgoalView: View {
     @State private var selectedDate: Date
     @State private var selectedTime: Date
     
+    @State private var selectedTimeOfDay: Constants.TimesOfDay
+    
     @State private var partCompletion: Double
     
     @State private var selectedHabitFrequency: Constants.Frequencies
@@ -84,8 +86,7 @@ struct DetailSubgoalView: View {
                             selection: $selectedDate)
                         RepetitionView()
                     }
-                    if selectedSubgoalType == .habit ||
-                        selectedSubgoalType == .rule {
+                    if selectedSubgoalType == .habit {
                         TimeGroupView()
                     }
                     SaveButtonView()
@@ -127,6 +128,9 @@ struct DetailSubgoalView: View {
             isUrgent = true
             _selectedDate = State(initialValue: deadline)
         }
+        _selectedTimeOfDay = State(
+            initialValue: Constants.TimesOfDay(
+                rawValue: subgoal?.timeOfDay ?? "") ?? .morning)
         if let _ = subgoal?.time {
             isExact = true
         }
@@ -151,6 +155,7 @@ struct DetailSubgoalView: View {
             subgoalToSave.startDate = selectedDate
         }
         subgoalToSave.time = isExact ? selectedTime : nil
+        subgoalToSave.timeOfDay = isExact ? nil : selectedTimeOfDay.rawValue
         if selectedSubgoalType == .part {
             subgoalToSave.completion = partCompletion
         }
@@ -266,13 +271,19 @@ private extension DetailSubgoalView {
     
     func TimeGroupView() -> some View {
         Group {
-            Toggle("Время", isOn: $isExact)
+            Toggle("Точное время", isOn: $isExact)
                 .tint(.blue)
             if isExact {
                 DatePicker(
                     "Напомнить",
                     selection: $selectedTime,
                     displayedComponents: .hourAndMinute)
+            } else {
+                Picker("Время дня", selection: $selectedTimeOfDay) {
+                    ForEach(Constants.TimesOfDay.allCases.dropLast()) {
+                        Text($0.rawValue)
+                    }
+                }
             }
         }
     }
