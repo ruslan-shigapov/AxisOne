@@ -10,17 +10,28 @@ import SwiftUI
 struct JournalView: View {
     
     @FetchRequest(
-        entity: Goal.entity(),
-        sortDescriptors: [],
-        predicate: NSPredicate(format: "isActive == true"))
-    private var goals: FetchedResults<Goal>
+        entity: Subgoal.entity(),
+        sortDescriptors: [.init(key: "time", ascending: true)],
+        predicate: SubgoalFilter.predicate(for: .now, hasRules: false))
+    private var subgoals: FetchedResults<Subgoal>
+    
+    private var groupedSubgoals: [Constants.TimesOfDay: [Subgoal]] {
+        Dictionary(grouping: subgoals) {
+            if let exactTime = $0.time {
+                return Constants.TimesOfDay.getTimeOfDay(from: exactTime)
+            } else if let timeOfDay = $0.timeOfDay {
+                return Constants.TimesOfDay(rawValue: timeOfDay) ?? .unknown
+            }
+            return .unknown
+        }
+    }
         
     var body: some View {
         ZStack {
-            if goals.isEmpty {
+            if groupedSubgoals.isEmpty {
                 EmptyStateView()
             } else {
-                SubgoalListView()
+                TimeOfDayListView()
             }
         }
         .toolbar {
@@ -39,14 +50,12 @@ struct JournalView: View {
             .fontWeight(.medium)
     }
     
-    func SubgoalListView() -> some View {
+    func TimeOfDayListView() -> some View {
         List {
-            Section("Активные цели") {
-                ForEach(goals) { goal in
-                    NavigationLink(
-                        destination: AnalysisView(goal: goal)
-                    ) {
-                        Text(goal.title ?? "")
+            ForEach(Constants.TimesOfDay.allCases.filter { groupedSubgoals.keys.contains($0) }) { timeOfDay in
+                NavigationLink(destination: AnalysisView()) {
+                    LabeledContent(timeOfDay.rawValue) {
+                        Text(String(groupedSubgoals[timeOfDay]?.count ?? 0))
                     }
                 }
             }

@@ -100,7 +100,9 @@ struct DetailGoalView: View {
         goalToSave.notes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
         goalToSave.isActive = goal?.isActive ?? false
         goalToSave.isCompleted = goal?.isCompleted ?? false
-        goalToSave.order = getOrder()
+        if goal == nil {
+            goalToSave.order = getOrder()
+        }
         let oldSubgoals = goalToSave.subgoals as? Set<Subgoal> ?? []
         for subgoal in oldSubgoals.subtracting(subgoals) {
             goalToSave.removeFromSubgoals(subgoal)

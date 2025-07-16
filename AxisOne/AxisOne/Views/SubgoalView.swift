@@ -25,9 +25,6 @@ struct SubgoalView: View {
                     }
             }
             TextView()
-                .onTapGesture {
-//                    isModalViewPresented = true
-                }
         }
         .swipeActions(allowsFullSwipe: false) {
             Button(role: .destructive) {
@@ -39,9 +36,6 @@ struct SubgoalView: View {
                 Image(systemName: "trash")
             }
         }
-//        .sheet(isPresented: $isModalViewPresented) {
-//            DetailGoalView(goal: goal)
-//        }
     }
     
     private func getSubgoalColor(_ subgoal: Subgoal) -> Color {
@@ -72,8 +66,6 @@ struct SubgoalView: View {
             Text("\(subgoal.type ?? "") • \(subgoal.goal?.lifeArea ?? "")")
                 .foregroundStyle(.secondary)
         }
-//        .frame(maxWidth: .infinity, alignment: .leading)
-//        .contentShape(Rectangle())
     }
 }
 

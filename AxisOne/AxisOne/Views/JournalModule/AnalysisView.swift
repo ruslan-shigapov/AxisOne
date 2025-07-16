@@ -24,19 +24,19 @@ struct AnalysisView: View {
     }
     
     // MARK: - Public Properties
-    var goal: Goal
+//    var goal: Goal
     
     // MARK: - Body
     var body: some View {
         Form {
             Section("Подцели") {
                 List {
-                    ForEach(
-                        (goal.subgoals as? Set<Subgoal>)?
-                            .sorted { $0.order < $1.order } ?? []
-                    ) {
-                        Text($0.title ?? "")
-                    }
+//                    ForEach(
+//                        (goal.subgoals as? Set<Subgoal>)?
+//                            .sorted { $0.order < $1.order } ?? []
+//                    ) {
+//                        Text($0.title ?? "")
+//                    }
                 }
             }
             Section("Размышления") {
@@ -72,27 +72,27 @@ struct AnalysisView: View {
     }
     
     // MARK: - Initialize
-    init(goal: Goal) {
-        self.goal = goal
-        if let reflection = (goal.reflections as? Set<Reflection>)?.first(
-            where: {
-                Calendar.current.isDateInToday($0.date ?? Date.distantPast)
-            }) {
-            _mainThough = State(initialValue: reflection.mainThough ?? "")
-            _selectedEmotions = State(
-                initialValue: reflection.emotions?.components(
-                    separatedBy: " ") ?? [])
-        }
-    }
+//    init(goal: Goal) {
+//        self.goal = goal
+//        if let reflection = (goal.reflections as? Set<Reflection>)?.first(
+//            where: {
+//                Calendar.current.isDateInToday($0.date ?? Date.distantPast)
+//            }) {
+//            _mainThough = State(initialValue: reflection.mainThough ?? "")
+//            _selectedEmotions = State(
+//                initialValue: reflection.emotions?.components(
+//                    separatedBy: " ") ?? [])
+//        }
+//    }
     
     // MARK: - Private Methods
     private func save() {
-        let reflection = Reflection(context: context)
-        reflection.date = Date()
-        reflection.mainThough = mainThough
-        reflection.emotions = selectedEmotions.joined(separator: " ")
-        goal.addToReflections(reflection)
-        try? context.save()
+//        let reflection = Reflection(context: context)
+//        reflection.date = Date()
+//        reflection.mainThough = mainThough
+//        reflection.emotions = selectedEmotions.joined(separator: " ")
+//        goal.addToReflections(reflection)
+//        try? context.save()
     }
 }
 

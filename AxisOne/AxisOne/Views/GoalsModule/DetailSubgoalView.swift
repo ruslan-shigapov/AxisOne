@@ -18,7 +18,8 @@ struct DetailSubgoalView: View {
     @State private var isUrgent = false
     @State private var isExact = false
     
-    @State private var selectedDate: Date
+    @State private var selectedStartDate: Date
+    @State private var selectedDeadline: Date
     @State private var selectedTime: Date
     
     @State private var selectedTimeOfDay: Constants.TimesOfDay
@@ -83,7 +84,7 @@ struct DetailSubgoalView: View {
                     if selectedSubgoalType == .habit {
                         DatePickerView(
                             title: "Приступить",
-                            selection: $selectedDate)
+                            selection: $selectedStartDate)
                         RepetitionView()
                     }
                     if selectedSubgoalType == .habit {
@@ -123,10 +124,12 @@ struct DetailSubgoalView: View {
                 rawValue: subgoal?.type ?? "") ?? .task)
         _title = State(initialValue: subgoal?.title ?? "")
         _notes = State(initialValue: subgoal?.notes ?? "")
-        _selectedDate = State(initialValue: subgoal?.startDate ?? Date())
+        _selectedStartDate = State(initialValue: subgoal?.startDate ?? Date())
         if let deadline = subgoal?.deadline {
             isUrgent = true
-            _selectedDate = State(initialValue: deadline)
+            _selectedDeadline = State(initialValue: deadline)
+        } else {
+            _selectedDeadline = State(initialValue: Date())
         }
         _selectedTimeOfDay = State(
             initialValue: Constants.TimesOfDay(
@@ -149,17 +152,17 @@ struct DetailSubgoalView: View {
         subgoalToSave.notes = notes
         subgoalToSave.isCompleted = subgoal?.isCompleted ?? false
         if selectedSubgoalType == .task || selectedSubgoalType == .part {
-            subgoalToSave.deadline = isUrgent ? selectedDate : nil
+            subgoalToSave.deadline = isUrgent ? selectedDeadline : nil
         }
-        if selectedSubgoalType == .habit {
-            subgoalToSave.startDate = selectedDate
+        if selectedSubgoalType != .rule {
+            subgoalToSave.time = isExact ? selectedTime : nil
+            subgoalToSave.timeOfDay = isExact ? nil : selectedTimeOfDay.rawValue
         }
-        subgoalToSave.time = isExact ? selectedTime : nil
-        subgoalToSave.timeOfDay = isExact ? nil : selectedTimeOfDay.rawValue
         if selectedSubgoalType == .part {
             subgoalToSave.completion = partCompletion
         }
         if selectedSubgoalType == .habit {
+            subgoalToSave.startDate = selectedStartDate
             subgoalToSave.frequency = selectedHabitFrequency.rawValue
         }
         if let subgoal {
@@ -177,7 +180,8 @@ private extension DetailSubgoalView {
             selectedSubgoalType = type
             isUrgent = false
             isExact = false
-            selectedDate = Date()
+            selectedStartDate = Date()
+            selectedDeadline = Date()
         } label: {
             LabeledContent(type.rawValue) {
                 Image(systemName: type.imageName)
@@ -216,7 +220,7 @@ private extension DetailSubgoalView {
             Toggle("Срок", isOn: $isUrgent)
                 .tint(.blue)
             if isUrgent {
-                DatePickerView(title: "Дата", selection: $selectedDate)
+                DatePickerView(title: "Дата", selection: $selectedDeadline)
             }
         }
     }
@@ -262,7 +266,6 @@ private extension DetailSubgoalView {
         DatePicker(
             title,
             selection: selection,
-            in: Date()...,
             displayedComponents: .date)
         .environment(
             \.locale,

@@ -119,6 +119,16 @@ enum Constants {
         case unknown = "Неизвестно"
         
         var id: Self { self }
+        
+        static func getTimeOfDay(from date: Date?) -> Self {
+            guard let date else { return .unknown }
+            return switch Calendar.current.component(.hour, from: date) {
+            case 5..<12: .morning
+            case 12..<18: .afternoon
+            case 18...23: .evening
+            default: .night
+            }
+        }
     }
     // MARK: Feelings
     enum Feelings: String, CaseIterable, Identifiable {

@@ -10,18 +10,25 @@ import SwiftUI
 struct MainView: View {
     
     // MARK: - Private Properties
-    @FetchRequest(entity: Subgoal.entity(), sortDescriptors: [])
+    @FetchRequest(
+        entity: Subgoal.entity(),
+        sortDescriptors: [.init(key: "time", ascending: true)],
+        predicate: SubgoalFilter.predicate(for: .now))
     private var subgoals: FetchedResults<Subgoal>
         
     private var currentSubgoals: [Subgoal] {
         let subgoalsByExactTime = subgoals.filter {
-            getTimeOfDay(from: $0.time) == getTimeOfDay(from: Date())
+            let subgoalTime = Constants.TimesOfDay.getTimeOfDay(from: $0.time)
+            return subgoalTime == Constants.TimesOfDay.getTimeOfDay(from: Date())
         }
         let subgoalsByTimeOfDay = subgoals.filter {
-            $0.timeOfDay == getTimeOfDay(from: Date()).rawValue
+            $0.timeOfDay == Constants.TimesOfDay.getTimeOfDay(
+                from: Date()).rawValue
         }
         return subgoalsByExactTime + subgoalsByTimeOfDay
     }
+    
+    @State private var selectedDate = Date()
     
     @State private var selectedSubgoalType: Constants.SubgoalTypes?
     
@@ -36,23 +43,16 @@ struct MainView: View {
                 }
             }
             .sheet(item: $selectedSubgoalType) {
-                SubgoalTypeView(type: $0)
+                SubgoalTypeView(type: $0, date: selectedDate)
             }
     }
     
     // MARK: - Private Methods
     private func getSubgoalCount(_ subgoalType: Constants.SubgoalTypes) -> Int {
-        subgoals.filter { $0.type == subgoalType.rawValue }.count
-    }
-    
-    private func getTimeOfDay(from date: Date?) -> Constants.TimesOfDay {
-        guard let date else { return .unknown }
-        return switch Calendar.current.component(.hour, from: date) {
-        case 5..<12: .morning
-        case 12..<18: .afternoon
-        case 18...23: .evening
-        default: .night
-        }
+        subgoals
+            .filter { $0.type == subgoalType.rawValue }
+            .filter { !$0.isCompleted }
+            .count
     }
 }
 
@@ -68,9 +68,7 @@ private extension MainView {
                 ForEach(Constants.SubgoalTypes.allCases) { type in
                     SubgoalTypeCardView(type, count: getSubgoalCount(type))
                         .onTapGesture {
-                            if getSubgoalCount(type) > 0 {
-                                selectedSubgoalType = type
-                            }
+                            selectedSubgoalType = type
                         }
                 }
             }
@@ -106,12 +104,23 @@ private extension MainView {
     
     func SubgoalListView() -> some View {
         List {
+            DatePicker("", selection: $selectedDate, displayedComponents: .date)
+                .onChange(of: selectedDate) {
+                    subgoals.nsPredicate = SubgoalFilter.predicate(
+                        for: selectedDate)
+                }
+                .environment(
+                    \.locale,
+                     Locale(identifier: "ru_RU"))
             Section("Сегодня") {
                 SubgoalTypeGridView()
             }
             let uncompletedSubgoals = currentSubgoals.filter { !$0.isCompleted }
-            if !uncompletedSubgoals.isEmpty {
-                Section(getTimeOfDay(from: Date()).rawValue) {
+            Section(Constants.TimesOfDay.getTimeOfDay(from: Date()).rawValue) {
+                if uncompletedSubgoals.isEmpty {
+                    Text("Время дня свободно")
+                        .foregroundStyle(.secondary)
+                } else {
                     ForEach(uncompletedSubgoals) {
                         SubgoalView(subgoal: $0)
                     }
