@@ -10,50 +10,69 @@ import SwiftUI
 struct AnalysisView: View {
     
     // MARK: - Private Properties
-    @State private var mainThough = ""
+    @State private var selectedSubgoal: Subgoal?
     
     @State private var selectedFeeling: Constants.Feelings = .joy
-    @State private var selectedEmotions: [String] = []
+    @State private var selectedGroupedEmotions: [Subgoal: [String]] = [:]
+    
+    @State private var mainThough = ""
     
     @Environment(\.managedObjectContext) private var context
     @Environment(\.dismiss) private var dismiss
     
     private var isFormValid: Bool {
-        !mainThough.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
-        selectedEmotions.count > 4
+        !mainThough.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty /*&&*/
+//        selectedEmotions.count > 4
     }
     
     // MARK: - Public Properties
-//    var goal: Goal
+    var subgoals: [Subgoal]
     
     // MARK: - Body
     var body: some View {
         Form {
             Section("Подцели") {
                 List {
-//                    ForEach(
-//                        (goal.subgoals as? Set<Subgoal>)?
-//                            .sorted { $0.order < $1.order } ?? []
-//                    ) {
-//                        Text($0.title ?? "")
-//                    }
+                    ForEach(subgoals) { subgoal in
+                        LabeledContent {
+                            HStack {
+                                HStack {
+                                    ForEach(0..<3) {
+                                        RoundedRectangle(cornerRadius: 5)
+                                            .fill(
+                                                ($0 < selectedGroupedEmotions[
+                                                    subgoal
+                                                ]?.count ?? 0)
+                                                ? .blue
+                                                : .gray)
+                                            .frame(width: 5, height: 15)
+                                    }
+                                }
+                                Image(systemName: subgoal.isCompleted
+                                      ? "checkmark.circle.fill"
+                                      : "circle")
+                            }
+                        } label: {
+                            Text(subgoal.title ?? "")
+                                .fontWeight(subgoal == selectedSubgoal
+                                            ? .semibold : .regular)
+                        }
+                        .onTapGesture {
+                            selectedSubgoal = subgoal
+                        }
+                    }
                 }
-            }
-            Section("Размышления") {
-                MainTextEditorView()
             }
             Section {
                 FeelingPickerView()
                 EmotionsView()
             } header: {
-                HStack {
-                    Text("Эмоции")
-                    Spacer()
-                    Text(String(selectedEmotions.count))
-                        .fontWeight(.semibold)
-                }
+                Text("Эмоции")
             } footer: {
                 Text("Выберите хотя бы 5 эмоций для исчерпывающего анализа в будущем. Но и не переусердствуйте.")
+            }
+            Section("Размышления") {
+                MainTextEditorView()
             }
         }
         .navigationTitle("Самоанализ")
@@ -71,28 +90,23 @@ struct AnalysisView: View {
         }
     }
     
-    // MARK: - Initialize
-//    init(goal: Goal) {
-//        self.goal = goal
-//        if let reflection = (goal.reflections as? Set<Reflection>)?.first(
-//            where: {
-//                Calendar.current.isDateInToday($0.date ?? Date.distantPast)
-//            }) {
-//            _mainThough = State(initialValue: reflection.mainThough ?? "")
-//            _selectedEmotions = State(
-//                initialValue: reflection.emotions?.components(
-//                    separatedBy: " ") ?? [])
-//        }
-//    }
+    init(selectedSubgoal: Subgoal? = nil, subgoals: [Subgoal]) {
+        self.subgoals = subgoals
+        _selectedSubgoal = State(initialValue: subgoals.first)
+    }
     
     // MARK: - Private Methods
     private func save() {
-//        let reflection = Reflection(context: context)
-//        reflection.date = Date()
-//        reflection.mainThough = mainThough
+        let reflection = Reflection(context: context)
+        reflection.date = Date()
+        reflection.mainThough = mainThough
+        subgoals.forEach {
+            let response = Reaction(context: context)
+            response.subgoal = $0
 //        reflection.emotions = selectedEmotions.joined(separator: " ")
-//        goal.addToReflections(reflection)
-//        try? context.save()
+//            reflection.addToResponses(response)
+        }
+        try? context.save()
     }
 }
 
@@ -122,20 +136,13 @@ private extension AnalysisView {
         .pickerStyle(.segmented)
         .padding(.vertical, 4)
     }
-    
+
     func EmotionsView() -> some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), spacing: 4)]) {
             ForEach(selectedFeeling.emotions, id: \.self) { emotion in
-                EmotionView(emotion, isSelected: selectedEmotions.contains(emotion))
+                EmotionView(emotion, isSelected: isEmotionSelected(emotion))
                     .onTapGesture {
-                        withAnimation(.easeInOut(duration: 0.2)) {
-                            if selectedEmotions.contains(emotion) {
-                                selectedEmotions.removeAll(
-                                    where: { $0 == emotion })
-                            } else {
-                                selectedEmotions.append(emotion)
-                            }
-                        }
+                        toggleEmotion(emotion)
                     }
             }
         }
@@ -152,6 +159,24 @@ private extension AnalysisView {
             .background(
                 isSelected ? selectedFeeling.color : .white,
                 in: Capsule())
+    }
+    
+    private func isEmotionSelected(_ emotion: String) -> Bool {
+        guard let subgoal = selectedSubgoal else { return false }
+        return (selectedGroupedEmotions[subgoal] ?? []).contains(emotion)
+    }
+    
+    private func toggleEmotion(_ emotion: String) {
+        guard let subgoal = selectedSubgoal else { return }
+        withAnimation(.easeInOut(duration: 0.2)) {
+            var emotions = selectedGroupedEmotions[subgoal] ?? []
+            if emotions.contains(emotion) {
+                emotions.removeAll(where: { $0 == emotion })
+            } else {
+                emotions.append(emotion)
+            }
+            selectedGroupedEmotions[subgoal] = emotions
+        }
     }
 }
 

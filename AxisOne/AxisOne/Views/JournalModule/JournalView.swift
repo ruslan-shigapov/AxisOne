@@ -12,7 +12,10 @@ struct JournalView: View {
     @FetchRequest(
         entity: Subgoal.entity(),
         sortDescriptors: [.init(key: "time", ascending: true)],
-        predicate: SubgoalFilter.predicate(for: .now, hasRules: false))
+        predicate: SubgoalFilter.predicate(
+            for: .now,
+            hasRules: false,
+            isActive: true))
     private var subgoals: FetchedResults<Subgoal>
     
     private var groupedSubgoals: [Constants.TimesOfDay: [Subgoal]] {
@@ -52,10 +55,17 @@ struct JournalView: View {
     
     func TimeOfDayListView() -> some View {
         List {
-            ForEach(Constants.TimesOfDay.allCases.filter { groupedSubgoals.keys.contains($0) }) { timeOfDay in
-                NavigationLink(destination: AnalysisView()) {
-                    LabeledContent(timeOfDay.rawValue) {
-                        Text(String(groupedSubgoals[timeOfDay]?.count ?? 0))
+            Section("Время дня") {
+                ForEach(
+                    Constants.TimesOfDay.allCases.filter { groupedSubgoals.keys.contains($0)
+                    }) { timeOfDay in
+                    NavigationLink(
+                        destination: AnalysisView(
+                            subgoals: groupedSubgoals[timeOfDay] ?? [])
+                    ) {
+                        LabeledContent(timeOfDay.rawValue) {
+                            Text(String(groupedSubgoals[timeOfDay]?.count ?? 0))
+                        }
                     }
                 }
             }
