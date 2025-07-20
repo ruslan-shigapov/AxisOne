@@ -9,12 +9,36 @@ import SwiftUI
 
 struct HistoryView: View {
     
+    @FetchRequest(
+        entity: Reflection.entity(),
+        sortDescriptors: [])
+    private var reflections: FetchedResults<Reflection>
+    
+    @Environment(\.managedObjectContext) private var context
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-            .navigationTitle("История")
+        List {
+            ForEach(reflections) { reflection in
+                Text(reflection.date?.formatted() ?? "")
+                    .onTapGesture {
+                        deleteReflections()
+                    }
+            }
+        }
+        .navigationTitle("История")
+    }
+    
+    private func deleteReflections() {
+        reflections.forEach {
+            context.delete($0)
+        }
+        try? context.save()
     }
 }
 
 #Preview {
-    HistoryView()
+    ContentView()
+        .environment(
+            \.managedObjectContext,
+             PersistenceController.shared.container.viewContext)
 }

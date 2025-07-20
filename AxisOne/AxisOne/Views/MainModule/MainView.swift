@@ -73,7 +73,7 @@ private extension MainView {
                 }
             }
             .listRowInsets(EdgeInsets())
-            .listRowBackground(Color(.secondarySystemBackground))
+            .listRowBackground(Color(.systemBackground))
     }
     
     func SubgoalTypeCardView(
@@ -98,7 +98,7 @@ private extension MainView {
         .padding(12)
         .background {
             RoundedRectangle(cornerRadius: 16)
-                .fill(Color(.systemBackground))
+                .fill(Color(.secondarySystemBackground))
         }
     }
     

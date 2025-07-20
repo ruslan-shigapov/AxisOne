@@ -16,7 +16,8 @@
     </entity>
     <entity name="Reflection" representedClassName="Reflection" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="mainThough" optional="YES" attributeType="String"/>
+        <attribute name="mainThought" optional="YES" attributeType="String"/>
+        <attribute name="timeOfDay" optional="YES" attributeType="String"/>
         <relationship name="reactions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Reaction" inverseName="reflection" inverseEntity="Reaction"/>
     </entity>
     <entity name="Subgoal" representedClassName="Subgoal" syncable="YES" codeGenerationType="class">

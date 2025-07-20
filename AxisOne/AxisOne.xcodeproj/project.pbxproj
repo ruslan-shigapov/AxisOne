@@ -17,6 +17,7 @@
 		E493E69D2E19264E009CDDDE /* SubgoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E493E69C2E19264E009CDDDE /* SubgoalView.swift */; };
 		E493E69F2E19270F009CDDDE /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E493E69E2E19270F009CDDDE /* HistoryView.swift */; };
 		E493E6A12E1928DC009CDDDE /* AnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E493E6A02E1928DC009CDDDE /* AnalysisView.swift */; };
+		E4CDF5F22E2BD778004A118C /* ReflectionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDF5F12E2BD778004A118C /* ReflectionFilter.swift */; };
 		E4EF52422E0FCFB400D5B7FE /* AxisOne.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523B2E0FCFB400D5B7FE /* AxisOne.xcdatamodeld */; };
 		E4EF52432E0FCFB400D5B7FE /* AxisOneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523C2E0FCFB400D5B7FE /* AxisOneApp.swift */; };
 		E4EF52442E0FCFB400D5B7FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523D2E0FCFB400D5B7FE /* ContentView.swift */; };
@@ -38,6 +39,7 @@
 		E493E69C2E19264E009CDDDE /* SubgoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalView.swift; sourceTree = "<group>"; };
 		E493E69E2E19270F009CDDDE /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		E493E6A02E1928DC009CDDDE /* AnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisView.swift; sourceTree = "<group>"; };
+		E4CDF5F12E2BD778004A118C /* ReflectionFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflectionFilter.swift; sourceTree = "<group>"; };
 		E4EF52232E0EF53A00D5B7FE /* AxisOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AxisOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4EF52392E0FCFB400D5B7FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4EF523A2E0FCFB400D5B7FE /* AxisOne.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AxisOne.entitlements; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 			children = (
 				E4EF523F2E0FCFB400D5B7FE /* Persistence.swift */,
 				E4FA15822E264BD300AF7873 /* SubgoalFilter.swift */,
+				E4CDF5F12E2BD778004A118C /* ReflectionFilter.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 				E493E6A12E1928DC009CDDDE /* AnalysisView.swift in Sources */,
 				E493E69F2E19270F009CDDDE /* HistoryView.swift in Sources */,
 				E4FA15832E264BD300AF7873 /* SubgoalFilter.swift in Sources */,
+				E4CDF5F22E2BD778004A118C /* ReflectionFilter.swift in Sources */,
 				E4EF52432E0FCFB400D5B7FE /* AxisOneApp.swift in Sources */,
 				E40E86D02E1025A900ED6DCA /* GoalView.swift in Sources */,
 				E4FA157F2E24053800AF7873 /* SubgoalTypeView.swift in Sources */,

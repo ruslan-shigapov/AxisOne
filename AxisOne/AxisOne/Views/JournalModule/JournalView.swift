@@ -11,12 +11,18 @@ struct JournalView: View {
     
     @FetchRequest(
         entity: Subgoal.entity(),
-        sortDescriptors: [.init(key: "time", ascending: true)],
+        sortDescriptors: [],
         predicate: SubgoalFilter.predicate(
             for: .now,
             hasRules: false,
             isActive: true))
     private var subgoals: FetchedResults<Subgoal>
+    
+    @FetchRequest(
+        entity: Reflection.entity(),
+        sortDescriptors: [],
+        predicate: ReflectionFilter.predicate(for: .now))
+    private var reflections: FetchedResults<Reflection>
     
     private var groupedSubgoals: [Constants.TimesOfDay: [Subgoal]] {
         Dictionary(grouping: subgoals) {
@@ -59,17 +65,33 @@ struct JournalView: View {
                 ForEach(
                     Constants.TimesOfDay.allCases.filter { groupedSubgoals.keys.contains($0)
                     }) { timeOfDay in
-                    NavigationLink(
-                        destination: AnalysisView(
-                            subgoals: groupedSubgoals[timeOfDay] ?? [])
-                    ) {
-                        LabeledContent(timeOfDay.rawValue) {
-                            Text(String(groupedSubgoals[timeOfDay]?.count ?? 0))
+                        NavigationLink(
+                            destination: AnalysisView(
+                                timeOfDay: timeOfDay,
+                                subgoals: groupedSubgoals[timeOfDay] ?? [])
+                        ) {
+                            LabeledContent(timeOfDay.rawValue) {
+                                HStack {
+                                    CheckmarkImage(for: timeOfDay)
+                                    Text(
+                                        String(
+                                            groupedSubgoals[
+                                                timeOfDay
+                                            ]?.count ?? 0))
+                                }
+                            }
                         }
-                    }
                 }
             }
         }
+    }
+    
+    func CheckmarkImage(for timeOfDay: Constants.TimesOfDay) -> some View {
+        groupedSubgoals.keys.contains(timeOfDay) &&
+        reflections.contains(
+            where: { $0.timeOfDay ?? "" == timeOfDay.rawValue })
+        ? Image(systemName: "checkmark")
+        : Image(systemName: "")
     }
 }
 
