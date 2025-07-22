@@ -23,6 +23,16 @@ struct HistoryView: View {
                     .onTapGesture {
                         deleteReflections()
                     }
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            withAnimation {
+                                context.delete(reflection)
+                                try? context.save()
+                            }
+                        } label: { 
+                            Image(systemName: "trash")
+                        }
+                    }
             }
         }
         .navigationTitle("История")

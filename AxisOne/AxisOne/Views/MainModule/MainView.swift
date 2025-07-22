@@ -32,10 +32,33 @@ struct MainView: View {
     
     @State private var selectedSubgoalType: Constants.SubgoalTypes?
     
+    @State private var isDatePickerPresented = false
+    
     // MARK: - Body
     var body: some View {
         SubgoalListView()
             .toolbar {
+                ToolbarItem {
+                    
+                }
+                ToolbarItem {
+                    Button {
+                        isDatePickerPresented = true
+                    } label: {
+                        Image(systemName: "calendar")
+                    }
+                    .popover(isPresented: $isDatePickerPresented) {
+                        DatePicker("", selection: $selectedDate, displayedComponents: .date)
+                            .datePickerStyle(.graphical)
+                            .onChange(of: selectedDate) {
+                                subgoals.nsPredicate = SubgoalFilter.predicate(
+                                    for: selectedDate)
+                            }
+                            .environment(
+                                \.locale,
+                                 Locale(identifier: "ru_RU"))
+                    }
+                }
                 ToolbarItem {
                     NavigationLink(destination: SettingsView()) {
                         Image(systemName: "gearshape")
@@ -104,14 +127,6 @@ private extension MainView {
     
     func SubgoalListView() -> some View {
         List {
-            DatePicker("", selection: $selectedDate, displayedComponents: .date)
-                .onChange(of: selectedDate) {
-                    subgoals.nsPredicate = SubgoalFilter.predicate(
-                        for: selectedDate)
-                }
-                .environment(
-                    \.locale,
-                     Locale(identifier: "ru_RU"))
             Section("Сегодня") {
                 SubgoalTypeGridView()
             }

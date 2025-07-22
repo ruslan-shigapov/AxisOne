@@ -10,6 +10,9 @@ import SwiftUI
 struct DetailSubgoalView: View {
     
     // MARK: - Private Properties
+    @Environment(\.managedObjectContext) private var context
+    @Environment(\.dismiss) private var dismiss
+    
     @State private var selectedSubgoalType: Constants.SubgoalTypes
     
     @State private var title: String
@@ -27,9 +30,6 @@ struct DetailSubgoalView: View {
     @State private var partCompletion: Double
     
     @State private var selectedHabitFrequency: Constants.Frequencies
-    
-    @Environment(\.managedObjectContext) private var context
-    @Environment(\.dismiss) private var dismiss
     
     private let navigationTitle: String
     
@@ -49,28 +49,14 @@ struct DetailSubgoalView: View {
         NavigationStack {
             Form {
                 if subgoal == nil {
-                    Section {
-                        LazyVGrid(
-                            columns: [
-                                GridItem(.flexible()),
-                                GridItem(.flexible())
-                            ]) {
-                                ForEach(Constants.SubgoalTypes.allCases) {
-                                    ChooseButtonView(for: $0)
-                                }
-                            }
-                            .listRowInsets(EdgeInsets())
-                            .listRowBackground(
-                                Color(.secondarySystemBackground))
-                    } header: {
-                            Text("Тип")
-                    } footer: {
-                        Text(selectedSubgoalType.description)
-                    }
+                    SubgoalTypeSectionView()
                 }
                 Section {
                     TextFieldWithImageView()
-                    TextField("Можете добавить уточнение", text: $notes)
+                    TextField(
+                        "Можете добавить уточнение",
+                        text: $notes,
+                        axis: .vertical)
                     if selectedSubgoalType == .task ||
                         selectedSubgoalType == .part {
                         DeadlineGroupView()
@@ -165,15 +151,36 @@ struct DetailSubgoalView: View {
             subgoalToSave.startDate = selectedStartDate
             subgoalToSave.frequency = selectedHabitFrequency.rawValue
         }
-        if let subgoal {
-            subgoals.removeAll { $0 == subgoal }
+        if let subgoal, let index = subgoals.firstIndex(of: subgoal) {
+            subgoals[index] = subgoalToSave
+        } else {
+            subgoals.insert(subgoalToSave, at: 0)
         }
-        subgoals.append(subgoalToSave)
     }
 }
 
 // MARK: - Views
 private extension DetailSubgoalView {
+    
+    func SubgoalTypeSectionView() -> some View {
+        Section {
+            LazyVGrid(
+                columns: [
+                    GridItem(.flexible()),
+                    GridItem(.flexible())
+                ]) {
+                    ForEach(Constants.SubgoalTypes.allCases) {
+                        ChooseButtonView(for: $0)
+                    }
+                }
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color(.systemBackground))
+        } header: {
+            Text("Тип")
+        } footer: {
+            Text(selectedSubgoalType.description)
+        }
+    }
     
     func ChooseButtonView(for type: Constants.SubgoalTypes) -> some View {
         Button {
@@ -225,53 +232,6 @@ private extension DetailSubgoalView {
         }
     }
     
-    func CompletionView() -> some View {
-        VStack {
-            LabeledContent("Составляет от цели") {
-                Text("\(Int(partCompletion)) %")
-            }
-            Slider(
-                value: $partCompletion,
-                in: 0...100,
-                step: 25)
-            .onChange(of: partCompletion) { _, value in
-                if value == 0 {
-                    partCompletion = 25
-                }
-            }
-        }
-    }
-    
-    func RepetitionView() -> some View {
-        VStack {
-            LabeledContent(
-                "Повторять"
-            ) {
-                Picker(
-                    "",
-                    selection: $selectedHabitFrequency
-                ) {
-                    ForEach(Constants.Frequencies.allCases) {
-                        Text($0.rawValue)
-                    }
-                }
-            }
-        }
-    }
-    
-    func DatePickerView(
-        title: String,
-        selection: Binding<Date>
-    ) -> some View {
-        DatePicker(
-            title,
-            selection: selection,
-            displayedComponents: .date)
-        .environment(
-            \.locale,
-             Locale(identifier: "ru_RU"))
-    }
-    
     func TimeGroupView() -> some View {
         Group {
             Toggle("Точное время", isOn: $isExact)
@@ -291,11 +251,58 @@ private extension DetailSubgoalView {
         }
     }
     
+    func CompletionView() -> some View {
+        VStack {
+            LabeledContent("Составляет от цели") {
+                Text("\(Int(partCompletion)) %")
+            }
+            Slider(
+                value: $partCompletion,
+                in: 0...100,
+                step: 25)
+            .onChange(of: partCompletion) { _, value in
+                if value == 0 {
+                    partCompletion = 25
+                }
+            }
+        }
+    }
+    
+    func DatePickerView(
+        title: String,
+        selection: Binding<Date>
+    ) -> some View {
+        DatePicker(
+            title,
+            selection: selection,
+            displayedComponents: .date)
+        .environment(
+            \.locale,
+             Locale(identifier: "ru_RU"))
+    }
+    
+    func RepetitionView() -> some View {
+        VStack {
+            LabeledContent(
+                "Повторять"
+            ) {
+                Picker(
+                    "",
+                    selection: $selectedHabitFrequency
+                ) {
+                    ForEach(Constants.Frequencies.allCases) {
+                        Text($0.rawValue)
+                    }
+                }
+            }
+        }
+    }
+    
     func SaveButtonView() -> some View {
         Button("Сохранить") {
             save()
+            isModified.toggle()
             DispatchQueue.main.async {
-                isModified = true
                 dismiss()
             }
         }
@@ -305,8 +312,8 @@ private extension DetailSubgoalView {
     func DeleteButtonView(_ subgoal: Subgoal) -> some View {
         Button("Удалить подцель") {
             subgoals.removeAll { $0 == subgoal }
+            isModified.toggle()
             DispatchQueue.main.async {
-                isModified = true
                 dismiss()
             }
         }

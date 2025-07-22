@@ -9,7 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var selectedTab: Constants.Tabs = .journal
+    @Environment(\.managedObjectContext) private var context
+    
+    @State private var selectedTab: Constants.Tabs = .main
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -23,6 +25,30 @@ struct ContentView: View {
                 }
             }
         }
+        .onAppear {
+            resetHabitsIfNeeded()
+        }
+    }
+    
+    private func resetHabitsIfNeeded() {
+        let fetchRequest = Subgoal.fetchRequest()
+        fetchRequest.predicate = NSPredicate(
+            format: "type == %@",
+            Constants.SubgoalTypes.habit.rawValue)
+        let habits = try? context.fetch(fetchRequest)
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        habits?.forEach {
+            guard let lastReset = $0.lastReset else {
+                $0.lastReset = today
+                return
+            }
+            if !calendar.isDate(lastReset, inSameDayAs: today) {
+                $0.isCompleted = false
+                $0.lastReset = today
+            }
+        }
+        try? context.save()
     }
 }
 

@@ -10,9 +10,9 @@ import SwiftUI
 struct GoalView: View {
     
     // MARK: - Private Properties
-    @State private var isModalViewPresented = false
-    
     @Environment(\.managedObjectContext) private var context
+    
+    @State private var isModalViewPresented = false
     
     private var activationColor: Color {
         Constants.LifeAreas(
@@ -36,7 +36,7 @@ struct GoalView: View {
                     isModalViewPresented = true
                 }
         }
-        .swipeActions(allowsFullSwipe: true) {
+        .swipeActions {
             if !goal.isCompleted {
                 ToggleActivationButtonView()
             }
@@ -55,8 +55,8 @@ struct GoalView: View {
             goal.subgoals?.forEach {
                 ($0 as? Subgoal)?.isActive = false
             }
-            goal.order = getOrder()
         }
+        goal.order = getOrder()
         try? context.save()
     }
     

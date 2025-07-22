@@ -10,13 +10,10 @@ import SwiftUI
 struct GoalsView: View {
     
     // MARK: - Private Properties
+    @Environment(\.managedObjectContext) private var context
+    
     @FetchRequest(entity: Goal.entity(), sortDescriptors: [])
     private var goals: FetchedResults<Goal>
-    
-    @State private var isModalViewPresented = false
-    
-    @State private var isEditing = false
-    @State private var editMode: EditMode = .inactive
     
     @AppStorage("isHealthSectionExpanded")
     private var isHealthSectionExpanded = true
@@ -26,9 +23,15 @@ struct GoalsView: View {
     private var isWealthSectionExpanded = true
     @AppStorage("isPersonalSectionExpanded")
     private var isPersonalSectionExpanded = true
+
+    @AppStorage("isCompletedHidden")
+    private var isCompletedHidden: Bool = false
     
-    @Environment(\.managedObjectContext) private var context
+    @State private var isModalViewPresented = false
     
+    @State private var isEditing = false
+    @State private var editMode: EditMode = .inactive
+
     // MARK: - Body
     var body: some View {
         ZStack {
@@ -43,6 +46,9 @@ struct GoalsView: View {
                 if !goals.isEmpty {
                     EditButtonView()
                 }
+            }
+            ToolbarItem {
+                HideCompletedButtonView()
             }
             ToolbarItem {
                 AddButtonView()
@@ -62,15 +68,11 @@ struct GoalsView: View {
     private func getSectionExpansionState(
         for lifeArea: Constants.LifeAreas
     ) -> Binding<Bool> {
-        switch lifeArea {
-        case .health:
-            return $isHealthSectionExpanded
-        case .relations:
-            return $isRelationsSectionExpanded
-        case .wealth:
-            return $isWealthSectionExpanded
-        case .personal:
-            return $isPersonalSectionExpanded
+        return switch lifeArea {
+        case .health: $isHealthSectionExpanded
+        case .relations: $isRelationsSectionExpanded
+        case .wealth: $isWealthSectionExpanded
+        case .personal: $isPersonalSectionExpanded
         }
     }
     
@@ -102,7 +104,16 @@ private extension GoalsView {
                 goals.contains { $0.lifeArea == lifeArea.rawValue }
             }) { lifeArea in
                 var filteredGoals = getGoals(for: lifeArea)
-                    .sorted { $0.order < $1.order }
+                    .filter {
+                        (!isCompletedHidden && !isEditing) || !$0.isCompleted
+                    }
+                    .sorted {
+                        if $0.isCompleted != $1.isCompleted {
+                            return !$0.isCompleted
+                        } else {
+                            return $0.order < $1.order
+                        }
+                    }
                 Section(isExpanded: getSectionExpansionState(for: lifeArea)) {
                     ForEach(filteredGoals) {
                         GoalView(goal: $0)
@@ -151,6 +162,17 @@ private extension GoalsView {
             }
         } label: {
             Image(systemName: "shuffle")
+                .foregroundStyle(editMode == .active ? .secondary : .primary)
+        }
+    }
+    
+    func HideCompletedButtonView() -> some View {
+        Button {
+            withAnimation {
+                isCompletedHidden.toggle()
+            }
+        } label: {
+            Image(systemName: isCompletedHidden ? "eye.slash" : "eye")
         }
     }
     
