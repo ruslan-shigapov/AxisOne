@@ -57,15 +57,15 @@ enum Constants {
     enum SubgoalTypes: String, CaseIterable, Identifiable {
         
         case task = "Задача"
-        case part = "Отрезок"
         case habit = "Привычка"
+        case part = "Отрезок"
         case rule = "Правило"
         
         var imageName: String {
             switch self {
             case .task: "circle.circle"
-            case .part: "flag.circle"
             case .habit: "repeat.circle"
+            case .part: "flag.circle"
             case .rule: "bolt.circle"
             }
         }
@@ -73,8 +73,8 @@ enum Constants {
         var placeholder: String {
             switch self {
             case .task: "Что нужно сделать?"
-            case .part: "Опишите результат"
             case .habit: "Опишите действие"
+            case .part: "Опишите результат"
             case .rule: "Что стоит помнить?"
             }
         }
@@ -82,8 +82,8 @@ enum Constants {
         var description: String {
             switch self {
             case .task: "Каждая выполненная задача приближает вас к цели. Старайтесь продвигаться хотя бы немного вперед каждый день."
-            case .part: "Когда разбиваете цель на отрезки, то она становится более достижимой."
             case .habit: "Ключом к достижению многих целей является дисциплина. Вы можете добавить до трех привычек к одной цели."
+            case .part: "Когда разбиваете цель на отрезки, то она становится более достижимой."
             case .rule: "Иногда недостаточно просто совершать какие-либо действия. Бывает полезно держать в фокусе смыслы или намерения, которые помогут на вашем пути."
             }
         }
@@ -91,8 +91,8 @@ enum Constants {
         var plural: String {
             switch self {
             case .task: "Задачи"
-            case .part: "Отрезки"
             case .habit: "Привычки"
+            case .part: "Отрезки"
             case .rule: "Правила"
             }
         }
@@ -117,6 +117,16 @@ enum Constants {
         case evening = "Вечер / 18:00-22:59"
         case night = "Ночь / 23:00-4:59"
         case unknown = "Неизвестно"
+        
+        var imageName: String {
+            switch self {
+            case .morning: "sunrise"
+            case .afternoon: "sun.max"
+            case .evening: "sunset"
+            case .night: "moon.stars"
+            case .unknown: ""
+            }
+        }
         
         var id: Self { self }
         

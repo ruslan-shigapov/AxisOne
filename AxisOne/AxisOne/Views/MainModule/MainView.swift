@@ -16,58 +16,65 @@ struct MainView: View {
         predicate: SubgoalFilter.predicate(for: .now))
     private var subgoals: FetchedResults<Subgoal>
         
+    @State private var selectedDate = Date()
+    
+    @State private var selectedTimeOfDay = Constants.TimesOfDay.getTimeOfDay(
+        from: Date())
+    
+    @State private var isDatePickerPresented = false
+    
+    @State private var selectedSubgoalType: Constants.SubgoalTypes?
+    
     private var currentSubgoals: [Subgoal] {
         let subgoalsByExactTime = subgoals.filter {
             let subgoalTime = Constants.TimesOfDay.getTimeOfDay(from: $0.time)
-            return subgoalTime == Constants.TimesOfDay.getTimeOfDay(from: Date())
+            return subgoalTime.rawValue == selectedTimeOfDay.rawValue
         }
         let subgoalsByTimeOfDay = subgoals.filter {
-            $0.timeOfDay == Constants.TimesOfDay.getTimeOfDay(
-                from: Date()).rawValue
+            $0.timeOfDay == selectedTimeOfDay.rawValue
         }
         return subgoalsByExactTime + subgoalsByTimeOfDay
     }
     
-    @State private var selectedDate = Date()
+    private var uncompletedSubgoals: [Subgoal] {
+        currentSubgoals.filter { !$0.isCompleted }
+    }
     
-    @State private var selectedSubgoalType: Constants.SubgoalTypes?
-    
-    @State private var isDatePickerPresented = false
+    private var completedSubgoals: [Subgoal] {
+        currentSubgoals.filter { $0.isCompleted }
+    }
     
     // MARK: - Body
     var body: some View {
-        SubgoalListView()
-            .toolbar {
-                ToolbarItem {
-                    
-                }
-                ToolbarItem {
-                    Button {
-                        isDatePickerPresented = true
-                    } label: {
-                        Image(systemName: "calendar")
-                    }
-                    .popover(isPresented: $isDatePickerPresented) {
-                        DatePicker("", selection: $selectedDate, displayedComponents: .date)
-                            .datePickerStyle(.graphical)
-                            .onChange(of: selectedDate) {
-                                subgoals.nsPredicate = SubgoalFilter.predicate(
-                                    for: selectedDate)
-                            }
-                            .environment(
-                                \.locale,
-                                 Locale(identifier: "ru_RU"))
-                    }
-                }
-                ToolbarItem {
-                    NavigationLink(destination: SettingsView()) {
-                        Image(systemName: "gearshape")
+        List {
+            Section("Сегодня") {
+                SubgoalTypeGridView()
+            }
+            Section(selectedTimeOfDay.rawValue) {
+                TimeOfDayPickerView()
+                SubgoalSectionView()
+            }
+            if !completedSubgoals.isEmpty {
+                Section("Выполнено") {
+                    ForEach(completedSubgoals) {
+                        SubgoalView(subgoal: $0)
                     }
                 }
             }
-            .sheet(item: $selectedSubgoalType) {
-                SubgoalTypeView(type: $0, date: selectedDate)
+        }
+        .toolbar {
+            ToolbarItem {
+                CalendarButtonView()
             }
+            ToolbarItem {
+                NavigationLink(destination: SettingsView()) {
+                    Image(systemName: "gearshape")
+                }
+            }
+        }
+        .sheet(item: $selectedSubgoalType) {
+            SubgoalTypeView(type: $0, date: selectedDate)
+        }
     }
     
     // MARK: - Private Methods
@@ -83,20 +90,39 @@ struct MainView: View {
 private extension MainView {
     
     func SubgoalTypeGridView() -> some View {
-        LazyVGrid(
-            columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible())
-            ]) {
-                ForEach(Constants.SubgoalTypes.allCases) { type in
+        VStack {
+            HStack {
+                ForEach(Constants.SubgoalTypes.allCases.dropLast()) { type in
                     SubgoalTypeCardView(type, count: getSubgoalCount(type))
                         .onTapGesture {
                             selectedSubgoalType = type
                         }
                 }
             }
-            .listRowInsets(EdgeInsets())
-            .listRowBackground(Color(.systemBackground))
+            HStack {
+                Image(systemName: Constants.SubgoalTypes.rule.imageName)
+                    .imageScale(.large)
+                    .foregroundStyle(.blue)
+                Text(Constants.SubgoalTypes.rule.plural)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text(String(getSubgoalCount(.rule)))
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.primary)
+            }
+            .padding(12)
+            .background {
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color(.secondarySystemBackground))
+            }
+            .onTapGesture {
+                selectedSubgoalType = .rule
+            }
+        }
+        .listRowInsets(EdgeInsets())
+        .listRowBackground(Color(.systemBackground))
     }
     
     func SubgoalTypeCardView(
@@ -125,30 +151,46 @@ private extension MainView {
         }
     }
     
-    func SubgoalListView() -> some View {
-        List {
-            Section("Сегодня") {
-                SubgoalTypeGridView()
+    func TimeOfDayPickerView() -> some View {
+        Picker("", selection: $selectedTimeOfDay) {
+            ForEach(Constants.TimesOfDay.allCases.dropLast()) {
+                Image(systemName: $0.imageName)
             }
-            let uncompletedSubgoals = currentSubgoals.filter { !$0.isCompleted }
-            Section(Constants.TimesOfDay.getTimeOfDay(from: Date()).rawValue) {
-                if uncompletedSubgoals.isEmpty {
-                    Text("Время дня свободно")
-                        .foregroundStyle(.secondary)
-                } else {
-                    ForEach(uncompletedSubgoals) {
-                        SubgoalView(subgoal: $0)
-                    }
+        }
+        .pickerStyle(.palette)
+        .listRowInsets(EdgeInsets())
+        .padding(.bottom, 10)
+    }
+    
+    func SubgoalSectionView() -> some View {
+        Group {
+            if uncompletedSubgoals.isEmpty {
+                Text("Время дня свободно")
+                    .foregroundStyle(.secondary)
+            } else {
+                ForEach(uncompletedSubgoals) {
+                    SubgoalView(subgoal: $0)
                 }
             }
-            let completedSubgoals = currentSubgoals.filter { $0.isCompleted }
-            if !completedSubgoals.isEmpty {
-                Section("Выполнено") {
-                    ForEach(completedSubgoals) {
-                        SubgoalView(subgoal: $0)
-                    }
+        }
+    }
+    
+    func CalendarButtonView() -> some View {
+        Button {
+            isDatePickerPresented = true
+        } label: {
+            Image(systemName: "calendar")
+        }
+        .popover(isPresented: $isDatePickerPresented) {
+            DatePicker("", selection: $selectedDate, displayedComponents: .date)
+                .datePickerStyle(.graphical)
+                .onChange(of: selectedDate) {
+                    subgoals.nsPredicate = SubgoalFilter.predicate(
+                        for: selectedDate)
                 }
-            }
+                .environment(
+                    \.locale,
+                     Locale(identifier: "ru_RU"))
         }
     }
 }

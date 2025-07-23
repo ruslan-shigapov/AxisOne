@@ -31,6 +31,8 @@ struct DetailSubgoalView: View {
     
     @State private var selectedHabitFrequency: Constants.Frequencies
     
+    @State private var isModalPresentation: Bool
+    
     private let navigationTitle: String
     
     private var isFormValid: Bool {
@@ -90,6 +92,16 @@ struct DetailSubgoalView: View {
             }
             .navigationTitle(navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                if isModalPresentation {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button("Отмена") {
+                            dismiss()
+                        }
+                        .foregroundStyle(.red)
+                    }
+                }
+            }
         }
     }
     
@@ -98,12 +110,14 @@ struct DetailSubgoalView: View {
         lifeArea: Constants.LifeAreas,
         subgoal: Subgoal? = nil,
         subgoals: Binding<[Subgoal]>,
-        isModified: Binding<Bool>
+        isModified: Binding<Bool>,
+        isModalPresentation: Bool = false
     ) {
         self.lifeArea = lifeArea
         self.subgoal = subgoal
         self._subgoals = subgoals
         self._isModified = isModified
+        self.isModalPresentation = isModalPresentation
         navigationTitle = subgoal?.type ?? "Новая подцель"
         _selectedSubgoalType = State(
             initialValue: Constants.SubgoalTypes(
@@ -156,6 +170,27 @@ struct DetailSubgoalView: View {
         } else {
             subgoals.insert(subgoalToSave, at: 0)
         }
+    }
+    
+    private func update() {
+        guard let subgoal else { return }
+        subgoal.title = title
+        subgoal.notes = notes
+        if selectedSubgoalType == .task || selectedSubgoalType == .part {
+            subgoal.deadline = isUrgent ? selectedDeadline : nil
+        }
+        if selectedSubgoalType != .rule {
+            subgoal.time = isExact ? selectedTime : nil
+            subgoal.timeOfDay = isExact ? nil : selectedTimeOfDay.rawValue
+        }
+        if selectedSubgoalType == .part {
+            subgoal.completion = partCompletion
+        }
+        if selectedSubgoalType == .habit {
+            subgoal.startDate = selectedStartDate
+            subgoal.frequency = selectedHabitFrequency.rawValue
+        }
+        try? context.save()
     }
 }
 
@@ -300,7 +335,7 @@ private extension DetailSubgoalView {
     
     func SaveButtonView() -> some View {
         Button("Сохранить") {
-            save()
+            isModalPresentation ? update() : save()
             isModified.toggle()
             DispatchQueue.main.async {
                 dismiss()

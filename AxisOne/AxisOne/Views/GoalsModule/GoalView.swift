@@ -92,6 +92,7 @@ private extension GoalView {
             if let notes = goal.notes, !notes.isEmpty {
                 Text(notes)
                     .lineLimit(1)
+                    .fontWeight(.light)
                     .foregroundStyle(.secondary)
             }
         }

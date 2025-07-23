@@ -69,6 +69,7 @@
 			children = (
 				E4EF523D2E0FCFB400D5B7FE /* ContentView.swift */,
 				E4563B1B2E0FE4D30075B178 /* MainView.swift */,
+				E493E69C2E19264E009CDDDE /* SubgoalView.swift */,
 				E4FA157E2E24053800AF7873 /* SubgoalTypeView.swift */,
 				E4563B232E0FE96A0075B178 /* SettingsView.swift */,
 			);
@@ -143,7 +144,6 @@
 		E4EF524A2E0FCFD800D5B7FE /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E493E69C2E19264E009CDDDE /* SubgoalView.swift */,
 				E4563B272E0FE9B10075B178 /* MainModule */,
 				E4563B282E0FE9C90075B178 /* GoalsModule */,
 				E4563B292E0FEA050075B178 /* JournalModule */,
