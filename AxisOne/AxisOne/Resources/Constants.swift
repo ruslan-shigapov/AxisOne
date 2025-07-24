@@ -58,15 +58,17 @@ enum Constants {
         
         case task = "Задача"
         case habit = "Привычка"
-        case part = "Отрезок"
-        case rule = "Правило"
+        case milestone = "Веха"
+        case focus = "Фокус"
+        case inbox = "\"Входящие\""
         
         var imageName: String {
             switch self {
             case .task: "circle.circle"
             case .habit: "repeat.circle"
-            case .part: "flag.circle"
-            case .rule: "bolt.circle"
+            case .milestone: "flag.circle"
+            case .focus: "bolt.circle"
+            case .inbox: "tray.circle"
             }
         }
         
@@ -74,17 +76,19 @@ enum Constants {
             switch self {
             case .task: "Что нужно сделать?"
             case .habit: "Опишите действие"
-            case .part: "Опишите результат"
-            case .rule: "Что стоит помнить?"
+            case .milestone: "Опишите результат"
+            case .focus: "Что стоит помнить?"
+            case .inbox: ""
             }
         }
-        
+        // TODO: изменить описание на более четкие и подходящие
         var description: String {
             switch self {
             case .task: "Каждая выполненная задача приближает вас к цели. Старайтесь продвигаться хотя бы немного вперед каждый день."
             case .habit: "Ключом к достижению многих целей является дисциплина. Вы можете добавить до трех привычек к одной цели."
-            case .part: "Когда разбиваете цель на отрезки, то она становится более достижимой."
-            case .rule: "Иногда недостаточно просто совершать какие-либо действия. Бывает полезно держать в фокусе смыслы или намерения, которые помогут на вашем пути."
+            case .milestone: "Когда разбиваете цель на отрезки, то она становится более достижимой."
+            case .focus: "Иногда недостаточно просто совершать какие-либо действия. Бывает полезно держать в фокусе смыслы или намерения, которые помогут на вашем пути."
+            case .inbox: ""
             }
         }
         
@@ -92,8 +96,9 @@ enum Constants {
             switch self {
             case .task: "Задачи"
             case .habit: "Привычки"
-            case .part: "Отрезки"
-            case .rule: "Правила"
+            case .milestone: "Вехи"
+            case .focus: "Фокусы"
+            case .inbox: self.rawValue
             }
         }
         

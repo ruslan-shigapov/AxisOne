@@ -60,13 +60,13 @@ struct DetailSubgoalView: View {
                         text: $notes,
                         axis: .vertical)
                     if selectedSubgoalType == .task ||
-                        selectedSubgoalType == .part {
+                        selectedSubgoalType == .milestone {
                         DeadlineGroupView()
                         if isUrgent {
                             TimeGroupView()
                         }
                     }
-                    if selectedSubgoalType == .part {
+                    if selectedSubgoalType == .milestone {
                         CompletionView()
                     }
                     if selectedSubgoalType == .habit {
@@ -151,14 +151,14 @@ struct DetailSubgoalView: View {
         subgoalToSave.title = title
         subgoalToSave.notes = notes
         subgoalToSave.isCompleted = subgoal?.isCompleted ?? false
-        if selectedSubgoalType == .task || selectedSubgoalType == .part {
+        if selectedSubgoalType == .task || selectedSubgoalType == .milestone {
             subgoalToSave.deadline = isUrgent ? selectedDeadline : nil
         }
-        if selectedSubgoalType != .rule {
+        if selectedSubgoalType != .focus {
             subgoalToSave.time = isExact ? selectedTime : nil
             subgoalToSave.timeOfDay = isExact ? nil : selectedTimeOfDay.rawValue
         }
-        if selectedSubgoalType == .part {
+        if selectedSubgoalType == .milestone {
             subgoalToSave.completion = partCompletion
         }
         if selectedSubgoalType == .habit {
@@ -176,14 +176,14 @@ struct DetailSubgoalView: View {
         guard let subgoal else { return }
         subgoal.title = title
         subgoal.notes = notes
-        if selectedSubgoalType == .task || selectedSubgoalType == .part {
+        if selectedSubgoalType == .task || selectedSubgoalType == .milestone {
             subgoal.deadline = isUrgent ? selectedDeadline : nil
         }
-        if selectedSubgoalType != .rule {
+        if selectedSubgoalType != .focus {
             subgoal.time = isExact ? selectedTime : nil
             subgoal.timeOfDay = isExact ? nil : selectedTimeOfDay.rawValue
         }
-        if selectedSubgoalType == .part {
+        if selectedSubgoalType == .milestone {
             subgoal.completion = partCompletion
         }
         if selectedSubgoalType == .habit {
@@ -204,7 +204,7 @@ private extension DetailSubgoalView {
                     GridItem(.flexible()),
                     GridItem(.flexible())
                 ]) {
-                    ForEach(Constants.SubgoalTypes.allCases) {
+                    ForEach(Constants.SubgoalTypes.allCases.dropLast()) {
                         ChooseButtonView(for: $0)
                     }
                 }

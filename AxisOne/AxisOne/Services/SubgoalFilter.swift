@@ -11,7 +11,7 @@ struct SubgoalFilter {
     
     static func predicate(
         for date: Date,
-        hasRules: Bool = true,
+        hasFocuses: Bool = true,
         isActive: Bool = false
     ) -> NSPredicate {
         guard let interval = Calendar.current.dateInterval(
@@ -37,7 +37,9 @@ struct SubgoalFilter {
             ])
         let habitPredicate = NSCompoundPredicate(
             andPredicateWithSubpredicates: [
-                NSPredicate(format: "type == %@", "Привычка"),
+                NSPredicate(
+                    format: "type == %@",
+                    Constants.SubgoalTypes.habit.rawValue),
                 NSPredicate(
                     format: "startDate <= %@ OR startDate == nil",
                     argumentArray: [interval.end])
@@ -48,11 +50,13 @@ struct SubgoalFilter {
                 deadlinePredicate,
                 habitPredicate
             ])
-        let finalPredicate = hasRules
+        let finalPredicate = hasFocuses
         ? NSCompoundPredicate(
             orPredicateWithSubpredicates: [
                 basePredicate,
-                NSPredicate(format: "type == %@", "Правило")
+                NSPredicate(
+                    format: "type == %@",
+                    Constants.SubgoalTypes.focus.rawValue)
             ])
         : basePredicate
         return isActive

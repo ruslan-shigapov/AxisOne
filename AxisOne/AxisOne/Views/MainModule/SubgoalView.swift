@@ -30,18 +30,18 @@ struct SubgoalView: View {
                 TypeCapsuleView()
             }
             HStack {
-                if subgoal.type != Constants.SubgoalTypes.rule.rawValue {
+                if subgoal.type != Constants.SubgoalTypes.focus.rawValue {
                     CheckmarkImageView()
                         .onTapGesture {
                             withAnimation {
                                 toggleCompletion()
                             }
                         }
-                    TextView()
-                        .onTapGesture {
-                            isModalViewPresented = true
-                        }
                 }
+                TextView()
+                    .onTapGesture {
+                        isModalViewPresented = true
+                    }
             }
         }
         .padding(12)

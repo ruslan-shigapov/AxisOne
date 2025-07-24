@@ -24,8 +24,8 @@ struct GoalsView: View {
     @AppStorage("isPersonalSectionExpanded")
     private var isPersonalSectionExpanded = true
 
-    @AppStorage("isCompletedHidden")
-    private var isCompletedHidden: Bool = false
+    @AppStorage("isCompletedGoalsHidden")
+    private var isCompletedGoalsHidden: Bool = false
     
     @State private var isModalViewPresented = false
     
@@ -42,13 +42,13 @@ struct GoalsView: View {
             }
         }
         .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                ToggleHidingCompletedButtonView()
+            }
             ToolbarItem {
                 if !goals.isEmpty {
                     EditButtonView()
                 }
-            }
-            ToolbarItem {
-                HideCompletedButtonView()
             }
             ToolbarItem {
                 AddButtonView()
@@ -105,7 +105,7 @@ private extension GoalsView {
             }) { lifeArea in
                 var filteredGoals = getGoals(for: lifeArea)
                     .filter {
-                        (!isCompletedHidden && !isEditing) || !$0.isCompleted
+                        (!isCompletedGoalsHidden && !isEditing) || !$0.isCompleted
                     }
                     .sorted {
                         if $0.isCompleted != $1.isCompleted {
@@ -150,6 +150,16 @@ private extension GoalsView {
         }
     }
     
+    func ToggleHidingCompletedButtonView() -> some View {
+        Button {
+            withAnimation {
+                isCompletedGoalsHidden.toggle()
+            }
+        } label: {
+            Image(systemName: isCompletedGoalsHidden ? "eye" : "eye.slash")
+        }
+    }
+    
     func EditButtonView() -> some View {
         Button {
             DispatchQueue.main.async {
@@ -163,16 +173,6 @@ private extension GoalsView {
         } label: {
             Image(systemName: "shuffle")
                 .foregroundStyle(editMode == .active ? .secondary : .primary)
-        }
-    }
-    
-    func HideCompletedButtonView() -> some View {
-        Button {
-            withAnimation {
-                isCompletedHidden.toggle()
-            }
-        } label: {
-            Image(systemName: isCompletedHidden ? "eye.slash" : "eye")
         }
     }
     

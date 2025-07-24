@@ -14,7 +14,7 @@ struct JournalView: View {
         sortDescriptors: [],
         predicate: SubgoalFilter.predicate(
             for: .now,
-            hasRules: false,
+            hasFocuses: false,
             isActive: true))
     private var subgoals: FetchedResults<Subgoal>
     
