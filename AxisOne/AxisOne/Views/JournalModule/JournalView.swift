@@ -12,10 +12,7 @@ struct JournalView: View {
     @FetchRequest(
         entity: Subgoal.entity(),
         sortDescriptors: [],
-        predicate: SubgoalFilter.predicate(
-            for: .now,
-            hasFocuses: false,
-            isActive: true))
+        predicate: SubgoalFilter.predicate(for: .now, hasFocuses: false))
     private var subgoals: FetchedResults<Subgoal>
     
     @FetchRequest(

@@ -150,7 +150,12 @@ struct DetailGoalView: View {
         fetchRequest.sortDescriptors = [.init(key: "order", ascending: true)]
         let lastGoal = try? context.fetch(fetchRequest).last
         return (lastGoal?.order ?? 0) + 1
-    }    
+    }
+    
+    private func shouldStrikethrough(_ subgoal: Subgoal) -> Bool {
+        let type = Constants.SubgoalTypes(rawValue: subgoal.type ?? "")
+        return (type == .task || type == .milestone) && subgoal.isCompleted
+    }
 }
 
 // MARK: - Views
@@ -187,9 +192,6 @@ private extension DetailGoalView {
                         isModified: $isSubgoalsModified)
                 ) {
                     SubgoalRowView(subgoal)
-                        .foregroundStyle(subgoal.isCompleted
-                                         ? .secondary
-                                         : .primary)
                 }
             }
         }
@@ -204,6 +206,10 @@ private extension DetailGoalView {
                 .font(.system(size: 22))
                 .foregroundStyle(.secondary)
             Text(subgoal.title ?? "")
+                .foregroundStyle(subgoal.isCompleted
+                                 ? .secondary
+                                 : .primary)
+                .strikethrough(shouldStrikethrough(subgoal))
         }
     }
     

@@ -18,11 +18,6 @@ struct MainView: View {
     
     @AppStorage("isCompletedSubgoalsHidden")
     private var isCompletedSubgoalsHidden: Bool = false
-        
-    @State private var selectedDate = Date()
-    
-    @State private var selectedTimeOfDay = Constants.TimesOfDay.getTimeOfDay(
-        from: Date())
     
     @AppStorage("isFocusesHidden")
     private var isFocusesHidden = false
@@ -30,8 +25,15 @@ struct MainView: View {
     @AppStorage("focusOfDay")
     private var focusOfDay: String?
     
+    @State private var selectedDate = Date()
+    
     @State private var isDatePickerPresented = false
     
+    @State private var isModalViewPresented = false
+    
+    @State private var selectedTimeOfDay = Constants.TimesOfDay.getTimeOfDay(
+        from: Date())
+        
     @State private var selectedSubgoalType: Constants.SubgoalTypes?
     
     private var currentSubgoals: [Subgoal] {
@@ -59,19 +61,7 @@ struct MainView: View {
             Section {
                 SubgoalTypeGridView()
             } header: {
-                LabeledContent("Сегодня") {
-                    Button {
-                        withAnimation {
-                            isFocusesHidden.toggle()
-                        }
-                    } label: {
-                        HStack(spacing: 4) {
-                            Text(isFocusesHidden ? "Показать" : "Скрыть")
-                            Text("фокус")
-                        }
-                    }
-                }
-                .font(.caption)
+                TodaySectionHeaderView()
             }
             Section(selectedTimeOfDay.rawValue) {
                 TimeOfDayPickerView()
@@ -101,10 +91,15 @@ struct MainView: View {
         .sheet(item: $selectedSubgoalType) {
             SubgoalTypeView(type: $0, date: selectedDate)
         }
+        .sheet(isPresented: $isModalViewPresented) {
+            InboxView(date: selectedDate)
+        }
     }
     
     // MARK: - Private Methods
-    private func getSubgoalCount(_ subgoalType: Constants.SubgoalTypes) -> Int {
+    private func getSubgoalCount(
+        _ subgoalType: Constants.SubgoalTypes
+    ) -> Int {
         subgoals
             .filter { $0.type == subgoalType.rawValue }
             .filter { !$0.isCompleted }
@@ -115,13 +110,26 @@ struct MainView: View {
 // MARK: - Views
 private extension MainView {
     
+    func TodaySectionHeaderView() -> some View {
+        LabeledContent("Сегодня") {
+            Button {
+                withAnimation {
+                    isFocusesHidden.toggle()
+                }
+            } label: {
+                HStack(spacing: 4) {
+                    Text(isFocusesHidden ? "Показать" : "Скрыть")
+                    Text("фокус")
+                }
+            }
+        }
+        .font(.caption)
+    }
+    
     func SubgoalTypeGridView() -> some View {
         VStack {
             if !isFocusesHidden {
                 SubgoalTypeSecondaryView(.focus, count: getSubgoalCount(.focus))
-                    .onTapGesture {
-                        selectedSubgoalType = .focus
-                    }
             }
             HStack {
                 ForEach(Constants.SubgoalTypes.allCases.dropLast(2)) { type in
@@ -132,12 +140,34 @@ private extension MainView {
                 }
             }
             SubgoalTypeSecondaryView(.inbox, count: getSubgoalCount(.inbox))
-                .onTapGesture {
-                    selectedSubgoalType = .inbox
-                }
         }
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color(.systemBackground))
+    }
+    
+    func SubgoalTypePrimaryView(
+        _ subgoalType: Constants.SubgoalTypes,
+        count: Int
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Image(systemName: subgoalType.imageName)
+                    .imageScale(.large)
+                    .foregroundStyle(.blue)
+                Spacer()
+                Text(String(count))
+                    .font(.title2)
+                    .fontWeight(.semibold)
+            }
+            Text(subgoalType.plural)
+                .fontWeight(.medium)
+                .foregroundStyle(.secondary)
+        }
+        .padding(12)
+        .background {
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.secondarySystemBackground))
+        }
     }
     
     func SubgoalTypeSecondaryView(
@@ -181,30 +211,12 @@ private extension MainView {
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color(.secondarySystemBackground))
         }
-    }
-    
-    func SubgoalTypePrimaryView(
-        _ subgoalType: Constants.SubgoalTypes,
-        count: Int
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Image(systemName: subgoalType.imageName)
-                    .imageScale(.large)
-                    .foregroundStyle(.blue)
-                Spacer()
-                Text(String(count))
-                    .font(.title2)
-                    .fontWeight(.semibold)
+        .onTapGesture {
+            if subgoalType == .inbox {
+                isModalViewPresented = true
+            } else {
+                selectedSubgoalType = subgoalType
             }
-            Text(subgoalType.plural)
-                .fontWeight(.medium)
-                .foregroundStyle(.secondary)
-        }
-        .padding(12)
-        .background {
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color(.secondarySystemBackground))
         }
     }
     
@@ -238,17 +250,49 @@ private extension MainView {
         } label: {
             Image(systemName: "calendar")
         }
-        .popover(isPresented: $isDatePickerPresented) {
-            DatePicker("", selection: $selectedDate, displayedComponents: .date)
-                .datePickerStyle(.graphical)
-                .onChange(of: selectedDate) {
-                    subgoals.nsPredicate = SubgoalFilter.predicate(
-                        for: selectedDate)
-                }
-                .environment(
-                    \.locale,
-                     Locale(identifier: "ru_RU"))
+        .sheet(isPresented: $isDatePickerPresented) {
+            NavigationStack {
+                DatePickerView()
+                    .navigationTitle("Выберите дату")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .topBarLeading) {
+                            Button("Отмена") {
+                                isDatePickerPresented = false
+                            }
+                            .foregroundStyle(.red)
+                        }
+                        ToolbarItem {
+                            Button("Сегодня") {
+                                selectedDate = Date()
+                                subgoals.nsPredicate = SubgoalFilter.predicate(
+                                    for: selectedDate)
+                                isDatePickerPresented = false
+                            }
+                            .disabled(
+                                Calendar.current.isDateInToday(selectedDate))
+                        }
+                    }
+            }
+            .presentationDetents([.medium])
         }
+    }
+    
+    func DatePickerView() -> some View {
+        DatePicker(
+            "",
+            selection: $selectedDate,
+            displayedComponents: .date)
+        .datePickerStyle(.graphical)
+        .onChange(of: selectedDate) {
+            subgoals.nsPredicate = SubgoalFilter.predicate(
+                for: selectedDate)
+            isDatePickerPresented = false
+        }
+        .environment(
+            \.locale,
+             Locale(identifier: "ru_RU"))
+        .padding()
     }
     
     func ToggleHidingCompletedButtonView() -> some View {

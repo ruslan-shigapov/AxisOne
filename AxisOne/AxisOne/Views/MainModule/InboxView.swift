@@ -1,43 +1,69 @@
 //
-//  SubgoalTypeView.swift
+//  InboxView.swift
 //  AxisOne
 //
-//  Created by Ruslan Shigapov on 13.07.2025.
+//  Created by Ruslan Shigapov on 27.07.2025.
 //
 
 import SwiftUI
 
-struct SubgoalTypeView: View {
+struct InboxView: View {
     
     @Environment(\.dismiss) private var dismiss
     
-    @FetchRequest
+    @FetchRequest(
+        entity: Subgoal.entity(),
+        sortDescriptors: [.init(key: "time", ascending: true)],
+        predicate: NSPredicate(
+            format: "type == %@",
+            Constants.SubgoalTypes.inbox.rawValue))
     private var subgoals: FetchedResults<Subgoal>
     
     private var filteredSubgoals: [Subgoal] {
-        subgoals.filter { $0.type == type.rawValue }
+        subgoals.filter {
+            guard let deadline = $0.deadline, !$0.isCompleted else {
+                return false
+            }
+            return Calendar.current.isDate(deadline, inSameDayAs: date)
+        }
     }
     
     private var uncompletedSubgoals: [Subgoal] {
-        filteredSubgoals.filter { !$0.isCompleted }
+        subgoals.filter {
+            !$0.isCompleted && $0.deadline == nil
+        }
     }
     
     private var completedSubgoals: [Subgoal] {
-        filteredSubgoals.filter { $0.isCompleted }
+        subgoals.filter { $0.isCompleted }
     }
     
-    var type: Constants.SubgoalTypes
     var date: Date
     
     var body: some View {
         NavigationStack {
             List {
-                Section(type.plural) {
-                    if uncompletedSubgoals.isEmpty {
+                NavigationLink(
+                    destination: DetailSubgoalView(
+                        subgoals: .constant([]),
+                        isModified: .constant(false))
+                ) {
+                    Text("Добавить")
+                        .foregroundStyle(.blue)
+                }
+                if !uncompletedSubgoals.isEmpty {
+                    Section("На очереди") {
+                        ForEach(uncompletedSubgoals) {
+                            SubgoalView(subgoal: $0)
+                        }
+                    }
+                }
+                Section("Сегодня") {
+                    if filteredSubgoals.isEmpty {
                         Text("Подцелей данного типа не имеется")
                             .foregroundStyle(.secondary)
                     } else {
-                        ForEach(uncompletedSubgoals) {
+                        ForEach(filteredSubgoals) {
                             SubgoalView(subgoal: $0)
                         }
                     }
@@ -50,7 +76,7 @@ struct SubgoalTypeView: View {
                     }
                 }
             }
-            .navigationTitle(getTitle())
+            .navigationTitle(Constants.SubgoalTypes.inbox.rawValue)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem {
@@ -63,31 +89,6 @@ struct SubgoalTypeView: View {
                 }
             }
         }
-    }
-    
-    init(type: Constants.SubgoalTypes, date: Date) {
-        self.type = type
-        self.date = date
-        _subgoals = FetchRequest(
-            entity: Subgoal.entity(),
-            sortDescriptors: [.init(key: "time", ascending: true)],
-            predicate: SubgoalFilter.predicate(for: date))
-    }
-    
-    private func getTitle() -> String {
-        let calendar = Calendar.current
-        if calendar.isDateInToday(date) {
-            return "Сегодня"
-        } else if calendar.isDateInTomorrow(date) {
-            return "Завтра"
-        } else if calendar.isDateInYesterday(date) {
-            return "Вчера"
-        }
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ru_RU")
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
     }
 }
 

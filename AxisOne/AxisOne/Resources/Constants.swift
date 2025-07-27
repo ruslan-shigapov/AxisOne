@@ -78,7 +78,7 @@ enum Constants {
             case .habit: "Опишите действие"
             case .milestone: "Опишите результат"
             case .focus: "Что стоит помнить?"
-            case .inbox: ""
+            case .inbox: "Что нужно сделать?"
             }
         }
         // TODO: изменить описание на более четкие и подходящие
@@ -130,6 +130,16 @@ enum Constants {
             case .evening: "sunset"
             case .night: "moon.stars"
             case .unknown: ""
+            }
+        }
+        
+        var order: Int {
+            switch self {
+            case .morning: 0
+            case .afternoon: 1
+            case .evening: 2
+            case .night: 3
+            case .unknown: 4
             }
         }
         

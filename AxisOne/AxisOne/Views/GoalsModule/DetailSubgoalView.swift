@@ -40,7 +40,7 @@ struct DetailSubgoalView: View {
     }
 
     // MARK: - Public Properties
-    var lifeArea: Constants.LifeAreas
+    var lifeArea: Constants.LifeAreas?
     var subgoal: Subgoal?
     
     @Binding var subgoals: [Subgoal]
@@ -50,7 +50,7 @@ struct DetailSubgoalView: View {
     var body: some View {
         NavigationStack {
             Form {
-                if subgoal == nil {
+                if subgoal == nil, lifeArea != nil {
                     SubgoalTypeSectionView()
                 }
                 Section {
@@ -59,8 +59,8 @@ struct DetailSubgoalView: View {
                         "Можете добавить уточнение",
                         text: $notes,
                         axis: .vertical)
-                    if selectedSubgoalType == .task ||
-                        selectedSubgoalType == .milestone {
+                    if selectedSubgoalType != .habit ||
+                        selectedSubgoalType == .focus {
                         DeadlineGroupView()
                         if isUrgent {
                             TimeGroupView()
@@ -100,6 +100,21 @@ struct DetailSubgoalView: View {
                         }
                         .foregroundStyle(.red)
                     }
+                    if let subgoal {
+                        ToolbarItem {
+                            Button(
+                                subgoal.isCompleted 
+                                ? "Невыполнено"
+                                : "Выполнено"
+                            ) {
+                                subgoal.isCompleted.toggle()
+                                try? context.save()
+                                DispatchQueue.main.async {
+                                    dismiss()
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -107,7 +122,7 @@ struct DetailSubgoalView: View {
     
     // MARK: - Initialize
     init(
-        lifeArea: Constants.LifeAreas,
+        lifeArea: Constants.LifeAreas? = nil,
         subgoal: Subgoal? = nil,
         subgoals: Binding<[Subgoal]>,
         isModified: Binding<Bool>,
@@ -122,6 +137,9 @@ struct DetailSubgoalView: View {
         _selectedSubgoalType = State(
             initialValue: Constants.SubgoalTypes(
                 rawValue: subgoal?.type ?? "") ?? .task)
+        if lifeArea == nil {
+            _selectedSubgoalType = State(initialValue: .inbox)
+        }
         _title = State(initialValue: subgoal?.title ?? "")
         _notes = State(initialValue: subgoal?.notes ?? "")
         _selectedStartDate = State(initialValue: subgoal?.startDate ?? Date())
@@ -151,12 +169,15 @@ struct DetailSubgoalView: View {
         subgoalToSave.title = title
         subgoalToSave.notes = notes
         subgoalToSave.isCompleted = subgoal?.isCompleted ?? false
-        if selectedSubgoalType == .task || selectedSubgoalType == .milestone {
+        if selectedSubgoalType != .habit, selectedSubgoalType != .focus {
             subgoalToSave.deadline = isUrgent ? selectedDeadline : nil
         }
         if selectedSubgoalType != .focus {
             subgoalToSave.time = isExact ? selectedTime : nil
             subgoalToSave.timeOfDay = isExact ? nil : selectedTimeOfDay.rawValue
+            if !isUrgent {
+                subgoalToSave.timeOfDay = nil
+            }
         }
         if selectedSubgoalType == .milestone {
             subgoalToSave.completion = partCompletion
@@ -167,6 +188,8 @@ struct DetailSubgoalView: View {
         }
         if let subgoal, let index = subgoals.firstIndex(of: subgoal) {
             subgoals[index] = subgoalToSave
+        } else if lifeArea == nil {
+            try? context.save()
         } else {
             subgoals.insert(subgoalToSave, at: 0)
         }
@@ -176,12 +199,15 @@ struct DetailSubgoalView: View {
         guard let subgoal else { return }
         subgoal.title = title
         subgoal.notes = notes
-        if selectedSubgoalType == .task || selectedSubgoalType == .milestone {
+        if selectedSubgoalType != .habit, selectedSubgoalType != .focus {
             subgoal.deadline = isUrgent ? selectedDeadline : nil
         }
         if selectedSubgoalType != .focus {
             subgoal.time = isExact ? selectedTime : nil
             subgoal.timeOfDay = isExact ? nil : selectedTimeOfDay.rawValue
+            if !isUrgent {
+                subgoal.timeOfDay = nil
+            }
         }
         if selectedSubgoalType == .milestone {
             subgoal.completion = partCompletion
@@ -236,7 +262,7 @@ private extension DetailSubgoalView {
         .buttonStyle(BorderlessButtonStyle())
         .background(
             ZStack {
-                lifeArea.color
+                lifeArea?.color ?? .clear
                 if selectedSubgoalType == type {
                     RoundedRectangle(cornerRadius: 16)
                         .stroke(.primary, lineWidth: 3)
@@ -346,8 +372,13 @@ private extension DetailSubgoalView {
     
     func DeleteButtonView(_ subgoal: Subgoal) -> some View {
         Button("Удалить подцель") {
-            subgoals.removeAll { $0 == subgoal }
-            isModified.toggle()
+            if isModalPresentation {
+                context.delete(subgoal)
+                try? context.save()
+            } else {
+                subgoals.removeAll { $0 == subgoal }
+                isModified.toggle()
+            }
             DispatchQueue.main.async {
                 dismiss()
             }
@@ -358,7 +389,7 @@ private extension DetailSubgoalView {
 
 #Preview {
     DetailSubgoalView(
-        lifeArea: .health,
+        lifeArea: .wealth,
         subgoals: .constant([]),
         isModified: .constant(false))
 }

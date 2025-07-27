@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SubgoalView: View {
     
+    // MARK: - Private Properties
     @Environment(\.managedObjectContext) private var context
     
     @State private var isModalViewPresented = false
@@ -21,13 +22,47 @@ struct SubgoalView: View {
         subgoal.goal?.title ?? ""
     }
     
+    private var isMissed: Bool {
+        guard subgoal.type != Constants.SubgoalTypes.focus.rawValue else {
+            return false
+        }
+        guard !subgoal.isCompleted else { return false }
+        if let deadline = subgoal.deadline {
+            guard Calendar.current.isDate(deadline, inSameDayAs: Date()) else {
+                return false
+            }
+        }
+        var timeOfDayValue: Constants.TimesOfDay
+        if let time = subgoal.time {
+            timeOfDayValue = Constants.TimesOfDay.getTimeOfDay(from: time)
+        } else if let timeOfDay = subgoal.timeOfDay {
+            timeOfDayValue = Constants.TimesOfDay(
+                rawValue: timeOfDay) ?? .unknown
+        } else {
+            return false
+        }
+        return timeOfDayValue.order < Constants.TimesOfDay.getTimeOfDay(
+            from: Date()).order
+    }
+
+    // MARK: - Public Properties
     @ObservedObject var subgoal: Subgoal
     
+    // MARK: - Body
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack {
-                LifeAreaCapsuleView()
-                TypeCapsuleView()
+                if subgoal.type != Constants.SubgoalTypes.inbox.rawValue {
+                    CapsuleView(
+                        color: lifeArea.color,
+                        title: subgoal.goal?.lifeArea)
+                }
+                CapsuleView(color: .clear, title: subgoal.type)
+                if let time = subgoal.time {
+                    Spacer()
+                    Text(time.formatted(date: .omitted, time: .shortened))
+                    Image(systemName: "bell")
+                }
             }
             HStack {
                 if subgoal.type != Constants.SubgoalTypes.focus.rawValue {
@@ -66,6 +101,7 @@ struct SubgoalView: View {
         }
     }
     
+    // MARK: - Private Methods
     private func toggleCompletion() {
         subgoal.isCompleted.toggle()
         subgoal.order = getOrder()
@@ -83,26 +119,15 @@ struct SubgoalView: View {
     }
 }
 
+// MARK: - Views
 private extension SubgoalView {
     
-    func TypeCapsuleView() -> some View {
-        Capsule()
-            .fill(.secondary)
-            .frame(width: 90, height: 22)
-            .overlay(
-                Text(subgoal.type ?? "")
-                    .font(.footnote)
-            )
-    }
-    
-    func LifeAreaCapsuleView() -> some View {
-        Capsule()
-            .fill(lifeArea.color)
-            .frame(width: 100, height: 22)
-            .overlay(
-                Text(subgoal.goal?.lifeArea ?? "")
-                    .font(.footnote)
-            )
+    func CapsuleView(color: Color, title: String?) -> some View {
+        Text(title ?? "")
+            .font(.footnote)
+            .frame(width: 96, height: 24)
+            .background(Capsule().fill(color))
+            .overlay(Capsule().stroke(.primary, lineWidth: 1.3))
     }
     
     func CheckmarkImageView() -> some View {
@@ -117,12 +142,16 @@ private extension SubgoalView {
         VStack(alignment: .leading) {
             Text(subgoal.title ?? "")
                 .lineLimit(2)
-                .fontWeight(.medium)
-                .foregroundStyle(subgoal.isCompleted ? .secondary : .primary)
-            Text("Цель: \(subgoal.goal?.title ?? "")")
-                .lineLimit(1)
-                .fontWeight(.light)
-                .foregroundStyle(.secondary)
+                .fontWeight(isMissed ? .regular : .medium)
+                .foregroundStyle(subgoal.isCompleted
+                                 ? .secondary
+                                 : isMissed ? Color.red : .primary)
+            if subgoal.type != Constants.SubgoalTypes.inbox.rawValue {
+                Text("Цель: \(subgoal.goal?.title ?? "")")
+                    .lineLimit(1)
+                    .fontWeight(.light)
+                    .foregroundStyle(.secondary)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
