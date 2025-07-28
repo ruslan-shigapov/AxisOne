@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct HistoryView: View {
-    
+
+    @Environment(\.managedObjectContext) private var context
+
     @FetchRequest(
         entity: Reflection.entity(),
         sortDescriptors: [])
     private var reflections: FetchedResults<Reflection>
-    
-    @Environment(\.managedObjectContext) private var context
-    
+        
     var body: some View {
         List {
             ForEach(reflections) { reflection in

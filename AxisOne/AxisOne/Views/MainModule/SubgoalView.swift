@@ -13,6 +13,8 @@ struct SubgoalView: View {
     @Environment(\.managedObjectContext) private var context
     
     @State private var isModalViewPresented = false
+    
+    @State private var isConfirmationDialogPresented = false
 
     private var lifeArea: Constants.LifeAreas {
         Constants.LifeAreas(rawValue: subgoal.goal?.lifeArea ?? "") ?? .health
@@ -20,6 +22,16 @@ struct SubgoalView: View {
     
     private var goalTitle: String {
         subgoal.goal?.title ?? ""
+    }
+    
+    private var timeOfDay: Constants.TimesOfDay {
+        if let time = subgoal.time {
+            return Constants.TimesOfDay.getTimeOfDay(from: time)
+        } else if let timeOfDay = subgoal.timeOfDay {
+            return Constants.TimesOfDay(rawValue: timeOfDay) ?? .unknown
+        } else {
+            return .unknown
+        }
     }
     
     private var isMissed: Bool {
@@ -32,16 +44,8 @@ struct SubgoalView: View {
                 return false
             }
         }
-        var timeOfDayValue: Constants.TimesOfDay
-        if let time = subgoal.time {
-            timeOfDayValue = Constants.TimesOfDay.getTimeOfDay(from: time)
-        } else if let timeOfDay = subgoal.timeOfDay {
-            timeOfDayValue = Constants.TimesOfDay(
-                rawValue: timeOfDay) ?? .unknown
-        } else {
-            return false
-        }
-        return timeOfDayValue.order < Constants.TimesOfDay.getTimeOfDay(
+        guard timeOfDay != .unknown else { return false }
+        return timeOfDay.order < Constants.TimesOfDay.getTimeOfDay(
             from: Date()).order
     }
 
@@ -90,6 +94,11 @@ struct SubgoalView: View {
             } label: {
                 Image(systemName: "trash")
             }
+            Button {
+                isConfirmationDialogPresented = true
+            } label: {
+                Image(systemName: "move.3d")
+            }
         }
         .sheet(isPresented: $isModalViewPresented) {
             DetailSubgoalView(
@@ -98,6 +107,19 @@ struct SubgoalView: View {
                 subgoals: .constant([]),
                 isModified: .constant(false),
                 isModalPresentation: true)
+        }
+        .confirmationDialog(
+            "Перенести на...",
+            isPresented: $isConfirmationDialogPresented, titleVisibility: .visible
+        ) {
+            ForEach(Constants.TimesOfDay.allCases.dropLast()) { value in
+                Button(value.rawValue) {
+                    subgoal.timeOfDay = value.rawValue
+                    try? context.save()
+                }
+                .disabled(timeOfDay == value)
+            }
+            Button("Отмена", role: .cancel) {}
         }
     }
     

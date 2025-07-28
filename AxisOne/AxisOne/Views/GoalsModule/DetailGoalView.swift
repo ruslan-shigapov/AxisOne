@@ -29,6 +29,9 @@ struct DetailGoalView: View {
     @State private var isEditing = false
     @State private var editMode: EditMode = .inactive
     
+    @State private var isDeleteAlertPresented = false
+    @State private var isErrorAlertPresented = false
+    
     private var isFormValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
         isModified
@@ -214,14 +217,19 @@ private extension DetailGoalView {
     }
     
     func DeleteButtonView(_ goal: Goal) -> some View {
-        Button("Удалить цель") {
-            context.delete(goal)
-            try? context.save()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                dismiss()
-            }
+        Button("Удалить цель", role: .destructive) {
+            isDeleteAlertPresented = true
         }
-        .foregroundStyle(.red)
+        .alert("Вы уверены?", isPresented: $isDeleteAlertPresented) {
+            Button("Удалить", role: .destructive) {
+                context.delete(goal)
+                try? context.save()
+                DispatchQueue.main.async {
+                    dismiss()
+                }
+            }
+            Button("Отмена", role: .cancel) {}
+        }
     }
     
     func SubgoalSectionHeaderView() -> some View {
@@ -255,13 +263,20 @@ private extension DetailGoalView {
     func DoneButtonView() -> some View {
         Button("Готово") {
             if hasDuplicate() {
-                // TODO: add alert
+                isErrorAlertPresented = true
                 return
             }
             save()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 dismiss()
             }
+        }
+        .alert(
+            "Попробуйте снова",
+            isPresented: $isErrorAlertPresented,
+            actions: {}
+        ) {
+            Text("Цель с таким названием уже существует.")
         }
     }
 }

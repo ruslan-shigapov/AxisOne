@@ -33,6 +33,8 @@ struct DetailSubgoalView: View {
     
     @State private var isModalPresentation: Bool
     
+    @State private var isAlertPresented = false
+    
     private let navigationTitle: String
     
     private var isFormValid: Bool {
@@ -175,7 +177,7 @@ struct DetailSubgoalView: View {
         if selectedSubgoalType != .focus {
             subgoalToSave.time = isExact ? selectedTime : nil
             subgoalToSave.timeOfDay = isExact ? nil : selectedTimeOfDay.rawValue
-            if !isUrgent {
+            if !isUrgent, selectedSubgoalType != .habit {
                 subgoalToSave.timeOfDay = nil
             }
         }
@@ -205,7 +207,7 @@ struct DetailSubgoalView: View {
         if selectedSubgoalType != .focus {
             subgoal.time = isExact ? selectedTime : nil
             subgoal.timeOfDay = isExact ? nil : selectedTimeOfDay.rawValue
-            if !isUrgent {
+            if !isUrgent, selectedSubgoalType != .habit {
                 subgoal.timeOfDay = nil
             }
         }
@@ -371,19 +373,24 @@ private extension DetailSubgoalView {
     }
     
     func DeleteButtonView(_ subgoal: Subgoal) -> some View {
-        Button("Удалить подцель") {
-            if isModalPresentation {
-                context.delete(subgoal)
-                try? context.save()
-            } else {
-                subgoals.removeAll { $0 == subgoal }
-                isModified.toggle()
-            }
-            DispatchQueue.main.async {
-                dismiss()
-            }
+        Button("Удалить подцель", role: .destructive) {
+            isAlertPresented = true
         }
-        .foregroundStyle(.red)
+        .alert("Вы уверены?", isPresented: $isAlertPresented) {
+            Button("Удалить", role: .destructive) {
+                if isModalPresentation {
+                    context.delete(subgoal)
+                    try? context.save()
+                } else {
+                    subgoals.removeAll { $0 == subgoal }
+                    isModified.toggle()
+                }
+                DispatchQueue.main.async {
+                    dismiss()
+                }
+            }
+            Button("Отмена", role: .cancel) {}
+        }
     }
 }
 
