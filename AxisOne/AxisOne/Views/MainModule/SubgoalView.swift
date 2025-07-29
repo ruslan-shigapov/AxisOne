@@ -148,7 +148,6 @@ private extension SubgoalView {
     func CapsuleView(color: Color, title: String?) -> some View {
         Text(title ?? "")
             .font(.custom("Jura", size: 13))
-            .fontWeight(.medium)
             .frame(width: 96, height: 24)
             .background(
                 Capsule().fill(
@@ -162,7 +161,7 @@ private extension SubgoalView {
                         endPoint: .bottom
                     ))
             )
-            .overlay(Capsule().stroke(.primary, lineWidth: 1.3))
+            .overlay(Capsule().stroke(.primary, lineWidth: 1))
     }
     
     func CheckmarkImageView() -> some View {

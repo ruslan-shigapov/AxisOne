@@ -100,18 +100,6 @@ struct DetailSubgoalView: View {
             .background(Color("Background"))
             .scrollContentBackground(.hidden)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        dismiss()
-                    } label: {
-                        HStack {
-                            Image(systemName: "chevron.left")
-                            Text("Назад")
-                                .font(.custom("Jura", size: 17))
-                        }
-                        .fontWeight(.medium)
-                    }
-                }
                 ToolbarItem(placement: .principal) {
                     Text(navigationTitle)
                         .font(.custom("Jura", size: 20))
@@ -142,6 +130,19 @@ struct DetailSubgoalView: View {
                             .font(.custom("Jura", size: 17))
                             .fontWeight(.medium)
                             .foregroundStyle(.accent)
+                        }
+                    }
+                } else {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            HStack {
+                                Image(systemName: "chevron.left")
+                                Text("Назад")
+                                    .font(.custom("Jura", size: 17))
+                            }
+                            .fontWeight(.medium)
                         }
                     }
                 }

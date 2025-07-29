@@ -51,7 +51,8 @@ struct ContentView: View {
     }
     
     init() {
-        setupNavigationBarTitle()
+        setupNavBarAppearance()
+        setupTabBarAppearance()
     }
     
     private func resetHabitsIfNeeded() {
@@ -90,25 +91,34 @@ struct ContentView: View {
         focusOfDay = focuses?.randomElement()?.title
     }
     
-    private func setupNavigationBarTitle() {
+    private func setupNavBarAppearance() {
         guard let largeTitleFont = UIFont(name: "Jura-Bold", size: 34) else {
             return
         }
         guard let titleFont = UIFont(name: "Jura-Bold", size: 20) else {
             return
         }
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.largeTitleTextAttributes = [
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.largeTitleTextAttributes = [
             .font: largeTitleFont,
             .foregroundColor: UIColor.label
         ]
-        appearance.titleTextAttributes = [
+        navBarAppearance.titleTextAttributes = [
             .font: titleFont,
             .foregroundColor: UIColor.label
         ]
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().standardAppearance = navBarAppearance
+        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+    }
+    
+    private func setupTabBarAppearance() {
+        guard let titleFont = UIFont(name: "Jura-Medium", size: 12) else {
+            return
+        }
+        let tabBarAppearance = UITabBarAppearance()
+        let itemAppearance = tabBarAppearance.stackedLayoutAppearance
+        itemAppearance.normal.titleTextAttributes = [.font: titleFont]
+        UITabBar.appearance().standardAppearance = tabBarAppearance
     }
 }
 

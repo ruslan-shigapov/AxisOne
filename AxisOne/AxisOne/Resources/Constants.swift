@@ -8,7 +8,7 @@
 import SwiftUICore
 
 enum Constants {
-    // MARK: Tabs
+    
     enum Tabs: String, CaseIterable, Identifiable {
         
         case goals = "Цели"
@@ -34,7 +34,7 @@ enum Constants {
         
         var id: Self { self }
     }
-    // MARK: Life Areas
+    
     enum LifeAreas: String, CaseIterable, Identifiable {
         
         case health = "Здоровье"
@@ -53,7 +53,7 @@ enum Constants {
         
         var id: Self { self }
     }
-    // MARK: Subgoal Types
+    
     enum SubgoalTypes: String, CaseIterable, Identifiable {
         
         case task = "Задача"
@@ -81,13 +81,13 @@ enum Constants {
             case .inbox: "Что нужно сделать?"
             }
         }
-        // TODO: изменить описание на более четкие и подходящие
+
         var description: String {
             switch self {
             case .task: "Каждая выполненная задача приближает вас к цели. Старайтесь как можно чаще продвигаться хотя бы немного вперед."
-            case .habit: "Ключом к достижению многих целей является дисциплина. Вы можете добавить до трех привычек к одной цели."
+            case .habit: "Ключом к достижению многих целей является дисциплина. Вы сможете отслеживать непрерывные периоды выполнения привычек."
             case .milestone: "Когда разбиваете цель на отрезки, то она становится более достижимой."
-            case .focus: "Иногда недостаточно просто совершать какие-либо действия. Бывает полезно держать в фокусе смыслы или намерения, которые помогут на вашем пути."
+            case .focus: "Иногда недостаточно просто совершать действия. Бывает полезно держать в фокусе смыслы или намерения, которые помогут на вашем пути."
             case .inbox: ""
             }
         }
@@ -104,7 +104,7 @@ enum Constants {
         
         var id: Self { self }
     }
-    // MARK: Frequencies
+    
     enum Frequencies: String, CaseIterable, Identifiable {
         
         case daily = "Ежедневно"
@@ -114,7 +114,7 @@ enum Constants {
         
         var id: Self { self }
     }
-    // MARK: Feelings
+    
     enum TimesOfDay: String, CaseIterable, Identifiable {
         
         case morning = "Утро / 5:00-11:59"
@@ -155,7 +155,7 @@ enum Constants {
             }
         }
     }
-    // MARK: Feelings
+    
     enum Feelings: String, CaseIterable, Identifiable {
         
         case anger = "Гнев"
