@@ -9,6 +9,7 @@ import SwiftUI
 
 struct JournalView: View {
     
+    // MARK: - Private Properties
     @FetchRequest(
         entity: Subgoal.entity(),
         sortDescriptors: [],
@@ -31,7 +32,8 @@ struct JournalView: View {
             return .unknown
         }
     }
-        
+    
+    // MARK: - Body
     var body: some View {
         ZStack {
             if groupedSubgoals.isEmpty {
@@ -48,6 +50,10 @@ struct JournalView: View {
             }
         }
     }
+}
+
+// MARK: - Views
+private extension JournalView {
     
     func EmptyStateView() -> some View {
         Text("На сегодня нет активных подцелей для самоанализа")
@@ -67,18 +73,20 @@ struct JournalView: View {
                                 timeOfDay: timeOfDay,
                                 subgoals: groupedSubgoals[timeOfDay] ?? [])
                         ) {
-                            LabeledContent(timeOfDay.rawValue) {
-                                HStack {
-                                    CheckmarkImage(for: timeOfDay)
-                                    Text(
-                                        String(
-                                            groupedSubgoals[
-                                                timeOfDay
-                                            ]?.count ?? 0))
-                                }
-                            }
+                            TimeOfDayRowView(timeOfDay)
                         }
                 }
+            }
+        }
+    }
+    
+    func TimeOfDayRowView(_ timeOfDay: Constants.TimesOfDay) -> some View {
+        LabeledContent(timeOfDay.rawValue) {
+            HStack {
+                CheckmarkImage(for: timeOfDay)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.accent)
+                Text(String(groupedSubgoals[timeOfDay]?.count ?? 0))
             }
         }
     }

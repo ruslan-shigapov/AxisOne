@@ -10,6 +10,9 @@ import SwiftUI
 struct AnalysisView: View {
     
     // MARK: - Private Properties
+    @Environment(\.managedObjectContext) private var context
+    @Environment(\.dismiss) private var dismiss
+    
     @FetchRequest
     private var reflections: FetchedResults<Reflection>
     
@@ -18,12 +21,9 @@ struct AnalysisView: View {
     @State private var selectedFeeling: Constants.Feelings = .joy
     @State private var selectedGroupedEmotions: [Subgoal: [String]] = [:]
     
+    @State private var isExpanded = true
+    
     @State private var mainThought = ""
-    
-    @State private var isSectionExpanded = true
-    
-    @Environment(\.managedObjectContext) private var context
-    @Environment(\.dismiss) private var dismiss
     
     private var isFormValid: Bool {
         !mainThought.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
@@ -39,60 +39,36 @@ struct AnalysisView: View {
     // MARK: - Public Properties
     var timeOfDay: Constants.TimesOfDay
     var subgoals: [Subgoal]
-
+    
     // MARK: - Body
     var body: some View {
         Form {
             Section("Подцели") {
                 ForEach(Array(selectedGroupedEmotions.keys)) { subgoal in
-                    LabeledContent {
-                        HStack {
-                            HStack {
-                                ForEach(0..<3) {
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .fill(
-                                            ($0 < selectedGroupedEmotions[
-                                                subgoal
-                                            ]?.count ?? 0)
-                                            ? .blue
-                                            : .gray)
-                                        .frame(width: 5, height: 15)
-                                }
-                            }
-                            Image(systemName: subgoal.isCompleted
-                                  ? "checkmark.circle.fill"
-                                  : "circle")
-                            .foregroundStyle(
-                                (selectedGroupedEmotions[
-                                    subgoal
-                                ]?.count ?? 0) > 2
-                                ? .blue
-                                : .gray)
+                    SubgoalEmotionsView(subgoal)
+                        .onTapGesture {
+                            selectedSubgoal = subgoal
                         }
-                    } label: {
-                        Text(subgoal.title ?? "")
-                            .foregroundStyle(subgoal == selectedSubgoal
-                                             ? .primary
-                                             : .secondary)
-                    }
-                    .onTapGesture {
-                        selectedSubgoal = subgoal
-                    }
                 }
+            }
+            Section {
+                DisclosureGroup(isExpanded: $isExpanded) {
+                    EmotionsView()
+                } label: {
+                    FeelingPickerView()
+                        .disabled(!isExpanded)
+                        .padding(.trailing, 8)
+                }
+            } header: {
+                Text("Чувства")
+            } footer: {
+                Text("Выберите хотя бы по 3 эмоции к каждой подцели для исчерпывающего анализа в будущем. Но и не переусердствуйте.")
             }
             Section("Размышления") {
                 TextField(
                     "Что думаете по этому поводу?",
                     text: $mainThought,
                     axis: .vertical)
-            }
-            Section {
-                FeelingPickerView()
-                EmotionsView()
-            } header: {
-                Text("Эмоции")
-            } footer: {
-                Text("Выберите хотя бы по 3 эмоции к каждой подцели для исчерпывающего анализа в будущем. Но и не переусердствуйте.")
             }
         }
         .onAppear {
@@ -109,11 +85,12 @@ struct AnalysisView: View {
                     }
                 }
                 .disabled(!isFormValid)
-                .foregroundStyle(isFormValid ? .blue : .secondary)
+                .foregroundStyle(isFormValid ? .accent : .secondary)
             }
         }
     }
     
+    // MARK: - Initialize
     init(
         timeOfDay: Constants.TimesOfDay,
         subgoals: [Subgoal],
@@ -130,19 +107,19 @@ struct AnalysisView: View {
     
     // MARK: - Private Methods
     private func save() {
-        let reflection = reflections.first ?? Reflection(context: context)
-        reflection.date = Date()
-        reflection.timeOfDay = timeOfDay.rawValue
-        reflection.mainThought = mainThought
-        (reflection.reactions as? Set<Reaction>)?.forEach {
+        let reflectionToSave = reflections.first ?? Reflection(context: context)
+        reflectionToSave.date = Date()
+        reflectionToSave.timeOfDay = timeOfDay.rawValue
+        (reflectionToSave.reactions as? Set<Reaction>)?.forEach {
             context.delete($0)
         }
         for (subgoal, emotions) in selectedGroupedEmotions {
             let reaction = Reaction(context: context)
             reaction.subgoal = subgoal
             reaction.emotions = emotions.joined(separator: " ")
-            reflection.addToReactions(reaction)
+            reflectionToSave.addToReactions(reaction)
         }
+        reflectionToSave.mainThought = mainThought
         try? context.save()
     }
     
@@ -156,7 +133,10 @@ struct AnalysisView: View {
             }) {
                 let emotions = reaction.emotions?
                     .components(separatedBy: " ")
-                    .filter { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+                    .filter {
+                        !$0.trimmingCharacters(
+                            in: .whitespacesAndNewlines).isEmpty
+                    }
                 selectedGroupedEmotions[subgoal] = emotions
             } else {
                 selectedGroupedEmotions[subgoal] = []
@@ -164,10 +144,63 @@ struct AnalysisView: View {
         }
         selectedSubgoal = selectedGroupedEmotions.keys.first
     }
+    
+    private func isEmotionSelected(_ emotion: String) -> Bool {
+        guard let subgoal = selectedSubgoal else { return false }
+        return (selectedGroupedEmotions[subgoal] ?? []).contains(emotion)
+    }
+    
+    private func toggleEmotion(_ emotion: String) {
+        guard let subgoal = selectedSubgoal else { return }
+        withAnimation(.easeInOut(duration: 0.2)) {
+            var emotions = selectedGroupedEmotions[subgoal] ?? []
+            if emotions.contains(emotion) {
+                emotions.removeAll(where: { $0 == emotion })
+            } else {
+                emotions.append(emotion)
+            }
+            selectedGroupedEmotions[subgoal] = emotions
+        }
+    }
 }
 
 // MARK: - Views
 private extension AnalysisView {
+    
+    func SubgoalEmotionsView(_ subgoal: Subgoal) -> some View {
+        LabeledContent {
+            HStack {
+                HStack {
+                    ForEach(0..<3) {
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(
+                                ($0 < selectedGroupedEmotions[
+                                    subgoal
+                                ]?.count ?? 0)
+                                ? .accent
+                                : .gray)
+                            .frame(width: 5, height: 15)
+                    }
+                }
+                Image(systemName: subgoal.isCompleted
+                      ? "checkmark.circle.fill"
+                      : "circle")
+                .foregroundStyle(
+                    (selectedGroupedEmotions[
+                        subgoal
+                    ]?.count ?? 0) > 2
+                    ? .accent
+                    : .gray)
+            }
+        } label: {
+            Text(subgoal.title ?? "")
+                .foregroundStyle(subgoal == selectedSubgoal
+                                 ? .primary
+                                 : .secondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
+    }
     
     func FeelingPickerView() -> some View {
         Picker("", selection: $selectedFeeling) {
@@ -188,37 +221,20 @@ private extension AnalysisView {
                     }
             }
         }
-        .padding(8)
-        .background(.gray.opacity(0.1), in: .rect(cornerRadius: 16))
+        .listRowInsets(EdgeInsets())
+        .padding(.trailing, 16)
+        .padding(.vertical, 16)
     }
     
     func EmotionView(_ title: String, isSelected: Bool) -> some View {
         Text(title)
             .font(.callout)
-            .foregroundStyle(.white)
             .padding(.horizontal, 10)
             .padding(.vertical, 8)
+            .frame(maxWidth: .infinity)
             .background(
-                isSelected ? selectedFeeling.color : .gray.opacity(0.5),
+                isSelected ? .accent : .gray.opacity(0.5),
                 in: Capsule())
-    }
-    
-    private func isEmotionSelected(_ emotion: String) -> Bool {
-        guard let subgoal = selectedSubgoal else { return false }
-        return (selectedGroupedEmotions[subgoal] ?? []).contains(emotion)
-    }
-    
-    private func toggleEmotion(_ emotion: String) {
-        guard let subgoal = selectedSubgoal else { return }
-        withAnimation(.easeInOut(duration: 0.2)) {
-            var emotions = selectedGroupedEmotions[subgoal] ?? []
-            if emotions.contains(emotion) {
-                emotions.removeAll(where: { $0 == emotion })
-            } else {
-                emotions.append(emotion)
-            }
-            selectedGroupedEmotions[subgoal] = emotions
-        }
     }
 }
 

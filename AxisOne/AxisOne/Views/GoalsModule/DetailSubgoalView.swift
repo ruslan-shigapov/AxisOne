@@ -11,6 +11,7 @@ struct DetailSubgoalView: View {
     
     // MARK: - Private Properties
     @Environment(\.managedObjectContext) private var context
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
     
     @State private var selectedSubgoalType: Constants.SubgoalTypes
@@ -61,8 +62,8 @@ struct DetailSubgoalView: View {
                         "Можете добавить уточнение",
                         text: $notes,
                         axis: .vertical)
-                    if selectedSubgoalType != .habit ||
-                        selectedSubgoalType == .focus {
+                    if selectedSubgoalType != .habit,
+                       selectedSubgoalType != .focus {
                         DeadlineGroupView()
                         if isUrgent {
                             TimeGroupView()
@@ -115,6 +116,7 @@ struct DetailSubgoalView: View {
                                     dismiss()
                                 }
                             }
+                            .foregroundStyle(.accent)
                         }
                     }
                 }
@@ -258,7 +260,7 @@ private extension DetailSubgoalView {
                     .imageScale(.large)
             }
             .frame(maxWidth: .infinity, minHeight: 60)
-            .foregroundStyle(.black)
+            .foregroundStyle(colorScheme == .dark ? .white : .black)
             .padding(.horizontal)
         }
         .buttonStyle(BorderlessButtonStyle())
@@ -288,7 +290,7 @@ private extension DetailSubgoalView {
     func DeadlineGroupView() -> some View {
         Group {
             Toggle("Срок", isOn: $isUrgent)
-                .tint(.blue)
+                .tint(.accent)
             if isUrgent {
                 DatePickerView(title: "Дата", selection: $selectedDeadline)
             }
@@ -298,7 +300,7 @@ private extension DetailSubgoalView {
     func TimeGroupView() -> some View {
         Group {
             Toggle("Точное время", isOn: $isExact)
-                .tint(.blue)
+                .tint(.accent)
             if isExact {
                 DatePicker(
                     "Напомнить",
@@ -396,7 +398,7 @@ private extension DetailSubgoalView {
 
 #Preview {
     DetailSubgoalView(
-        lifeArea: .wealth,
+        lifeArea: .personal,
         subgoals: .constant([]),
         isModified: .constant(false))
 }

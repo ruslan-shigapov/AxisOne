@@ -85,7 +85,13 @@ struct SubgoalView: View {
         }
         .padding(12)
         .listRowInsets(EdgeInsets())
-        .swipeActions(allowsFullSwipe: false) {
+        .swipeActions {
+            Button {
+                isConfirmationDialogPresented = true
+            } label: {
+                Image(systemName: "move.3d")
+            }
+            .tint(.accent)
             Button(role: .destructive) {
                 withAnimation {
                     context.delete(subgoal)
@@ -93,11 +99,6 @@ struct SubgoalView: View {
                 }
             } label: {
                 Image(systemName: "trash")
-            }
-            Button {
-                isConfirmationDialogPresented = true
-            } label: {
-                Image(systemName: "move.3d")
             }
         }
         .sheet(isPresented: $isModalViewPresented) {

@@ -49,7 +49,7 @@ struct InboxView: View {
                         isModified: .constant(false))
                 ) {
                     Text("Добавить")
-                        .foregroundStyle(.blue)
+                        .foregroundStyle(.accent)
                 }
                 if !uncompletedSubgoals.isEmpty {
                     Section("На очереди") {

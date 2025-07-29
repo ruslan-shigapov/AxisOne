@@ -66,7 +66,7 @@ struct DetailGoalView: View {
                             isModified: $isSubgoalsModified)
                     ) {
                         Text("Добавить")
-                            .foregroundStyle(.blue)
+                            .foregroundStyle(.accent)
                     }
                     SubgoalListView()
                 } header: {
@@ -88,7 +88,7 @@ struct DetailGoalView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     DoneButtonView()
                         .disabled(!isFormValid)
-                        .foregroundStyle(isFormValid ? .blue : .secondary)
+                        .foregroundStyle(isFormValid ? .accent : .secondary)
                 }
             }
         }

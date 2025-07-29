@@ -153,7 +153,7 @@ private extension MainView {
             HStack {
                 Image(systemName: subgoalType.imageName)
                     .imageScale(.large)
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(.accent)
                 Spacer()
                 Text(String(count))
                     .font(.title2)
@@ -178,7 +178,7 @@ private extension MainView {
             HStack {
                 Image(systemName: subgoalType.imageName)
                     .imageScale(.large)
-                    .foregroundStyle(.blue)
+                    .foregroundStyle(.accent)
                 Text(subgoalType.plural)
                     .fontWeight(.medium)
                     .foregroundStyle(.secondary)
