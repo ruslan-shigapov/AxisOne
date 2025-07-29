@@ -95,6 +95,7 @@ private extension GoalsView {
             Text("Для этого коснитесь кнопки с плюсом.")
                 .foregroundStyle(.secondary)
         }
+        .font(.custom("Jura", size: 17))
         .multilineTextAlignment(.center)
     }
     
@@ -144,8 +145,8 @@ private extension GoalsView {
                 .tint(lifeArea.color)
         } label: {
             Text(lifeArea.rawValue)
-                .font(.callout)
-                .fontWeight(.medium)
+                .font(.custom("Jura", size: 16))
+                .fontWeight(.bold)
                 .foregroundColor(lifeArea.color)
         }
     }

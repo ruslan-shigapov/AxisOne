@@ -57,6 +57,7 @@ struct DetailGoalView: View {
                         text: $notes)
                 } footer: {
                     Text("Необязательно, но полезно, если необходимо держать в фокусе некоторые подробности.")
+                        .font(.custom("Jura", size: 13))
                 }
                 Section {
                     NavigationLink(
@@ -66,7 +67,9 @@ struct DetailGoalView: View {
                             isModified: $isSubgoalsModified)
                     ) {
                         Text("Добавить")
+                            .font(.custom("Jura", size: 17))
                             .foregroundStyle(.accent)
+                            .fontWeight(.medium)
                     }
                     SubgoalListView()
                 } header: {
@@ -79,9 +82,16 @@ struct DetailGoalView: View {
             .onChange(of: isSubgoalsModified) {
                 if $1 { isModified = true }
             }
-            .navigationTitle(goal == nil ? "Новая цель" : "Детали")
             .navigationBarTitleDisplayMode(.inline)
+            .presentationBackground(Color("Background"))
+            .scrollContentBackground(.hidden)
+            .listRowBackground(Color(.systemBackground))
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(goal == nil ? "Новая цель" : "Детали")
+                        .font(.custom("Jura", size: 20))
+                        .fontWeight(.bold)
+                }
                 ToolbarItem(placement: .topBarLeading) {
                     CancelButtonView()
                 }
@@ -170,6 +180,7 @@ private extension DetailGoalView {
                 Text($0.rawValue)
             }
         }
+        .font(.custom("Jura", size: 17))
     }
     
     func TextFieldView(
@@ -177,7 +188,8 @@ private extension DetailGoalView {
         text: Binding<String>
     ) -> some View {
         TextField(placeholder, text: text)
-            .onChange(of: text.wrappedValue) { 
+            .font(.custom("Jura", size: 17))
+            .onChange(of: text.wrappedValue) {
                 isModified = true
             }
     }
@@ -196,6 +208,7 @@ private extension DetailGoalView {
                 ) {
                     SubgoalRowView(subgoal)
                 }
+                .font(.custom("Jura", size: 17))
             }
         }
     }
@@ -220,6 +233,8 @@ private extension DetailGoalView {
         Button("Удалить цель", role: .destructive) {
             isDeleteAlertPresented = true
         }
+        .font(.custom("Jura", size: 17))
+        .fontWeight(.medium)
         .alert("Вы уверены?", isPresented: $isDeleteAlertPresented) {
             Button("Удалить", role: .destructive) {
                 context.delete(goal)
@@ -247,7 +262,7 @@ private extension DetailGoalView {
                 }
             }
         }
-        .font(.caption)
+        .font(.custom("Jura", size: 14))
     }
     
     func CancelButtonView() -> some View {
@@ -257,6 +272,8 @@ private extension DetailGoalView {
                 dismiss()
             }
         }
+        .font(.custom("Jura", size: 17))
+        .fontWeight(.medium)
         .foregroundStyle(.red)
     }
     
@@ -271,6 +288,8 @@ private extension DetailGoalView {
                 dismiss()
             }
         }
+        .font(.custom("Jura", size: 17))
+        .fontWeight(.medium)
         .alert(
             "Попробуйте снова",
             isPresented: $isErrorAlertPresented,

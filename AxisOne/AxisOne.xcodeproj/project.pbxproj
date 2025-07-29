@@ -27,6 +27,7 @@
 		E4F8124C2E0FF539007CDA87 /* DetailGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F8124B2E0FF539007CDA87 /* DetailGoalView.swift */; };
 		E4FA157F2E24053800AF7873 /* SubgoalTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FA157E2E24053800AF7873 /* SubgoalTypeView.swift */; };
 		E4FA15832E264BD300AF7873 /* SubgoalFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FA15822E264BD300AF7873 /* SubgoalFilter.swift */; };
+		E4FF634D2E38F936004A36A1 /* Jura.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4FF634C2E38F936004A36A1 /* Jura.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		E4F8124B2E0FF539007CDA87 /* DetailGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGoalView.swift; sourceTree = "<group>"; };
 		E4FA157E2E24053800AF7873 /* SubgoalTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalTypeView.swift; sourceTree = "<group>"; };
 		E4FA15822E264BD300AF7873 /* SubgoalFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalFilter.swift; sourceTree = "<group>"; };
+		E4FF634C2E38F936004A36A1 /* Jura.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Jura.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,7 +71,6 @@
 		E4563B272E0FE9B10075B178 /* MainModule */ = {
 			isa = PBXGroup;
 			children = (
-				E4EF523D2E0FCFB400D5B7FE /* ContentView.swift */,
 				E4563B1B2E0FE4D30075B178 /* MainView.swift */,
 				E493E69C2E19264E009CDDDE /* SubgoalView.swift */,
 				E4FA157E2E24053800AF7873 /* SubgoalTypeView.swift */,
@@ -147,6 +148,7 @@
 		E4EF524A2E0FCFD800D5B7FE /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E4EF523D2E0FCFB400D5B7FE /* ContentView.swift */,
 				E4563B272E0FE9B10075B178 /* MainModule */,
 				E4563B282E0FE9C90075B178 /* GoalsModule */,
 				E4563B292E0FEA050075B178 /* JournalModule */,
@@ -167,12 +169,21 @@
 		E4EF524C2E0FCFED00D5B7FE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E4FF634B2E38F926004A36A1 /* Fonts */,
 				E4563B212E0FE5450075B178 /* Constants.swift */,
 				E4EF52392E0FCFB400D5B7FE /* Assets.xcassets */,
 				E4EF523A2E0FCFB400D5B7FE /* AxisOne.entitlements */,
 				E4EF523E2E0FCFB400D5B7FE /* Info.plist */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		E4FF634B2E38F926004A36A1 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				E4FF634C2E38F936004A36A1 /* Jura.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -237,6 +248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4EF52462E0FCFB400D5B7FE /* Assets.xcassets in Resources */,
+				E4FF634D2E38F936004A36A1 /* Jura.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

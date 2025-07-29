@@ -32,21 +32,28 @@ struct SubgoalTypeView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section(type.plural) {
+                Section {
                     if uncompletedSubgoals.isEmpty {
                         Text("Подцелей данного типа не имеется")
+                            .font(.custom("Jura", size: 17))
                             .foregroundStyle(.secondary)
                     } else {
                         ForEach(uncompletedSubgoals) {
                             SubgoalView(subgoal: $0)
                         }
                     }
+                } header: {
+                    Text(type.plural)
+                        .font(.custom("Jura", size: 14))
                 }
                 if !completedSubgoals.isEmpty {
-                    Section("Выполнено") {
+                    Section {
                         ForEach(completedSubgoals) {
                             SubgoalView(subgoal: $0)
                         }
+                    } header: {
+                        Text("Выполнено")
+                            .font(.custom("Jura", size: 14))
                     }
                 }
             }

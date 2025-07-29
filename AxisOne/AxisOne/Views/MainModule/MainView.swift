@@ -63,15 +63,21 @@ struct MainView: View {
             } header: {
                 TodaySectionHeaderView()
             }
-            Section(selectedTimeOfDay.rawValue) {
+            Section {
                 TimeOfDayPickerView()
                 SubgoalSectionView()
+            } header: {
+                Text(selectedTimeOfDay.rawValue)
+                    .font(.custom("Jura", size: 14))
             }
             if !completedSubgoals.isEmpty && !isCompletedSubgoalsHidden {
-                Section("Выполнено") {
+                Section {
                     ForEach(completedSubgoals) {
                         SubgoalView(subgoal: $0)
                     }
+                } header: {
+                    Text("Выполнено")
+                        .font(.custom("Jura", size: 14))
                 }
             }
         }
@@ -123,7 +129,7 @@ private extension MainView {
                 }
             }
         }
-        .font(.caption)
+        .font(.custom("Jura", size: 14))
     }
     
     func SubgoalTypeGridView() -> some View {
@@ -142,7 +148,7 @@ private extension MainView {
             SubgoalTypeSecondaryView(.inbox, count: getSubgoalCount(.inbox))
         }
         .listRowInsets(EdgeInsets())
-        .listRowBackground(Color(.systemBackground))
+        .listRowBackground(Color.clear)
     }
     
     func SubgoalTypePrimaryView(
@@ -156,13 +162,14 @@ private extension MainView {
                     .foregroundStyle(.accent)
                 Spacer()
                 Text(String(count))
-                    .font(.title2)
-                    .fontWeight(.semibold)
+                    .font(.custom("Jura", size: 22))
+                    .fontWeight(.bold)
             }
             Text(subgoalType.plural)
                 .fontWeight(.medium)
                 .foregroundStyle(.secondary)
         }
+        .font(.custom("Jura", size: 17))
         .padding(12)
         .background {
             RoundedRectangle(cornerRadius: 16)
@@ -184,8 +191,8 @@ private extension MainView {
                     .foregroundStyle(.secondary)
                 Spacer()
                 Text(String(count))
-                    .font(.title2)
-                    .fontWeight(.semibold)
+                    .font(.custom("Jura", size: 22))
+                    .fontWeight(.bold)
             }
             if subgoalType == .focus,
                count > 0,
@@ -193,7 +200,7 @@ private extension MainView {
                !focusOfDay.isEmpty {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Фокус дня:")
-                        .font(.caption)
+                        .font(.custom("Jura", size: 13))
                         .foregroundStyle(.secondary)
                     Text(focusOfDay)
                 }
@@ -206,6 +213,7 @@ private extension MainView {
                 }
             }
         }
+        .font(.custom("Jura", size: 17))
         .padding(12)
         .background {
             RoundedRectangle(cornerRadius: 16)
@@ -235,6 +243,7 @@ private extension MainView {
         Group {
             if uncompletedSubgoals.isEmpty {
                 Text("Время дня свободно")
+                    .font(.custom("Jura", size: 17))
                     .foregroundStyle(.secondary)
             } else {
                 ForEach(uncompletedSubgoals) {

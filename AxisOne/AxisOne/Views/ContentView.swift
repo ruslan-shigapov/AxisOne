@@ -26,6 +26,18 @@ struct ContentView: View {
                 NavigationStack {
                     tab.view
                         .navigationTitle(tab.rawValue)
+                        .background(
+                            LinearGradient(
+                                gradient: Gradient(
+                                    colors: [
+                                        Color("Background").opacity(0.45),
+                                        Color("Background")
+                                    ]),
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                        .scrollContentBackground(.hidden)
                 }
                 .tabItem {
                     Label(tab.rawValue, systemImage: tab.iconName)
@@ -36,6 +48,10 @@ struct ContentView: View {
             resetHabitsIfNeeded()
             resetFocusOfDayIfNeeded()
         }
+    }
+    
+    init() {
+        setupNavigationBarTitle()
     }
     
     private func resetHabitsIfNeeded() {
@@ -72,6 +88,27 @@ struct ContentView: View {
         }
         guard let wasResetToday, !wasResetToday else { return }
         focusOfDay = focuses?.randomElement()?.title
+    }
+    
+    private func setupNavigationBarTitle() {
+        guard let largeTitleFont = UIFont(name: "Jura-Bold", size: 34) else {
+            return
+        }
+        guard let titleFont = UIFont(name: "Jura-Bold", size: 20) else {
+            return
+        }
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.largeTitleTextAttributes = [
+            .font: largeTitleFont,
+            .foregroundColor: UIColor.label
+        ]
+        appearance.titleTextAttributes = [
+            .font: titleFont,
+            .foregroundColor: UIColor.label
+        ]
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
     }
 }
 

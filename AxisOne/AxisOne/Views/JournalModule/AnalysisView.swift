@@ -43,13 +43,16 @@ struct AnalysisView: View {
     // MARK: - Body
     var body: some View {
         Form {
-            Section("Подцели") {
+            Section {
                 ForEach(Array(selectedGroupedEmotions.keys)) { subgoal in
                     SubgoalEmotionsView(subgoal)
                         .onTapGesture {
                             selectedSubgoal = subgoal
                         }
                 }
+            } header: {
+                Text("Подцели")
+                    .font(.custom("Jura", size: 14))
             }
             Section {
                 DisclosureGroup(isExpanded: $isExpanded) {
@@ -61,14 +64,20 @@ struct AnalysisView: View {
                 }
             } header: {
                 Text("Чувства")
+                    .font(.custom("Jura", size: 14))
             } footer: {
                 Text("Выберите хотя бы по 3 эмоции к каждой подцели для исчерпывающего анализа в будущем. Но и не переусердствуйте.")
+                    .font(.custom("Jura", size: 13))
             }
-            Section("Размышления") {
+            Section {
                 TextField(
                     "Что думаете по этому поводу?",
                     text: $mainThought,
                     axis: .vertical)
+                .font(.custom("Jura", size: 17))
+            } header: {
+                Text("Размышления")
+                    .font(.custom("Jura", size: 14))
             }
         }
         .onAppear {
@@ -76,7 +85,20 @@ struct AnalysisView: View {
             mainThought = reflections.first?.mainThought ?? ""
         }
         .navigationTitle("Самоанализ")
+        .navigationBarBackButtonHidden()
         .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    dismiss()
+                } label: {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                        Text("Назад")
+                            .font(.custom("Jura", size: 17))
+                    }
+                    .fontWeight(.medium)
+                }
+            }
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Готово") {
                     save()
@@ -84,6 +106,8 @@ struct AnalysisView: View {
                         dismiss()
                     }
                 }
+                .font(.custom("Jura", size: 17))
+                .fontWeight(.medium)
                 .disabled(!isFormValid)
                 .foregroundStyle(isFormValid ? .accent : .secondary)
             }
@@ -194,6 +218,7 @@ private extension AnalysisView {
             }
         } label: {
             Text(subgoal.title ?? "")
+                .font(.custom("Jura", size: 17))
                 .foregroundStyle(subgoal == selectedSubgoal
                                  ? .primary
                                  : .secondary)
@@ -228,7 +253,8 @@ private extension AnalysisView {
     
     func EmotionView(_ title: String, isSelected: Bool) -> some View {
         Text(title)
-            .font(.callout)
+            .font(.custom("Jura", size: 14))
+            .fontWeight(.medium)
             .padding(.horizontal, 10)
             .padding(.vertical, 8)
             .frame(maxWidth: .infinity)

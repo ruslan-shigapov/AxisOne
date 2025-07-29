@@ -147,9 +147,21 @@ private extension SubgoalView {
     
     func CapsuleView(color: Color, title: String?) -> some View {
         Text(title ?? "")
-            .font(.footnote)
+            .font(.custom("Jura", size: 13))
+            .fontWeight(.medium)
             .frame(width: 96, height: 24)
-            .background(Capsule().fill(color))
+            .background(
+                Capsule().fill(
+                    LinearGradient(
+                        gradient: Gradient(
+                            colors: [
+                                color.opacity(0.45),
+                                color
+                            ]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    ))
+            )
             .overlay(Capsule().stroke(.primary, lineWidth: 1.3))
     }
     
@@ -164,6 +176,7 @@ private extension SubgoalView {
     func TextView() -> some View {
         VStack(alignment: .leading) {
             Text(subgoal.title ?? "")
+                .font(.custom("Jura", size: 17))
                 .lineLimit(2)
                 .fontWeight(isMissed ? .regular : .medium)
                 .foregroundStyle(subgoal.isCompleted
@@ -171,6 +184,7 @@ private extension SubgoalView {
                                  : isMissed ? Color.red : .primary)
             if subgoal.type != Constants.SubgoalTypes.inbox.rawValue {
                 Text("Цель: \(subgoal.goal?.title ?? "")")
+                    .font(.custom("Jura", size: 17))
                     .lineLimit(1)
                     .fontWeight(.light)
                     .foregroundStyle(.secondary)

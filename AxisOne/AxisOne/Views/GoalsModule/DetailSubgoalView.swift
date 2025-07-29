@@ -62,6 +62,7 @@ struct DetailSubgoalView: View {
                         "Можете добавить уточнение",
                         text: $notes,
                         axis: .vertical)
+                    .font(.custom("Jura", size: 17))
                     if selectedSubgoalType != .habit,
                        selectedSubgoalType != .focus {
                         DeadlineGroupView()
@@ -76,6 +77,7 @@ struct DetailSubgoalView: View {
                         DatePickerView(
                             title: "Приступить",
                             selection: $selectedStartDate)
+                        .font(.custom("Jura", size: 17))
                         RepetitionView()
                     }
                     if selectedSubgoalType == .habit {
@@ -93,14 +95,35 @@ struct DetailSubgoalView: View {
                     isExact = false
                 }
             }
-            .navigationTitle(navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden()
+            .background(Color("Background"))
+            .scrollContentBackground(.hidden)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        HStack {
+                            Image(systemName: "chevron.left")
+                            Text("Назад")
+                                .font(.custom("Jura", size: 17))
+                        }
+                        .fontWeight(.medium)
+                    }
+                }
+                ToolbarItem(placement: .principal) {
+                    Text(navigationTitle)
+                        .font(.custom("Jura", size: 20))
+                        .fontWeight(.bold)
+                }
                 if isModalPresentation {
                     ToolbarItem(placement: .topBarLeading) {
                         Button("Отмена") {
                             dismiss()
                         }
+                        .font(.custom("Jura", size: 17))
+                        .fontWeight(.medium)
                         .foregroundStyle(.red)
                     }
                     if let subgoal {
@@ -116,6 +139,8 @@ struct DetailSubgoalView: View {
                                     dismiss()
                                 }
                             }
+                            .font(.custom("Jura", size: 17))
+                            .fontWeight(.medium)
                             .foregroundStyle(.accent)
                         }
                     }
@@ -239,11 +264,13 @@ private extension DetailSubgoalView {
                     }
                 }
                 .listRowInsets(EdgeInsets())
-                .listRowBackground(Color(.systemBackground))
+                .listRowBackground(Color("Background"))
         } header: {
             Text("Тип")
+                .font(.custom("Jura", size: 14))
         } footer: {
             Text(selectedSubgoalType.description)
+                .font(.custom("Jura", size: 13))
         }
     }
     
@@ -259,6 +286,8 @@ private extension DetailSubgoalView {
                 Image(systemName: type.imageName)
                     .imageScale(.large)
             }
+            .font(.custom("Jura", size: 17))
+            .fontWeight(.medium)
             .frame(maxWidth: .infinity, minHeight: 60)
             .foregroundStyle(colorScheme == .dark ? .white : .black)
             .padding(.horizontal)
@@ -266,7 +295,15 @@ private extension DetailSubgoalView {
         .buttonStyle(BorderlessButtonStyle())
         .background(
             ZStack {
-                lifeArea?.color ?? .clear
+                LinearGradient(
+                    gradient: Gradient(
+                        colors: [
+                            (lifeArea?.color ?? .clear).opacity(0.45),
+                            lifeArea?.color ?? .clear
+                        ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
                 if selectedSubgoalType == type {
                     RoundedRectangle(cornerRadius: 16)
                         .stroke(.primary, lineWidth: 3)
@@ -284,6 +321,7 @@ private extension DetailSubgoalView {
                 selectedSubgoalType.placeholder,
                 text: $title,
                 axis: .vertical)
+            .font(.custom("Jura", size: 17))
         }
     }
     
@@ -295,6 +333,7 @@ private extension DetailSubgoalView {
                 DatePickerView(title: "Дата", selection: $selectedDeadline)
             }
         }
+        .font(.custom("Jura", size: 17))
     }
     
     func TimeGroupView() -> some View {
@@ -314,6 +353,7 @@ private extension DetailSubgoalView {
                 }
             }
         }
+        .font(.custom("Jura", size: 17))
     }
     
     func CompletionView() -> some View {
@@ -331,6 +371,7 @@ private extension DetailSubgoalView {
                 }
             }
         }
+        .font(.custom("Jura", size: 17))
     }
     
     func DatePickerView(
@@ -361,6 +402,7 @@ private extension DetailSubgoalView {
                 }
             }
         }
+        .font(.custom("Jura", size: 17))
     }
     
     func SaveButtonView() -> some View {
@@ -371,6 +413,8 @@ private extension DetailSubgoalView {
                 dismiss()
             }
         }
+        .font(.custom("Jura", size: 17))
+        .fontWeight(.medium)
         .frame(maxWidth: .infinity)
     }
     
@@ -378,6 +422,8 @@ private extension DetailSubgoalView {
         Button("Удалить подцель", role: .destructive) {
             isAlertPresented = true
         }
+        .font(.custom("Jura", size: 17))
+        .fontWeight(.medium)
         .alert("Вы уверены?", isPresented: $isAlertPresented) {
             Button("Удалить", role: .destructive) {
                 if isModalPresentation {

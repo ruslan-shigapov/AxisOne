@@ -84,6 +84,7 @@ private extension GoalView {
     func TextView() -> some View {
         VStack(alignment: .leading) {
             Text(goal.title ?? "")
+                .font(.custom("Jura", size: 17))
                 .lineLimit(2)
                 .fontWeight(.medium)
                 .foregroundStyle(goal.isActive
@@ -91,8 +92,9 @@ private extension GoalView {
                                  : goal.isCompleted ? .secondary : .primary)
             if let notes = goal.notes, !notes.isEmpty {
                 Text(notes)
-                    .lineLimit(1)
+                    .font(.custom("Jura", size: 17))
                     .fontWeight(.light)
+                    .lineLimit(1)
                     .foregroundStyle(.secondary)
             }
         }

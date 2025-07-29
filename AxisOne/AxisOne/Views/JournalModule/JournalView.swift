@@ -57,14 +57,15 @@ private extension JournalView {
     
     func EmptyStateView() -> some View {
         Text("На сегодня нет активных подцелей для самоанализа")
-            .frame(width: 230)
-            .multilineTextAlignment(.center)
+            .font(.custom("Jura", size: 17))
             .fontWeight(.medium)
+            .multilineTextAlignment(.center)
+            .frame(width: 230)
     }
     
     func TimeOfDayListView() -> some View {
         List {
-            Section("Время дня") {
+            Section {
                 ForEach(
                     Constants.TimesOfDay.allCases.filter { groupedSubgoals.keys.contains($0)
                     }) { timeOfDay in
@@ -75,7 +76,11 @@ private extension JournalView {
                         ) {
                             TimeOfDayRowView(timeOfDay)
                         }
+                        .font(.custom("Jura", size: 17))
                 }
+            } header: {
+                Text("Время дня")
+                    .font(.custom("Jura", size: 14))
             }
         }
     }
@@ -84,10 +89,10 @@ private extension JournalView {
         LabeledContent(timeOfDay.rawValue) {
             HStack {
                 CheckmarkImage(for: timeOfDay)
-                    .fontWeight(.medium)
                     .foregroundStyle(.accent)
                 Text(String(groupedSubgoals[timeOfDay]?.count ?? 0))
             }
+            .fontWeight(.medium)
         }
     }
     
