@@ -227,11 +227,11 @@
 				};
 			};
 			buildConfigurationList = E4EF521E2E0EF53A00D5B7FE /* Build configuration list for PBXProject "AxisOne" */;
-			developmentRegion = en;
+			developmentRegion = ru;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				ru,
 			);
 			mainGroup = E4EF521A2E0EF53A00D5B7FE;
 			minimizedProjectReferenceProxies = 1;

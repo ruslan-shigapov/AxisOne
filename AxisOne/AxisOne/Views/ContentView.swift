@@ -26,17 +26,7 @@ struct ContentView: View {
                 NavigationStack {
                     tab.view
                         .navigationTitle(tab.rawValue)
-                        .background(
-                            LinearGradient(
-                                gradient: Gradient(
-                                    colors: [
-                                        Color("Background").opacity(0.45),
-                                        Color("Background")
-                                    ]),
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
-                        )
+                        .background(Constants.Colors.background)
                         .scrollContentBackground(.hidden)
                 }
                 .tabItem {
@@ -53,6 +43,7 @@ struct ContentView: View {
     init() {
         setupNavBarAppearance()
         setupTabBarAppearance()
+        setupSegmentedControlAppearance()
     }
     
     private func resetHabitsIfNeeded() {
@@ -98,6 +89,9 @@ struct ContentView: View {
         guard let titleFont = UIFont(name: "Jura-Bold", size: 20) else {
             return
         }
+        guard let backButtonFont = UIFont(name: "Jura-Medium", size: 17) else {
+            return
+        }
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.largeTitleTextAttributes = [
             .font: largeTitleFont,
@@ -106,6 +100,9 @@ struct ContentView: View {
         navBarAppearance.titleTextAttributes = [
             .font: titleFont,
             .foregroundColor: UIColor.label
+        ]
+        navBarAppearance.backButtonAppearance.normal.titleTextAttributes = [
+            .font: backButtonFont
         ]
         UINavigationBar.appearance().standardAppearance = navBarAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
@@ -119,6 +116,20 @@ struct ContentView: View {
         let itemAppearance = tabBarAppearance.stackedLayoutAppearance
         itemAppearance.normal.titleTextAttributes = [.font: titleFont]
         UITabBar.appearance().standardAppearance = tabBarAppearance
+    }
+    
+    private func setupSegmentedControlAppearance() {
+        guard let titleFont = UIFont(name: "Jura-Medium", size: 14) else {
+            return
+        }
+        UISegmentedControl.appearance().setTitleTextAttributes(
+            [.font: titleFont],
+            for: .normal
+        )
+        UISegmentedControl.appearance().setTitleTextAttributes(
+            [.font: titleFont],
+            for: .selected
+        )
     }
 }
 

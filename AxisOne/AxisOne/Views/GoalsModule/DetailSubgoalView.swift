@@ -96,9 +96,6 @@ struct DetailSubgoalView: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden()
-            .background(Color("Background"))
-            .scrollContentBackground(.hidden)
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text(navigationTitle)
@@ -130,19 +127,6 @@ struct DetailSubgoalView: View {
                             .font(.custom("Jura", size: 17))
                             .fontWeight(.medium)
                             .foregroundStyle(.accent)
-                        }
-                    }
-                } else {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button {
-                            dismiss()
-                        } label: {
-                            HStack {
-                                Image(systemName: "chevron.left")
-                                Text("Назад")
-                                    .font(.custom("Jura", size: 17))
-                            }
-                            .fontWeight(.medium)
                         }
                     }
                 }
@@ -265,7 +249,7 @@ private extension DetailSubgoalView {
                     }
                 }
                 .listRowInsets(EdgeInsets())
-                .listRowBackground(Color("Background"))
+                .listRowBackground(Color(.systemBackground))
         } header: {
             Text("Тип")
                 .font(.custom("Jura", size: 14))
@@ -347,9 +331,23 @@ private extension DetailSubgoalView {
                     selection: $selectedTime,
                     displayedComponents: .hourAndMinute)
             } else {
-                Picker("Время дня", selection: $selectedTimeOfDay) {
-                    ForEach(Constants.TimesOfDay.allCases.dropLast()) {
-                        Text($0.rawValue)
+                LabeledContent("Время дня") {
+                    Menu {
+                        ForEach(
+                            Constants.TimesOfDay.allCases.dropLast()
+                        ) { timeOfDay in
+                            Button {
+                                selectedTimeOfDay = timeOfDay
+                            } label: {
+                                Text(timeOfDay.rawValue)
+                            }
+                        }
+                    } label: {
+                        HStack {
+                            Text(selectedTimeOfDay.rawValue)
+                            Image(systemName: "arrow.up.and.down")
+                        }
+                        .foregroundStyle(.gray)
                     }
                 }
             }
@@ -389,18 +387,21 @@ private extension DetailSubgoalView {
     }
     
     func RepetitionView() -> some View {
-        VStack {
-            LabeledContent(
-                "Повторять"
-            ) {
-                Picker(
-                    "",
-                    selection: $selectedHabitFrequency
-                ) {
-                    ForEach(Constants.Frequencies.allCases) {
-                        Text($0.rawValue)
+        LabeledContent("Повторять") {
+            Menu {
+                ForEach(Constants.Frequencies.allCases) { frequency in
+                    Button {
+                        selectedHabitFrequency = frequency
+                    } label: {
+                        Text(frequency.rawValue)
                     }
                 }
+            } label: {
+                HStack {
+                    Text(selectedHabitFrequency.rawValue)
+                    Image(systemName: "arrow.up.and.down")
+                }
+                .foregroundStyle(.gray)
             }
         }
         .font(.custom("Jura", size: 17))

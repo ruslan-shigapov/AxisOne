@@ -18,31 +18,25 @@ struct HistoryView: View {
         
     var body: some View {
         List {
-            ForEach(reflections) { reflection in
-                Text(reflection.date?.formatted() ?? "")
-                    .onTapGesture {
-                        deleteReflections()
-                    }
-                    .swipeActions {
-                        Button(role: .destructive) {
-                            withAnimation {
-                                context.delete(reflection)
-                                try? context.save()
+            Section("") {
+                ForEach(reflections) { reflection in
+                    Text(reflection.date?.formatted() ?? "")
+                        .swipeActions {
+                            Button(role: .destructive) {
+                                withAnimation {
+                                    context.delete(reflection)
+                                    try? context.save()
+                                }
+                            } label: {
+                                Image(systemName: "trash")
                             }
-                        } label: { 
-                            Image(systemName: "trash")
                         }
-                    }
+                }
             }
         }
         .navigationTitle("История")
-    }
-    
-    private func deleteReflections() {
-        reflections.forEach {
-            context.delete($0)
-        }
-        try? context.save()
+        .background(Constants.Colors.background)
+        .scrollContentBackground(.hidden)
     }
 }
 

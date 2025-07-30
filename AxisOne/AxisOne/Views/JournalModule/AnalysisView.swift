@@ -21,7 +21,7 @@ struct AnalysisView: View {
     @State private var selectedFeeling: Constants.Feelings = .joy
     @State private var selectedGroupedEmotions: [Subgoal: [String]] = [:]
     
-    @State private var isExpanded = true
+    @State private var isExpanded = false
     
     @State private var mainThought = ""
     
@@ -66,7 +66,7 @@ struct AnalysisView: View {
                 Text("Чувства")
                     .font(.custom("Jura", size: 14))
             } footer: {
-                Text("Выберите хотя бы по 3 эмоции к каждой подцели для исчерпывающего анализа в будущем. Но и не переусердствуйте.")
+                Text("Выберите от 3 до 5 эмоций к каждой подцели для исчерпывающего анализа в будущем.")
                     .font(.custom("Jura", size: 13))
             }
             Section {
@@ -85,20 +85,9 @@ struct AnalysisView: View {
             mainThought = reflections.first?.mainThought ?? ""
         }
         .navigationTitle("Самоанализ")
-        .navigationBarBackButtonHidden()
+        .background(Constants.Colors.background)
+        .scrollContentBackground(.hidden)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    HStack {
-                        Image(systemName: "chevron.left")
-                        Text("Назад")
-                            .font(.custom("Jura", size: 17))
-                    }
-                    .fontWeight(.medium)
-                }
-            }
             ToolbarItem(placement: .topBarTrailing) {
                 Button("Готово") {
                     save()
@@ -186,35 +175,30 @@ struct AnalysisView: View {
             selectedGroupedEmotions[subgoal] = emotions
         }
     }
+    
+    private func getEmotionCount(of subgoal: Subgoal) -> Int {
+        selectedGroupedEmotions[subgoal]?.count ?? 0
+    }
 }
 
 // MARK: - Views
 private extension AnalysisView {
     
     func SubgoalEmotionsView(_ subgoal: Subgoal) -> some View {
-        LabeledContent {
+        let rawCount = getEmotionCount(of: subgoal)
+        return LabeledContent {
             HStack {
                 HStack {
-                    ForEach(0..<3) {
+                    ForEach(0..<max(min(rawCount, 5), 3), id: \.self) {
                         RoundedRectangle(cornerRadius: 5)
-                            .fill(
-                                ($0 < selectedGroupedEmotions[
-                                    subgoal
-                                ]?.count ?? 0)
-                                ? .accent
-                                : .gray)
+                            .fill($0 < rawCount ? .accent : .gray)
                             .frame(width: 5, height: 15)
                     }
                 }
                 Image(systemName: subgoal.isCompleted
                       ? "checkmark.circle.fill"
                       : "circle")
-                .foregroundStyle(
-                    (selectedGroupedEmotions[
-                        subgoal
-                    ]?.count ?? 0) > 2
-                    ? .accent
-                    : .gray)
+                .foregroundStyle(rawCount > 2 ? .accent : .gray)
             }
         } label: {
             Text(subgoal.title ?? "")
@@ -242,7 +226,12 @@ private extension AnalysisView {
             ForEach(selectedFeeling.emotions, id: \.self) { emotion in
                 EmotionView(emotion, isSelected: isEmotionSelected(emotion))
                     .onTapGesture {
-                        toggleEmotion(emotion)
+                        if isEmotionSelected(emotion) {
+                            toggleEmotion(emotion)
+                        } else if let selectedSubgoal,
+                                  getEmotionCount(of: selectedSubgoal) < 5 {
+                            toggleEmotion(emotion)
+                        }
                     }
             }
         }

@@ -83,9 +83,6 @@ struct DetailGoalView: View {
                 if $1 { isModified = true }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .presentationBackground(Color("Background"))
-            .scrollContentBackground(.hidden)
-            .listRowBackground(Color(.systemBackground))
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text(goal == nil ? "Новая цель" : "Детали")
@@ -175,12 +172,23 @@ struct DetailGoalView: View {
 private extension DetailGoalView {
     
     func LifeAreaPickerView() -> some View {
-        Picker("Сфера жизни", selection: $selectedLifeArea) {
-            ForEach(Constants.LifeAreas.allCases) {
-                Text($0.rawValue)
+         LabeledContent("Сфера жизни") {
+            Menu {
+                ForEach(Constants.LifeAreas.allCases) { lifeArea in
+                    Button {
+                        selectedLifeArea = lifeArea
+                    } label: {
+                        Text(lifeArea.rawValue)
+                    }
+                }
+            } label: {
+                Text(selectedLifeArea.rawValue)
+                    .foregroundStyle(selectedLifeArea.color)
+                Image(systemName: "arrow.up.and.down")
+                    .foregroundStyle(.gray)
             }
         }
-        .font(.custom("Jura", size: 17))
+         .font(.custom("Jura", size: 17))
     }
     
     func TextFieldView(

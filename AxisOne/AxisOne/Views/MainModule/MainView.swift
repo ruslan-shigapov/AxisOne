@@ -234,7 +234,7 @@ private extension MainView {
                 Image(systemName: $0.imageName)
             }
         }
-        .pickerStyle(.palette)
+        .pickerStyle(.segmented)
         .listRowInsets(EdgeInsets())
         .padding(.bottom, 10)
     }
