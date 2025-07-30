@@ -345,6 +345,7 @@ private extension DetailSubgoalView {
                     } label: {
                         HStack {
                             Text(selectedTimeOfDay.rawValue)
+                                .fontWeight(.medium)
                             Image(systemName: "arrow.up.and.down")
                         }
                         .foregroundStyle(.gray)
@@ -399,6 +400,7 @@ private extension DetailSubgoalView {
             } label: {
                 HStack {
                     Text(selectedHabitFrequency.rawValue)
+                        .fontWeight(.medium)
                     Image(systemName: "arrow.up.and.down")
                 }
                 .foregroundStyle(.gray)

@@ -16,6 +16,12 @@ struct MainView: View {
         predicate: SubgoalFilter.predicate(for: .now))
     private var subgoals: FetchedResults<Subgoal>
     
+    // TODO: test (move to calendar view)
+    @FetchRequest(
+        entity: Subgoal.entity(),
+        sortDescriptors: [])
+    private var tsubgoals: FetchedResults<Subgoal>
+    
     @AppStorage("isCompletedSubgoalsHidden")
     private var isCompletedSubgoalsHidden: Bool = false
     
@@ -35,6 +41,22 @@ struct MainView: View {
         from: Date())
         
     @State private var selectedSubgoalType: Constants.SubgoalTypes?
+    
+    private var calendarDays: [Date] {
+        let today = Calendar.current.startOfDay(for: Date())
+        let allDates = tsubgoals.compactMap {
+            return switch $0.type {
+            case Constants.SubgoalTypes.task.rawValue: $0.deadline
+            case Constants.SubgoalTypes.milestone.rawValue: $0.deadline
+            case Constants.SubgoalTypes.habit.rawValue: $0.startDate
+            default: nil
+            }
+        } + [today]
+        let uniqueDays = Set(
+            allDates.map { Calendar.current.startOfDay(for: $0) })
+            .filter { $0 >= today }
+        return Array(uniqueDays).sorted()
+    }
     
     private var currentSubgoals: [Subgoal] {
         let subgoalsByExactTime = subgoals.filter {
@@ -58,6 +80,7 @@ struct MainView: View {
     // MARK: - Body
     var body: some View {
         List {
+            CalendarView()
             Section {
                 SubgoalTypeGridView()
             } header: {
@@ -86,9 +109,6 @@ struct MainView: View {
                 ToggleHidingCompletedButtonView()
             }
             ToolbarItem {
-                CalendarButtonView()
-            }
-            ToolbarItem {
                 NavigationLink(destination: SettingsView()) {
                     Image(systemName: "gearshape")
                 }
@@ -115,6 +135,41 @@ struct MainView: View {
 
 // MARK: - Views
 private extension MainView {
+    
+    func CalendarView() -> some View {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d.MM"
+        let weekdayFormatter = DateFormatter()
+        weekdayFormatter.dateFormat = "EE"
+        return LazyHGrid(rows: [GridItem()]) {
+            ForEach(calendarDays, id: \.self) { day in
+                VStack(spacing: 8) {
+                    Text(weekdayFormatter.string(from: day))
+                    Text(formatter.string(from: day))
+                        .fontWeight(.medium)
+                }
+                .font(.custom("Jura", size: 17))
+                .frame(width: 50, height: 60)
+                .padding(8)
+                .background {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(
+                            Calendar.current.isDate(
+                                day, inSameDayAs: selectedDate)
+                            ? .accent
+                            : Color(.secondarySystemBackground))
+                }
+                .onTapGesture {
+                    selectedDate = day
+                    subgoals.nsPredicate = SubgoalFilter.predicate(
+                        for: day)
+                }
+            }
+            .padding(.top, 16)
+        }
+        .listRowInsets(EdgeInsets())
+        .listRowBackground(Color.clear)
+    }
     
     func TodaySectionHeaderView() -> some View {
         LabeledContent("Сегодня") {
@@ -163,7 +218,7 @@ private extension MainView {
                 Spacer()
                 Text(String(count))
                     .font(.custom("Jura", size: 22))
-                    .fontWeight(.bold)
+                    .fontWeight(.semibold)
             }
             Text(subgoalType.plural)
                 .fontWeight(.medium)
@@ -192,7 +247,7 @@ private extension MainView {
                 Spacer()
                 Text(String(count))
                     .font(.custom("Jura", size: 22))
-                    .fontWeight(.bold)
+                    .fontWeight(.semibold)
             }
             if subgoalType == .focus,
                count > 0,
@@ -251,57 +306,6 @@ private extension MainView {
                 }
             }
         }
-    }
-    
-    func CalendarButtonView() -> some View {
-        Button {
-            isDatePickerPresented = true
-        } label: {
-            Image(systemName: "calendar")
-        }
-        .sheet(isPresented: $isDatePickerPresented) {
-            NavigationStack {
-                DatePickerView()
-                    .navigationTitle("Выберите дату")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .topBarLeading) {
-                            Button("Отмена") {
-                                isDatePickerPresented = false
-                            }
-                            .foregroundStyle(.red)
-                        }
-                        ToolbarItem {
-                            Button("Сегодня") {
-                                selectedDate = Date()
-                                subgoals.nsPredicate = SubgoalFilter.predicate(
-                                    for: selectedDate)
-                                isDatePickerPresented = false
-                            }
-                            .disabled(
-                                Calendar.current.isDateInToday(selectedDate))
-                        }
-                    }
-            }
-            .presentationDetents([.medium])
-        }
-    }
-    
-    func DatePickerView() -> some View {
-        DatePicker(
-            "",
-            selection: $selectedDate,
-            displayedComponents: .date)
-        .datePickerStyle(.graphical)
-        .onChange(of: selectedDate) {
-            subgoals.nsPredicate = SubgoalFilter.predicate(
-                for: selectedDate)
-            isDatePickerPresented = false
-        }
-        .environment(
-            \.locale,
-             Locale(identifier: "ru_RU"))
-        .padding()
     }
     
     func ToggleHidingCompletedButtonView() -> some View {

@@ -22,6 +22,8 @@ struct JournalView: View {
         predicate: ReflectionFilter.predicate(for: .now))
     private var reflections: FetchedResults<Reflection>
     
+    @State private var isModalPresented = false
+    
     private var groupedSubgoals: [Constants.TimesOfDay: [Subgoal]] {
         Dictionary(grouping: subgoals) {
             if let exactTime = $0.time {
@@ -39,7 +41,10 @@ struct JournalView: View {
             if groupedSubgoals.isEmpty {
                 EmptyStateView()
             } else {
-                TimeOfDayListView()
+                List {
+                    TimeOfDaySectionView()
+                    SummarySectionView()
+                }
             }
         }
         .toolbar {
@@ -48,6 +53,31 @@ struct JournalView: View {
                     Image(systemName: "clock")
                 }
             }
+        }
+        .sheet(isPresented: $isModalPresented) {
+            SummaryView(date: Date())
+        }
+    }
+    
+    private func getGroupedValues() -> [(Constants.LifeAreas, String, Double)] {
+        let reflectedSubgoals = reflections
+            .compactMap { $0.reactions as? Set<Reaction> }
+            .flatMap { $0 }
+            .compactMap { $0.subgoal }
+        return Constants.LifeAreas.allCases.map { lifeArea in
+            let matching = reflectedSubgoals.filter {
+                let subgoalLifeArea = Constants.LifeAreas(
+                    rawValue: $0.goal?.lifeArea ?? "")
+                return subgoalLifeArea == lifeArea
+            }
+            let allSubgoals = subgoals.filter {
+                $0.goal?.lifeArea ?? "" == lifeArea.rawValue
+            }.count
+            let completed = matching.filter(\.isCompleted).count
+            let progress = allSubgoals > 0
+            ? Double(completed) / Double(allSubgoals)
+            : 0
+            return (lifeArea, "\(completed)/\(allSubgoals)", progress)
         }
     }
 }
@@ -63,25 +93,23 @@ private extension JournalView {
             .frame(width: 230)
     }
     
-    func TimeOfDayListView() -> some View {
-        List {
-            Section {
-                ForEach(
-                    Constants.TimesOfDay.allCases.filter { groupedSubgoals.keys.contains($0)
-                    }) { timeOfDay in
-                        NavigationLink(
-                            destination: AnalysisView(
-                                timeOfDay: timeOfDay,
-                                subgoals: groupedSubgoals[timeOfDay] ?? [])
-                        ) {
-                            TimeOfDayRowView(timeOfDay)
-                        }
-                        .font(.custom("Jura", size: 17))
+    func TimeOfDaySectionView() -> some View {
+        Section {
+            ForEach(
+                Constants.TimesOfDay.allCases.filter { groupedSubgoals.keys.contains($0)
+                }) { timeOfDay in
+                    NavigationLink(
+                        destination: AnalysisView(
+                            timeOfDay: timeOfDay,
+                            subgoals: groupedSubgoals[timeOfDay] ?? [])
+                    ) {
+                        TimeOfDayRowView(timeOfDay)
+                    }
+                    .font(.custom("Jura", size: 17))
                 }
-            } header: {
-                Text("Время дня")
-                    .font(.custom("Jura", size: 14))
-            }
+        } header: {
+            Text("Время дня")
+                .font(.custom("Jura", size: 14))
         }
     }
     
@@ -102,6 +130,51 @@ private extension JournalView {
             where: { $0.timeOfDay ?? "" == timeOfDay.rawValue })
         ? Image(systemName: "checkmark")
         : Image(systemName: "")
+    }
+    
+    func SummarySectionView() -> some View {
+        Section {
+            if reflections.isEmpty {
+                Text("Пока недостаточно данных")
+                    .font(.custom("Jura", size: 17))
+                    .foregroundStyle(.secondary)
+            } else {
+                VStack {
+                    ForEach(
+                        getGroupedValues(), id: \.0.rawValue
+                    ) { lifeArea, text, progress in
+                        LabeledContent {
+                            ProgressView(value: progress)
+                                .frame(width: 150)
+                                .tint(lifeArea.color)
+                        } label: {
+                            VStack(alignment: .leading) {
+                                Text(lifeArea.rawValue)
+                                    .fontWeight(.medium)
+                                Text(text)
+                                    .font(.custom("Jura", size: 13))
+                            }
+                        }
+                        .foregroundStyle(lifeArea.color)
+                        .font(.custom("Jura", size: 17))
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    isModalPresented = true
+                }
+            }
+        } header: {
+            Text("Итоги")
+                .font(.custom("Jura", size: 14))
+        } footer: {
+            if !reflections.isEmpty {
+                let ending = reflections.count == 1 ? "анализа" : "анализов"
+                Text("Данные на основе \(reflections.count) само\(ending). Нажмите, чтобы узнать подробнее.")
+                    .font(.custom("Jura", size: 13))
+            }
+        }
     }
 }
 

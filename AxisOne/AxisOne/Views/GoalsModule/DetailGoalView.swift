@@ -184,6 +184,7 @@ private extension DetailGoalView {
             } label: {
                 Text(selectedLifeArea.rawValue)
                     .foregroundStyle(selectedLifeArea.color)
+                    .fontWeight(.medium)
                 Image(systemName: "arrow.up.and.down")
                     .foregroundStyle(.gray)
             }

@@ -28,6 +28,7 @@ struct AnalysisView: View {
     private var isFormValid: Bool {
         !mainThought.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
         selectedGroupedEmotions.allSatisfy { $0.value.count > 2 }
+        // TODO: add isModified 
     }
     
     private var reactions: [Reaction] {

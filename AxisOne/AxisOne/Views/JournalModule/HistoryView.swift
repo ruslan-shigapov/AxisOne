@@ -15,22 +15,49 @@ struct HistoryView: View {
         entity: Reflection.entity(),
         sortDescriptors: [])
     private var reflections: FetchedResults<Reflection>
+    
+    @State private var isModalPresented = false
+    
+    private var groupedReflections: [Date: [Reflection]] {
+        Dictionary(grouping: reflections) {
+            Calendar.current.startOfDay(for: $0.date ?? Date())
+        }
+    }
         
     var body: some View {
         List {
             Section("") {
-                ForEach(reflections) { reflection in
-                    Text(reflection.date?.formatted() ?? "")
-                        .swipeActions {
-                            Button(role: .destructive) {
-                                withAnimation {
-                                    context.delete(reflection)
-                                    try? context.save()
+                ForEach(
+                    groupedReflections.sorted { $0.key > $1.key }, id: \.key
+                ) { date, reflections in
+                    HStack {
+                        Text(date.formatted(date: .long, time: .omitted))
+                        Spacer()
+                        Text("#\(reflections.count)")
+                            .fontWeight(.bold)
+                            .foregroundStyle(.accent)
+                    }
+                    .font(.custom("Jura", size: 17))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        isModalPresented = true
+                    }
+                    .sheet(isPresented: $isModalPresented) {
+                        SummaryView(date: date)
+                    }
+                    .swipeActions {
+                        Button(role: .destructive) {
+                            withAnimation {
+                                reflections.forEach {
+                                    context.delete($0)
                                 }
-                            } label: {
-                                Image(systemName: "trash")
+                                try? context.save()
                             }
+                        } label: {
+                            Image(systemName: "trash")
                         }
+                    }
                 }
             }
         }
