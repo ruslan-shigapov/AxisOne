@@ -39,7 +39,9 @@ struct SubgoalTypeView: View {
                             .foregroundStyle(.secondary)
                     } else {
                         ForEach(uncompletedSubgoals) {
-                            SubgoalView(subgoal: $0)
+                            SubgoalView(
+                                subgoal: $0,
+                                isToday: Calendar.current.isDateInToday(date))
                         }
                     }
                 } header: {
@@ -49,7 +51,9 @@ struct SubgoalTypeView: View {
                 if !completedSubgoals.isEmpty {
                     Section {
                         ForEach(completedSubgoals) {
-                            SubgoalView(subgoal: $0)
+                            SubgoalView(
+                                subgoal: $0,
+                                isToday: Calendar.current.isDateInToday(date))
                         }
                     } header: {
                         Text("Выполнено")

@@ -15,6 +15,9 @@ struct SubgoalView: View {
     @State private var isModalViewPresented = false
     
     @State private var isConfirmationDialogPresented = false
+    
+    @State private var isConfirmationAlertPresented = false
+    @State private var isErrorAlertPresented = false
 
     private var lifeArea: Constants.LifeAreas {
         Constants.LifeAreas(rawValue: subgoal.goal?.lifeArea ?? "") ?? .health
@@ -38,7 +41,7 @@ struct SubgoalView: View {
         guard subgoal.type != Constants.SubgoalTypes.focus.rawValue else {
             return false
         }
-        guard !subgoal.isCompleted else { return false }
+        guard !subgoal.isCompleted, isToday else { return false }
         if let deadline = subgoal.deadline {
             guard Calendar.current.isDate(deadline, inSameDayAs: Date()) else {
                 return false
@@ -48,9 +51,14 @@ struct SubgoalView: View {
         return timeOfDay.order < Constants.TimesOfDay.getTimeOfDay(
             from: Date()).order
     }
+    
+    private var isVisuallyCompleted: Bool {
+        isToday ? subgoal.isCompleted : false
+    }
 
     // MARK: - Public Properties
     @ObservedObject var subgoal: Subgoal
+    var isToday: Bool
     
     // MARK: - Body
     var body: some View {
@@ -69,11 +77,21 @@ struct SubgoalView: View {
                 }
             }
             HStack {
-                if subgoal.type != Constants.SubgoalTypes.focus.rawValue {
+                if let subgoalType = Constants.SubgoalTypes(
+                    rawValue: subgoal.type ?? ""),
+                   subgoalType != Constants.SubgoalTypes.focus {
                     CheckmarkImageView()
                         .onTapGesture {
-                            withAnimation {
-                                toggleCompletion()
+                            if isToday {
+                                withAnimation {
+                                    toggleCompletion()
+                                }
+                            } else {
+                                if subgoalType == .habit {
+                                    isErrorAlertPresented = true
+                                } else {
+                                    isConfirmationAlertPresented = true
+                                }
                             }
                         }
                 }
@@ -122,6 +140,32 @@ struct SubgoalView: View {
             }
             Button("Отмена", role: .cancel) {}
         }
+        .alert(
+            "Вы уверены?",
+            isPresented: $isConfirmationAlertPresented,
+            actions: {
+                Button("Да") {
+                    subgoal.deadline = Date()
+                    if let _ = subgoal.time {
+                        subgoal.time = Date()
+                    } else {
+                        subgoal.timeOfDay = Constants.TimesOfDay.getTimeOfDay(
+                            from: Date()).rawValue
+                    }
+                    subgoal.isCompleted = true
+                    try? context.save()
+                }
+                Button("Нет", role: .cancel) {}
+            }
+        ) {
+            Text("Подцель будет выполнена сегодняшним числом.")
+        }
+        .alert(
+            "Внимание",
+            isPresented: $isErrorAlertPresented, actions: {}
+        ) {
+            Text("Выполнение привычек доступно только сегодня.")
+        }
     }
     
     // MARK: - Private Methods
@@ -165,7 +209,7 @@ private extension SubgoalView {
     }
     
     func CheckmarkImageView() -> some View {
-        Image(systemName: subgoal.isCompleted
+        Image(systemName: isVisuallyCompleted
               ? "checkmark.circle.fill"
               : "circle")
         .font(.system(size: 22))
@@ -178,7 +222,7 @@ private extension SubgoalView {
                 .font(.custom("Jura", size: 17))
                 .lineLimit(2)
                 .fontWeight(isMissed ? .regular : .medium)
-                .foregroundStyle(subgoal.isCompleted
+                .foregroundStyle(isVisuallyCompleted
                                  ? .secondary
                                  : isMissed ? Color.red : .primary)
             if subgoal.type != Constants.SubgoalTypes.inbox.rawValue {

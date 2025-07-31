@@ -103,30 +103,12 @@ struct DetailSubgoalView: View {
                         .fontWeight(.bold)
                 }
                 if isModalPresentation {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Отмена") {
+                    ToolbarItem {
+                        Button {
                             dismiss()
-                        }
-                        .font(.custom("Jura", size: 17))
-                        .fontWeight(.medium)
-                        .foregroundStyle(.red)
-                    }
-                    if let subgoal {
-                        ToolbarItem {
-                            Button(
-                                subgoal.isCompleted 
-                                ? "Невыполнено"
-                                : "Выполнено"
-                            ) {
-                                subgoal.isCompleted.toggle()
-                                try? context.save()
-                                DispatchQueue.main.async {
-                                    dismiss()
-                                }
-                            }
-                            .font(.custom("Jura", size: 17))
-                            .fontWeight(.medium)
-                            .foregroundStyle(.accent)
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .tint(.secondary)
                         }
                     }
                 }
@@ -214,6 +196,9 @@ struct DetailSubgoalView: View {
         subgoal.title = title
         subgoal.notes = notes
         if selectedSubgoalType != .habit, selectedSubgoalType != .focus {
+            if !Calendar.current.isDateInToday(selectedDeadline) {
+                subgoal.isCompleted = false
+            }
             subgoal.deadline = isUrgent ? selectedDeadline : nil
         }
         if selectedSubgoalType != .focus {

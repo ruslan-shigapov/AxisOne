@@ -16,12 +16,6 @@ struct MainView: View {
         predicate: SubgoalFilter.predicate(for: .now))
     private var subgoals: FetchedResults<Subgoal>
     
-    // TODO: test (move to calendar view)
-    @FetchRequest(
-        entity: Subgoal.entity(),
-        sortDescriptors: [])
-    private var tsubgoals: FetchedResults<Subgoal>
-    
     @AppStorage("isCompletedSubgoalsHidden")
     private var isCompletedSubgoalsHidden: Bool = false
     
@@ -42,22 +36,6 @@ struct MainView: View {
         
     @State private var selectedSubgoalType: Constants.SubgoalTypes?
     
-    private var calendarDays: [Date] {
-        let today = Calendar.current.startOfDay(for: Date())
-        let allDates = tsubgoals.compactMap {
-            return switch $0.type {
-            case Constants.SubgoalTypes.task.rawValue: $0.deadline
-            case Constants.SubgoalTypes.milestone.rawValue: $0.deadline
-            case Constants.SubgoalTypes.habit.rawValue: $0.startDate
-            default: nil
-            }
-        } + [today]
-        let uniqueDays = Set(
-            allDates.map { Calendar.current.startOfDay(for: $0) })
-            .filter { $0 >= today }
-        return Array(uniqueDays).sorted()
-    }
-    
     private var currentSubgoals: [Subgoal] {
         let subgoalsByExactTime = subgoals.filter {
             let subgoalTime = Constants.TimesOfDay.getTimeOfDay(from: $0.time)
@@ -70,7 +48,10 @@ struct MainView: View {
     }
     
     private var uncompletedSubgoals: [Subgoal] {
-        currentSubgoals.filter { !$0.isCompleted }
+        if Calendar.current.isDateInToday(selectedDate) {
+            return currentSubgoals.filter { !$0.isCompleted }
+        }
+        return currentSubgoals
     }
     
     private var completedSubgoals: [Subgoal] {
@@ -80,7 +61,10 @@ struct MainView: View {
     // MARK: - Body
     var body: some View {
         List {
-            CalendarView()
+            CalendarView(selectedDate: $selectedDate)
+                .onChange(of: selectedDate) {
+                    subgoals.nsPredicate = SubgoalFilter.predicate(for: $1)
+                }
             Section {
                 SubgoalTypeGridView()
             } header: {
@@ -93,10 +77,15 @@ struct MainView: View {
                 Text(selectedTimeOfDay.rawValue)
                     .font(.custom("Jura", size: 14))
             }
-            if !completedSubgoals.isEmpty && !isCompletedSubgoalsHidden {
+            if !completedSubgoals.isEmpty,
+               !isCompletedSubgoalsHidden,
+               Calendar.current.isDateInToday(selectedDate) {
                 Section {
                     ForEach(completedSubgoals) {
-                        SubgoalView(subgoal: $0)
+                        SubgoalView(
+                            subgoal: $0,
+                            isToday: Calendar.current.isDateInToday(
+                                selectedDate))
                     }
                 } header: {
                     Text("Выполнено")
@@ -105,8 +94,10 @@ struct MainView: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                ToggleHidingCompletedButtonView()
+            if Calendar.current.isDateInToday(selectedDate) {
+                ToolbarItem(placement: .topBarLeading) {
+                    ToggleHidingCompletedButtonView()
+                }
             }
             ToolbarItem {
                 NavigationLink(destination: SettingsView()) {
@@ -128,7 +119,9 @@ struct MainView: View {
     ) -> Int {
         subgoals
             .filter { $0.type == subgoalType.rawValue }
-            .filter { !$0.isCompleted }
+            .filter {
+                !$0.isCompleted || !Calendar.current.isDateInToday(selectedDate)
+            }
             .count
     }
 }
@@ -136,43 +129,8 @@ struct MainView: View {
 // MARK: - Views
 private extension MainView {
     
-    func CalendarView() -> some View {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "d.MM"
-        let weekdayFormatter = DateFormatter()
-        weekdayFormatter.dateFormat = "EE"
-        return LazyHGrid(rows: [GridItem()]) {
-            ForEach(calendarDays, id: \.self) { day in
-                VStack(spacing: 8) {
-                    Text(weekdayFormatter.string(from: day))
-                    Text(formatter.string(from: day))
-                        .fontWeight(.medium)
-                }
-                .font(.custom("Jura", size: 17))
-                .frame(width: 50, height: 60)
-                .padding(8)
-                .background {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(
-                            Calendar.current.isDate(
-                                day, inSameDayAs: selectedDate)
-                            ? .accent
-                            : Color(.secondarySystemBackground))
-                }
-                .onTapGesture {
-                    selectedDate = day
-                    subgoals.nsPredicate = SubgoalFilter.predicate(
-                        for: day)
-                }
-            }
-            .padding(.top, 16)
-        }
-        .listRowInsets(EdgeInsets())
-        .listRowBackground(Color.clear)
-    }
-    
     func TodaySectionHeaderView() -> some View {
-        LabeledContent("Сегодня") {
+        LabeledContent {
             Button {
                 withAnimation {
                     isFocusesHidden.toggle()
@@ -182,6 +140,12 @@ private extension MainView {
                     Text(isFocusesHidden ? "Показать" : "Скрыть")
                     Text("фокус")
                 }
+            }
+        } label: {
+            if Calendar.current.isDateInToday(selectedDate) {
+                Text("Сегодня")
+            } else {
+                Text(selectedDate.formatted(date: .long, time: .omitted))
             }
         }
         .font(.custom("Jura", size: 14))
@@ -302,7 +266,9 @@ private extension MainView {
                     .foregroundStyle(.secondary)
             } else {
                 ForEach(uncompletedSubgoals) {
-                    SubgoalView(subgoal: $0)
+                    SubgoalView(
+                        subgoal: $0,
+                        isToday: Calendar.current.isDateInToday(selectedDate))
                 }
             }
         }

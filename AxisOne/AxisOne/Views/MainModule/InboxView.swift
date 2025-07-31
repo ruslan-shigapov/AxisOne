@@ -54,7 +54,9 @@ struct InboxView: View {
                 if !uncompletedSubgoals.isEmpty {
                     Section("На очереди") {
                         ForEach(uncompletedSubgoals) {
-                            SubgoalView(subgoal: $0)
+                            SubgoalView(
+                                subgoal: $0,
+                                isToday: Calendar.current.isDateInToday(date))
                         }
                     }
                 }
@@ -64,14 +66,18 @@ struct InboxView: View {
                             .foregroundStyle(.secondary)
                     } else {
                         ForEach(filteredSubgoals) {
-                            SubgoalView(subgoal: $0)
+                            SubgoalView(
+                                subgoal: $0,
+                                isToday: Calendar.current.isDateInToday(date))
                         }
                     }
                 }
                 if !completedSubgoals.isEmpty {
                     Section("Выполнено") {
                         ForEach(completedSubgoals) {
-                            SubgoalView(subgoal: $0)
+                            SubgoalView(
+                                subgoal: $0,
+                                isToday: Calendar.current.isDateInToday(date))
                         }
                     }
                 }
