@@ -12,7 +12,7 @@ struct JournalView: View {
     // MARK: - Private Properties
     @FetchRequest(
         entity: Subgoal.entity(),
-        sortDescriptors: [],
+        sortDescriptors: [.init(key: "time", ascending: true)],
         predicate: SubgoalFilter.predicate(for: .now, hasFocuses: false))
     private var subgoals: FetchedResults<Subgoal>
     
@@ -39,7 +39,8 @@ struct JournalView: View {
     var body: some View {
         ZStack {
             if groupedSubgoals.isEmpty {
-                EmptyStateView()
+                EmptyStateView(
+                    primaryText: "На сегодня нет активных подцелей для самоанализа")
             } else {
                 List {
                     TimeOfDaySectionView()
@@ -85,14 +86,6 @@ struct JournalView: View {
 // MARK: - Views
 private extension JournalView {
     
-    func EmptyStateView() -> some View {
-        Text("На сегодня нет активных подцелей для самоанализа")
-            .font(.custom("Jura", size: 17))
-            .fontWeight(.medium)
-            .multilineTextAlignment(.center)
-            .frame(width: 230)
-    }
-    
     func TimeOfDaySectionView() -> some View {
         Section {
             ForEach(
@@ -108,15 +101,14 @@ private extension JournalView {
                     .font(.custom("Jura", size: 17))
                 }
         } header: {
-            Text("Время дня")
-                .font(.custom("Jura", size: 14))
+            HeaderView(text: "Время дня")
         }
     }
     
     func TimeOfDayRowView(_ timeOfDay: Constants.TimesOfDay) -> some View {
         LabeledContent(timeOfDay.rawValue) {
             HStack {
-                CheckmarkImage(for: timeOfDay)
+                CheckmarkImageView(for: timeOfDay)
                     .foregroundStyle(.accent)
                 Text(String(groupedSubgoals[timeOfDay]?.count ?? 0))
             }
@@ -124,7 +116,7 @@ private extension JournalView {
         }
     }
     
-    func CheckmarkImage(for timeOfDay: Constants.TimesOfDay) -> some View {
+    func CheckmarkImageView(for timeOfDay: Constants.TimesOfDay) -> some View {
         groupedSubgoals.keys.contains(timeOfDay) &&
         reflections.contains(
             where: { $0.timeOfDay ?? "" == timeOfDay.rawValue })
@@ -135,9 +127,7 @@ private extension JournalView {
     func SummarySectionView() -> some View {
         Section {
             if reflections.isEmpty {
-                Text("Пока недостаточно данных")
-                    .font(.custom("Jura", size: 17))
-                    .foregroundStyle(.secondary)
+                EmptyRowTextView(text: "Пока недостаточно данных")
             } else {
                 VStack {
                     ForEach(
@@ -166,13 +156,12 @@ private extension JournalView {
                 }
             }
         } header: {
-            Text("Итоги")
-                .font(.custom("Jura", size: 14))
+            HeaderView(text: "Итоги")
         } footer: {
             if !reflections.isEmpty {
                 let ending = reflections.count == 1 ? "анализа" : "анализов"
-                Text("Данные на основе \(reflections.count) само\(ending). Нажмите, чтобы узнать подробнее.")
-                    .font(.custom("Jura", size: 13))
+                FooterView(
+                    text: "Данные на основе \(reflections.count) само\(ending). Нажмите, чтобы узнать подробнее.")
             }
         }
     }

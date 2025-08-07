@@ -36,22 +36,29 @@ struct GoalsView: View {
     var body: some View {
         ZStack {
             if goals.isEmpty {
-                EmptyStateView()
+                EmptyStateView(
+                    primaryText: "Добавьте свою первую цель",
+                    secondaryText: "Для этого коснитесь кнопки с плюсом.")
             } else {
                 GoalListView()
             }
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                ToggleHidingCompletedButtonView()
-            }
-            ToolbarItem {
                 if !goals.isEmpty {
                     EditButtonView()
                 }
             }
             ToolbarItem {
-                AddButtonView()
+                ToolbarButtonView(
+                    type: .toggleCompletedVisibility,
+                    isCompletedHidden: $isCompletedGoalsHidden
+                )
+            }
+            ToolbarItem {
+                ToolbarButtonView(type: .add) {
+                    isModalViewPresented = true
+                }
             }
         }
         .sheet(isPresented: $isModalViewPresented) {
@@ -87,17 +94,6 @@ struct GoalsView: View {
 
 // MARK: - Views
 private extension GoalsView {
-    
-    func EmptyStateView() -> some View {
-        VStack {
-            Text("Добавьте свою первую цель")
-                .fontWeight(.medium)
-            Text("Для этого коснитесь кнопки с плюсом.")
-                .foregroundStyle(.secondary)
-        }
-        .font(.custom("Jura", size: 17))
-        .multilineTextAlignment(.center)
-    }
     
     func GoalListView() -> some View {
         List {
@@ -136,28 +132,15 @@ private extension GoalsView {
         .listStyle(.sidebar)
     }
     
-    func SectionHeaderView(
-        for lifeArea: Constants.LifeAreas
-    ) -> some View {
+    func SectionHeaderView(for lifeArea: Constants.LifeAreas) -> some View {
         LabeledContent {
             ProgressView(value: calculateProgress(for: lifeArea))
                 .frame(width: 150)
                 .tint(lifeArea.color)
         } label: {
             Text(lifeArea.rawValue)
-                .font(.custom("Jura", size: 16))
-                .fontWeight(.bold)
+                .font(.custom("Jura-Medium", size: 16))
                 .foregroundColor(lifeArea.color)
-        }
-    }
-    
-    func ToggleHidingCompletedButtonView() -> some View {
-        Button {
-            withAnimation {
-                isCompletedGoalsHidden.toggle()
-            }
-        } label: {
-            Image(systemName: isCompletedGoalsHidden ? "eye" : "eye.slash")
         }
     }
     
@@ -172,17 +155,13 @@ private extension GoalsView {
                 : .inactive
             }
         } label: {
-            Image(systemName: "shuffle")
-                .foregroundStyle(editMode == .active ? .secondary : .primary)
-        }
-    }
-    
-    func AddButtonView() -> some View {
-        Button {
-            isModalViewPresented = true
-        } label: {
-            Image(systemName: "plus")
-                .fontWeight(.medium)
+            if editMode == .active {
+                Text("Готово")
+                    .font(.custom("Jura-Bold", size: 17))
+            } else {
+                Text("Править")
+                    .font(.custom("Jura-Medium", size: 17))
+            }
         }
     }
 }

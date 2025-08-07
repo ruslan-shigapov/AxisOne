@@ -33,11 +33,7 @@ struct DetailSubgoalView: View {
     @State private var selectedHabitFrequency: Constants.Frequencies
     
     @State private var isModalPresentation: Bool
-    
-    @State private var isAlertPresented = false
-    
-    private let navigationTitle: String
-    
+            
     private var isFormValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
@@ -58,11 +54,9 @@ struct DetailSubgoalView: View {
                 }
                 Section {
                     TextFieldWithImageView()
-                    TextField(
-                        "Можете добавить уточнение",
-                        text: $notes,
-                        axis: .vertical)
-                    .font(.custom("Jura", size: 17))
+                    TextFieldView(
+                        placeholder: "Можете добавить уточнение",
+                        text: $notes)
                     if selectedSubgoalType != .habit,
                        selectedSubgoalType != .focus {
                         DeadlineGroupView()
@@ -77,7 +71,6 @@ struct DetailSubgoalView: View {
                         DatePickerView(
                             title: "Приступить",
                             selection: $selectedStartDate)
-                        .font(.custom("Jura", size: 17))
                         RepetitionView()
                     }
                     if selectedSubgoalType == .habit {
@@ -87,7 +80,9 @@ struct DetailSubgoalView: View {
                         .disabled(!isFormValid)
                 }
                 if let subgoal {
-                    DeleteButtonView(subgoal)
+                    DeleteButtonView(title: "Удалить подцель") {
+                        delete(subgoal)
+                    }
                 }
             }
             .onChange(of: isUrgent) { _, newValue in
@@ -98,17 +93,13 @@ struct DetailSubgoalView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text(navigationTitle)
-                        .font(.custom("Jura", size: 20))
-                        .fontWeight(.bold)
+                    NavigationBarTitleView(
+                        text: subgoal?.type ?? "Новая подцель")
                 }
                 if isModalPresentation {
                     ToolbarItem {
-                        Button {
+                        ToolbarButtonView(type: .cancel) {
                             dismiss()
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .tint(.secondary)
                         }
                     }
                 }
@@ -129,7 +120,6 @@ struct DetailSubgoalView: View {
         self._subgoals = subgoals
         self._isModified = isModified
         self.isModalPresentation = isModalPresentation
-        navigationTitle = subgoal?.type ?? "Новая подцель"
         _selectedSubgoalType = State(
             initialValue: Constants.SubgoalTypes(
                 rawValue: subgoal?.type ?? "") ?? .task)
@@ -217,6 +207,19 @@ struct DetailSubgoalView: View {
         }
         try? context.save()
     }
+    
+    private func delete(_ subgoal: Subgoal) {
+        if isModalPresentation {
+            context.delete(subgoal)
+            try? context.save()
+        } else {
+            subgoals.removeAll { $0 == subgoal }
+            isModified.toggle()
+        }
+        DispatchQueue.main.async {
+            dismiss()
+        }
+    }
 }
 
 // MARK: - Views
@@ -236,11 +239,9 @@ private extension DetailSubgoalView {
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color(.systemBackground))
         } header: {
-            Text("Тип")
-                .font(.custom("Jura", size: 14))
+            HeaderView(text: "Тип")
         } footer: {
-            Text(selectedSubgoalType.description)
-                .font(.custom("Jura", size: 13))
+            FooterView(text: selectedSubgoalType.description)
         }
     }
     
@@ -256,8 +257,7 @@ private extension DetailSubgoalView {
                 Image(systemName: type.imageName)
                     .imageScale(.large)
             }
-            .font(.custom("Jura", size: 17))
-            .fontWeight(.medium)
+            .font(.custom("Jura-Medium", size: 17))
             .frame(maxWidth: .infinity, minHeight: 60)
             .foregroundStyle(colorScheme == .dark ? .white : .black)
             .padding(.horizontal)
@@ -287,58 +287,59 @@ private extension DetailSubgoalView {
             Image(systemName: selectedSubgoalType.imageName)
                 .imageScale(.large)
                 .foregroundStyle(.secondary)
-            TextField(
-                selectedSubgoalType.placeholder,
-                text: $title,
-                axis: .vertical)
-            .font(.custom("Jura", size: 17))
+            TextFieldView(
+                placeholder: selectedSubgoalType.placeholder,
+                text: $title)
         }
+    }
+    
+    func ToggleView(title: String, isOn: Binding<Bool>) -> some View {
+        Toggle(title, isOn: isOn)
+            .font(.custom("Jura", size: 17))
+            .tint(.accent)
+    }
+    
+    func DatePickerView(
+        title: String,
+        selection: Binding<Date>
+    ) -> some View {
+        DatePicker(
+            title,
+            selection: selection,
+            displayedComponents: .date)
+        .font(.custom("Jura", size: 17))
+        .environment(
+            \.locale,
+             Locale(identifier: "ru_RU"))
     }
     
     func DeadlineGroupView() -> some View {
         Group {
-            Toggle("Срок", isOn: $isUrgent)
-                .tint(.accent)
+            ToggleView(title: "Срок", isOn: $isUrgent)
             if isUrgent {
                 DatePickerView(title: "Дата", selection: $selectedDeadline)
             }
         }
-        .font(.custom("Jura", size: 17))
     }
     
     func TimeGroupView() -> some View {
         Group {
-            Toggle("Точное время", isOn: $isExact)
-                .tint(.accent)
+            ToggleView(title: "Точное время", isOn: $isExact)
             if isExact {
                 DatePicker(
                     "Напомнить",
                     selection: $selectedTime,
                     displayedComponents: .hourAndMinute)
+                .font(.custom("Jura", size: 17))
             } else {
-                LabeledContent("Время дня") {
-                    Menu {
-                        ForEach(
-                            Constants.TimesOfDay.allCases.dropLast()
-                        ) { timeOfDay in
-                            Button {
-                                selectedTimeOfDay = timeOfDay
-                            } label: {
-                                Text(timeOfDay.rawValue)
-                            }
-                        }
-                    } label: {
-                        HStack {
-                            Text(selectedTimeOfDay.rawValue)
-                                .fontWeight(.medium)
-                            Image(systemName: "arrow.up.and.down")
-                        }
-                        .foregroundStyle(.gray)
-                    }
-                }
+                ButtonMenuView(
+                    title: "Время дня",
+                    items: Constants.TimesOfDay.allCases.dropLast(),
+                    selectedItem: $selectedTimeOfDay,
+                    onSelect: { selectedTimeOfDay = $0 },
+                    itemText: { $0.rawValue })
             }
         }
-        .font(.custom("Jura", size: 17))
     }
     
     func CompletionView() -> some View {
@@ -359,39 +360,13 @@ private extension DetailSubgoalView {
         .font(.custom("Jura", size: 17))
     }
     
-    func DatePickerView(
-        title: String,
-        selection: Binding<Date>
-    ) -> some View {
-        DatePicker(
-            title,
-            selection: selection,
-            displayedComponents: .date)
-        .environment(
-            \.locale,
-             Locale(identifier: "ru_RU"))
-    }
-    
     func RepetitionView() -> some View {
-        LabeledContent("Повторять") {
-            Menu {
-                ForEach(Constants.Frequencies.allCases) { frequency in
-                    Button {
-                        selectedHabitFrequency = frequency
-                    } label: {
-                        Text(frequency.rawValue)
-                    }
-                }
-            } label: {
-                HStack {
-                    Text(selectedHabitFrequency.rawValue)
-                        .fontWeight(.medium)
-                    Image(systemName: "arrow.up.and.down")
-                }
-                .foregroundStyle(.gray)
-            }
-        }
-        .font(.custom("Jura", size: 17))
+        ButtonMenuView(
+            title: "Повторять",
+            items: Constants.Frequencies.allCases,
+            selectedItem: $selectedHabitFrequency,
+            onSelect: { selectedHabitFrequency = $0 },
+            itemText: { $0.rawValue })
     }
     
     func SaveButtonView() -> some View {
@@ -402,32 +377,8 @@ private extension DetailSubgoalView {
                 dismiss()
             }
         }
-        .font(.custom("Jura", size: 17))
-        .fontWeight(.medium)
+        .font(.custom("Jura-Medium", size: 17))
         .frame(maxWidth: .infinity)
-    }
-    
-    func DeleteButtonView(_ subgoal: Subgoal) -> some View {
-        Button("Удалить подцель", role: .destructive) {
-            isAlertPresented = true
-        }
-        .font(.custom("Jura", size: 17))
-        .fontWeight(.medium)
-        .alert("Вы уверены?", isPresented: $isAlertPresented) {
-            Button("Удалить", role: .destructive) {
-                if isModalPresentation {
-                    context.delete(subgoal)
-                    try? context.save()
-                } else {
-                    subgoals.removeAll { $0 == subgoal }
-                    isModified.toggle()
-                }
-                DispatchQueue.main.async {
-                    dismiss()
-                }
-            }
-            Button("Отмена", role: .cancel) {}
-        }
     }
 }
 

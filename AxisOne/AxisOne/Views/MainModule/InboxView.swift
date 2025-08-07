@@ -20,12 +20,23 @@ struct InboxView: View {
     private var subgoals: FetchedResults<Subgoal>
     
     private var filteredSubgoals: [Subgoal] {
-        subgoals.filter {
-            guard let deadline = $0.deadline, !$0.isCompleted else {
-                return false
+        subgoals
+            .filter {
+                guard let deadline = $0.deadline, !$0.isCompleted else {
+                    return false
+                }
+                return Calendar.current.isDate(deadline, inSameDayAs: date)
             }
-            return Calendar.current.isDate(deadline, inSameDayAs: date)
-        }
+            .sorted {
+                guard let firstTimeOfDay = Constants.TimesOfDay(
+                    rawValue: $0.timeOfDay ?? ""),
+                      let secondTimeOfDay = Constants.TimesOfDay(
+                        rawValue: $1.timeOfDay ?? "")
+                else {
+                    return false
+                }
+                return firstTimeOfDay.order < secondTimeOfDay.order
+            }
     }
     
     private var uncompletedSubgoals: [Subgoal] {
@@ -49,21 +60,24 @@ struct InboxView: View {
                         isModified: .constant(false))
                 ) {
                     Text("Добавить")
+                        .font(.custom("Jura-Medium", size: 17))
                         .foregroundStyle(.accent)
                 }
                 if !uncompletedSubgoals.isEmpty {
-                    Section("На очереди") {
+                    Section {
                         ForEach(uncompletedSubgoals) {
                             SubgoalView(
                                 subgoal: $0,
                                 isToday: Calendar.current.isDateInToday(date))
                         }
+                    } header: {
+                        HeaderView(text: "На очереди")
                     }
                 }
-                Section("Сегодня") {
+                Section {
                     if filteredSubgoals.isEmpty {
-                        Text("Подцелей данного типа не имеется")
-                            .foregroundStyle(.secondary)
+                        EmptyRowTextView(
+                            text: "Подцелей данного типа не имеется")
                     } else {
                         ForEach(filteredSubgoals) {
                             SubgoalView(
@@ -71,14 +85,18 @@ struct InboxView: View {
                                 isToday: Calendar.current.isDateInToday(date))
                         }
                     }
+                } header: {
+                    HeaderView(text: "Сегодня")
                 }
                 if !completedSubgoals.isEmpty {
-                    Section("Выполнено") {
+                    Section {
                         ForEach(completedSubgoals) {
                             SubgoalView(
                                 subgoal: $0,
                                 isToday: Calendar.current.isDateInToday(date))
                         }
+                    } header: {
+                        HeaderView(text: "Выполнено")
                     }
                 }
             }
@@ -86,11 +104,8 @@ struct InboxView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem {
-                    Button {
+                    ToolbarButtonView(type: .cancel) {
                         dismiss()
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .tint(.secondary)
                     }
                 }
             }

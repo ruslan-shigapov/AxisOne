@@ -52,6 +52,15 @@ enum Constants {
             }
         }
         
+        var order: Int {
+            switch self {
+            case .health: 0
+            case .relations: 1
+            case .wealth: 2
+            case .personal: 3
+            }
+        }
+        
         var id: Self { self }
     }
     

@@ -44,7 +44,17 @@ struct MainView: View {
         let subgoalsByTimeOfDay = subgoals.filter {
             $0.timeOfDay == selectedTimeOfDay.rawValue
         }
-        return subgoalsByExactTime + subgoalsByTimeOfDay
+        let total = subgoalsByExactTime + subgoalsByTimeOfDay
+        return total.sorted {
+            guard let firstLifeArea = Constants.LifeAreas(
+                rawValue: $0.goal?.lifeArea ?? ""),
+                  let secondLifeArea = Constants.LifeAreas(
+                    rawValue: $1.goal?.lifeArea ?? "")
+            else {
+                return false
+            }
+            return firstLifeArea.order < secondLifeArea.order
+        }
     }
     
     private var uncompletedSubgoals: [Subgoal] {
@@ -68,14 +78,16 @@ struct MainView: View {
             Section {
                 SubgoalTypeGridView()
             } header: {
-                TodaySectionHeaderView()
+                HeaderWithToggleView(
+                    title: TodaySectionHeaderTitleView(),
+                    contentName: "фокус",
+                    isContentHidden: $isFocusesHidden)
             }
             Section {
                 TimeOfDayPickerView()
                 SubgoalSectionView()
             } header: {
-                Text(selectedTimeOfDay.rawValue)
-                    .font(.custom("Jura", size: 14))
+                HeaderView(text: selectedTimeOfDay.rawValue)
             }
             if !completedSubgoals.isEmpty,
                !isCompletedSubgoalsHidden,
@@ -88,15 +100,17 @@ struct MainView: View {
                                 selectedDate))
                     }
                 } header: {
-                    Text("Выполнено")
-                        .font(.custom("Jura", size: 14))
+                    HeaderView(text: "Выполнено")
                 }
             }
         }
         .toolbar {
             if Calendar.current.isDateInToday(selectedDate) {
-                ToolbarItem(placement: .topBarLeading) {
-                    ToggleHidingCompletedButtonView()
+                ToolbarItem {
+                    ToolbarButtonView(
+                        type: .toggleCompletedVisibility,
+                        isCompletedHidden: $isCompletedSubgoalsHidden
+                    )
                 }
             }
             ToolbarItem {
@@ -129,26 +143,12 @@ struct MainView: View {
 // MARK: - Views
 private extension MainView {
     
-    func TodaySectionHeaderView() -> some View {
-        LabeledContent {
-            Button {
-                withAnimation {
-                    isFocusesHidden.toggle()
-                }
-            } label: {
-                HStack(spacing: 4) {
-                    Text(isFocusesHidden ? "Показать" : "Скрыть")
-                    Text("фокус")
-                }
-            }
-        } label: {
-            if Calendar.current.isDateInToday(selectedDate) {
-                Text("Сегодня")
-            } else {
-                Text(selectedDate.formatted(date: .long, time: .omitted))
-            }
+    func TodaySectionHeaderTitleView() -> some View {
+        if Calendar.current.isDateInToday(selectedDate) {
+            Text("Сегодня")
+        } else {
+            Text(selectedDate.formatted(date: .long, time: .omitted))
         }
-        .font(.custom("Jura", size: 14))
     }
     
     func SubgoalTypeGridView() -> some View {
@@ -261,9 +261,7 @@ private extension MainView {
     func SubgoalSectionView() -> some View {
         Group {
             if uncompletedSubgoals.isEmpty {
-                Text("Время дня свободно")
-                    .font(.custom("Jura", size: 17))
-                    .foregroundStyle(.secondary)
+                EmptyRowTextView(text: "Время дня свободно")
             } else {
                 ForEach(uncompletedSubgoals) {
                     SubgoalView(
@@ -271,16 +269,6 @@ private extension MainView {
                         isToday: Calendar.current.isDateInToday(selectedDate))
                 }
             }
-        }
-    }
-    
-    func ToggleHidingCompletedButtonView() -> some View {
-        Button {
-            withAnimation {
-                isCompletedSubgoalsHidden.toggle()
-            }
-        } label: {
-            Image(systemName: isCompletedSubgoalsHidden ? "eye" : "eye.slash")
         }
     }
 }

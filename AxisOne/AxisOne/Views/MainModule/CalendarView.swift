@@ -20,6 +20,7 @@ struct CalendarView: View {
             case Constants.SubgoalTypes.task.rawValue: $0.deadline
             case Constants.SubgoalTypes.milestone.rawValue: $0.deadline
             case Constants.SubgoalTypes.habit.rawValue: $0.startDate
+            case Constants.SubgoalTypes.inbox.rawValue: $0.deadline
             default: nil
             }
         } + [today]

@@ -20,11 +20,8 @@ struct SummaryView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem {
-                        Button {
+                        ToolbarButtonView(type: .cancel) {
                             dismiss()
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .tint(.secondary)
                         }
                     }
                 }

@@ -51,10 +51,6 @@ struct SubgoalView: View {
         return timeOfDay.order < Constants.TimesOfDay.getTimeOfDay(
             from: Date()).order
     }
-    
-    private var isVisuallyCompleted: Bool {
-        isToday ? subgoal.isCompleted : false
-    }
 
     // MARK: - Public Properties
     @ObservedObject var subgoal: Subgoal
@@ -80,7 +76,9 @@ struct SubgoalView: View {
                 if let subgoalType = Constants.SubgoalTypes(
                     rawValue: subgoal.type ?? ""),
                    subgoalType != Constants.SubgoalTypes.focus {
-                    CheckmarkImageView()
+                    CheckmarkImageView(isCompleted: isToday
+                                       ? $subgoal.isCompleted
+                                       : .constant(false))
                         .onTapGesture {
                             if isToday {
                                 withAnimation {
@@ -95,28 +93,25 @@ struct SubgoalView: View {
                             }
                         }
                 }
-                TextView()
-                    .onTapGesture {
-                        isModalViewPresented = true
-                    }
+                ListRowTextView(
+                    primaryText: subgoal.title,
+                    secondaryText: subgoal.goal?.title,
+                    isActive: .constant(isMissed),
+                    isCompleted: $subgoal.isCompleted)
+                .onTapGesture {
+                    isModalViewPresented = true
+                }
             }
         }
         .padding(12)
         .listRowInsets(EdgeInsets())
         .swipeActions {
-            Button {
+            SwipeActionButtonView(type: .move) {
                 isConfirmationDialogPresented = true
-            } label: {
-                Image(systemName: "move.3d")
             }
-            .tint(.accent)
-            Button(role: .destructive) {
-                withAnimation {
-                    context.delete(subgoal)
-                    try? context.save()
-                }
-            } label: {
-                Image(systemName: "trash")
+            SwipeActionButtonView(type: .delete) {
+                context.delete(subgoal)
+                try? context.save()
             }
         }
         .sheet(isPresented: $isModalViewPresented) {
@@ -129,7 +124,8 @@ struct SubgoalView: View {
         }
         .confirmationDialog(
             "Перенести на...",
-            isPresented: $isConfirmationDialogPresented, titleVisibility: .visible
+            isPresented: $isConfirmationDialogPresented,
+            titleVisibility: .visible
         ) {
             ForEach(Constants.TimesOfDay.allCases.dropLast()) { value in
                 Button(value.rawValue) {
@@ -206,35 +202,6 @@ private extension SubgoalView {
                     ))
             )
             .overlay(Capsule().stroke(.primary, lineWidth: 1))
-    }
-    
-    func CheckmarkImageView() -> some View {
-        Image(systemName: isVisuallyCompleted
-              ? "checkmark.circle.fill"
-              : "circle")
-        .font(.system(size: 22))
-        .foregroundStyle(.secondary)
-    }
-    
-    func TextView() -> some View {
-        VStack(alignment: .leading) {
-            Text(subgoal.title ?? "")
-                .font(.custom("Jura", size: 17))
-                .lineLimit(2)
-                .fontWeight(isMissed ? .regular : .medium)
-                .foregroundStyle(isVisuallyCompleted
-                                 ? .secondary
-                                 : isMissed ? Color.red : .primary)
-            if subgoal.type != Constants.SubgoalTypes.inbox.rawValue {
-                Text("Цель: \(subgoal.goal?.title ?? "")")
-                    .font(.custom("Jura", size: 17))
-                    .lineLimit(1)
-                    .fontWeight(.light)
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .contentShape(Rectangle())
     }
 }
 

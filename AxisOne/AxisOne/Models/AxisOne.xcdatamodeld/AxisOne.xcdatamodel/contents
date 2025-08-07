@@ -16,7 +16,7 @@
     </entity>
     <entity name="Reflection" representedClassName="Reflection" syncable="YES" codeGenerationType="class">
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="mainThought" optional="YES" attributeType="String"/>
+        <attribute name="thoughts" optional="YES" attributeType="String"/>
         <attribute name="timeOfDay" optional="YES" attributeType="String"/>
         <relationship name="reactions" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Reaction" inverseName="reflection" inverseEntity="Reaction"/>
     </entity>

@@ -47,15 +47,11 @@ struct HistoryView: View {
                         SummaryView(date: date)
                     }
                     .swipeActions {
-                        Button(role: .destructive) {
-                            withAnimation {
-                                reflections.forEach {
-                                    context.delete($0)
-                                }
-                                try? context.save()
+                        SwipeActionButtonView(type: .delete) {
+                            reflections.forEach {
+                                context.delete($0)
                             }
-                        } label: {
-                            Image(systemName: "trash")
+                            try? context.save()
                         }
                     }
                 }

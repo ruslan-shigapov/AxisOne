@@ -9,17 +9,19 @@ import SwiftUI
 
 struct ContentView: View {
     
+    // MARK: - Private Properties
     @Environment(\.managedObjectContext) private var context
     
     @AppStorage("focusOfDay")
     private var focusOfDay: String?
     
-    @State private var selectedTab: Constants.Tabs = .main
+    @State private var selectedTab: Constants.Tabs = .journal
     
     private var today: Date {
         Calendar.current.startOfDay(for: Date())
     }
     
+    // MARK: - Body
     var body: some View {
         TabView(selection: $selectedTab) {
             ForEach(Constants.Tabs.allCases) { tab in
@@ -40,12 +42,14 @@ struct ContentView: View {
         }
     }
     
+    // MARK: - Initialize
     init() {
         setupNavBarAppearance()
         setupTabBarAppearance()
         setupSegmentedControlAppearance()
     }
     
+    // MARK: - Private Methods 
     private func resetHabitsIfNeeded() {
         let fetchRequest = Subgoal.fetchRequest()
         fetchRequest.predicate = NSPredicate(

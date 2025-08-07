@@ -23,10 +23,10 @@ struct AnalysisView: View {
     
     @State private var isExpanded = false
     
-    @State private var mainThought = ""
+    @State private var thoughts = ""
     
     private var isFormValid: Bool {
-        !mainThought.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
+        !thoughts.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
         selectedGroupedEmotions.allSatisfy { $0.value.count > 2 }
         // TODO: add isModified 
     }
@@ -45,15 +45,25 @@ struct AnalysisView: View {
     var body: some View {
         Form {
             Section {
-                ForEach(Array(selectedGroupedEmotions.keys)) { subgoal in
+                ForEach(
+                    Array(selectedGroupedEmotions.keys).sorted {
+                        guard let firstLifeArea = Constants.LifeAreas(
+                            rawValue: $0.goal?.lifeArea ?? ""),
+                              let secondLifeArea = Constants.LifeAreas(
+                                rawValue: $1.goal?.lifeArea ?? "")
+                        else {
+                            return false
+                        }
+                        return firstLifeArea.order < secondLifeArea.order
+                    }
+                ) { subgoal in
                     SubgoalEmotionsView(subgoal)
                         .onTapGesture {
                             selectedSubgoal = subgoal
                         }
                 }
             } header: {
-                Text("Подцели")
-                    .font(.custom("Jura", size: 14))
+                HeaderView(text: "Подцели")
             }
             Section {
                 DisclosureGroup(isExpanded: $isExpanded) {
@@ -64,40 +74,34 @@ struct AnalysisView: View {
                         .padding(.trailing, 8)
                 }
             } header: {
-                Text("Чувства")
-                    .font(.custom("Jura", size: 14))
+                HeaderView(text: "Чувства")
             } footer: {
-                Text("Выберите от 3 до 5 эмоций к каждой подцели для исчерпывающего анализа в будущем.")
-                    .font(.custom("Jura", size: 13))
+                FooterView(text: "Выберите от 3 до 5 эмоций к каждой подцели для исчерпывающего анализа в будущем.")
             }
             Section {
-                TextField(
-                    "Что думаете по этому поводу?",
-                    text: $mainThought,
-                    axis: .vertical)
-                .font(.custom("Jura", size: 17))
+                TextFieldView(
+                    placeholder: "Что думаете по этому поводу?",
+                    text: $thoughts)
             } header: {
-                Text("Размышления")
-                    .font(.custom("Jura", size: 14))
+                HeaderView(text: "Размышления")
             }
         }
         .onAppear {
             setupSelectedGroupedEmotions()
-            mainThought = reflections.first?.mainThought ?? ""
+            thoughts = reflections.first?.thoughts ?? ""
         }
         .navigationTitle("Самоанализ")
         .background(Constants.Colors.background)
         .scrollContentBackground(.hidden)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem {
                 Button("Готово") {
                     save()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         dismiss()
                     }
                 }
-                .font(.custom("Jura", size: 17))
-                .fontWeight(.medium)
+                .font(.custom("Jura-Medium", size: 17))
                 .disabled(!isFormValid)
                 .foregroundStyle(isFormValid ? .accent : .secondary)
             }
@@ -133,7 +137,7 @@ struct AnalysisView: View {
             reaction.emotions = emotions.joined(separator: " ")
             reflectionToSave.addToReactions(reaction)
         }
-        reflectionToSave.mainThought = mainThought
+        reflectionToSave.thoughts = thoughts
         try? context.save()
     }
     
@@ -156,7 +160,16 @@ struct AnalysisView: View {
                 selectedGroupedEmotions[subgoal] = []
             }
         }
-        selectedSubgoal = selectedGroupedEmotions.keys.first
+        selectedSubgoal = selectedGroupedEmotions.keys.sorted {
+            guard let firstLifeArea = Constants.LifeAreas(
+                rawValue: $0.goal?.lifeArea ?? ""),
+                  let secondLifeArea = Constants.LifeAreas(
+                    rawValue: $1.goal?.lifeArea ?? "")
+            else {
+                return false
+            }
+            return firstLifeArea.order < secondLifeArea.order
+        }.first
     }
     
     private func isEmotionSelected(_ emotion: String) -> Bool {
@@ -243,8 +256,7 @@ private extension AnalysisView {
     
     func EmotionView(_ title: String, isSelected: Bool) -> some View {
         Text(title)
-            .font(.custom("Jura", size: 14))
-            .fontWeight(.medium)
+            .font(.custom("Jura-Medium", size: 14))
             .padding(.horizontal, 10)
             .padding(.vertical, 8)
             .frame(maxWidth: .infinity)

@@ -29,8 +29,7 @@ struct DetailGoalView: View {
     @State private var isEditing = false
     @State private var editMode: EditMode = .inactive
     
-    @State private var isDeleteAlertPresented = false
-    @State private var isErrorAlertPresented = false
+    @State private var isAlertPresented = false
     
     private var isFormValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty &&
@@ -44,20 +43,31 @@ struct DetailGoalView: View {
     var body: some View {
         NavigationStack {
             Form {
-                LifeAreaPickerView()
-                    .onChange(of: selectedLifeArea) {
-                        isModified = true
-                    }
+                ButtonMenuView(
+                    title: "Сфера жизни",
+                    items: Constants.LifeAreas.allCases,
+                    selectedItem: $selectedLifeArea,
+                    onSelect: { selectedLifeArea = $0 },
+                    itemText: { $0.rawValue },
+                    itemColor: { $0.color })
+                .onChange(of: selectedLifeArea) { 
+                    isModified = true
+                }
                 Section {
                     TextFieldView(
                         placeholder: "Сформулируйте цель",
                         text: $title)
+                    .onChange(of: title) {
+                        isModified = true
+                    }
                     TextFieldView(
                         placeholder: "Добавьте уточнение",
                         text: $notes)
+                    .onChange(of: notes) {
+                        isModified = true
+                    }
                 } footer: {
-                    Text("Необязательно, но полезно, если необходимо держать в фокусе некоторые подробности.")
-                        .font(.custom("Jura", size: 13))
+                    FooterView(text: "Необязательно, но полезно, если необходимо держать в фокусе некоторые подробности.")
                 }
                 Section {
                     NavigationLink(
@@ -67,16 +77,20 @@ struct DetailGoalView: View {
                             isModified: $isSubgoalsModified)
                     ) {
                         Text("Добавить")
-                            .font(.custom("Jura", size: 17))
+                            .font(.custom("Jura-Medium", size: 17))
                             .foregroundStyle(.accent)
-                            .fontWeight(.medium)
                     }
                     SubgoalListView()
                 } header: {
-                    SubgoalSectionHeaderView()
+                    HeaderWithToggleView(
+                        title: Text("Подцели"),
+                        contentName: "заверш.",
+                        isContentHidden: $isCompletedSubgoalsHidden)
                 }
                 if let goal {
-                    DeleteButtonView(goal)
+                    DeleteButtonView(title: "Удалить цель") {
+                        delete(goal)
+                    }
                 }
             }
             .onChange(of: isSubgoalsModified) {
@@ -85,9 +99,9 @@ struct DetailGoalView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text(goal == nil ? "Новая цель" : "Детали")
-                        .font(.custom("Jura", size: 20))
-                        .fontWeight(.bold)
+                    NavigationBarTitleView(text: goal == nil
+                                          ? "Новая цель"
+                                          : "Детали")
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     CancelButtonView()
@@ -95,7 +109,6 @@ struct DetailGoalView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     DoneButtonView()
                         .disabled(!isFormValid)
-                        .foregroundStyle(isFormValid ? .accent : .secondary)
                 }
             }
         }
@@ -166,42 +179,18 @@ struct DetailGoalView: View {
         let type = Constants.SubgoalTypes(rawValue: subgoal.type ?? "")
         return (type == .task || type == .milestone) && subgoal.isCompleted
     }
+    
+    private func delete(_ goal: Goal) {
+        context.delete(goal)
+        try? context.save()
+        DispatchQueue.main.async {
+            dismiss()
+        }
+    }
 }
 
 // MARK: - Views
 private extension DetailGoalView {
-    
-    func LifeAreaPickerView() -> some View {
-         LabeledContent("Сфера жизни") {
-            Menu {
-                ForEach(Constants.LifeAreas.allCases) { lifeArea in
-                    Button {
-                        selectedLifeArea = lifeArea
-                    } label: {
-                        Text(lifeArea.rawValue)
-                    }
-                }
-            } label: {
-                Text(selectedLifeArea.rawValue)
-                    .foregroundStyle(selectedLifeArea.color)
-                    .fontWeight(.medium)
-                Image(systemName: "arrow.up.and.down")
-                    .foregroundStyle(.gray)
-            }
-        }
-         .font(.custom("Jura", size: 17))
-    }
-    
-    func TextFieldView(
-        placeholder: String,
-        text: Binding<String>
-    ) -> some View {
-        TextField(placeholder, text: text)
-            .font(.custom("Jura", size: 17))
-            .onChange(of: text.wrappedValue) {
-                isModified = true
-            }
-    }
     
     func SubgoalListView() -> some View {
         List {
@@ -231,47 +220,9 @@ private extension DetailGoalView {
                 .font(.system(size: 22))
                 .foregroundStyle(.secondary)
             Text(subgoal.title ?? "")
-                .foregroundStyle(subgoal.isCompleted
-                                 ? .secondary
-                                 : .primary)
+                .foregroundStyle(subgoal.isCompleted ? .secondary : .primary)
                 .strikethrough(shouldStrikethrough(subgoal))
         }
-    }
-    
-    func DeleteButtonView(_ goal: Goal) -> some View {
-        Button("Удалить цель", role: .destructive) {
-            isDeleteAlertPresented = true
-        }
-        .font(.custom("Jura", size: 17))
-        .fontWeight(.medium)
-        .alert("Вы уверены?", isPresented: $isDeleteAlertPresented) {
-            Button("Удалить", role: .destructive) {
-                context.delete(goal)
-                try? context.save()
-                DispatchQueue.main.async {
-                    dismiss()
-                }
-            }
-            Button("Отмена", role: .cancel) {}
-        }
-    }
-    
-    func SubgoalSectionHeaderView() -> some View {
-        LabeledContent("Подцели") {
-            Button {
-                withAnimation {
-                    isCompletedSubgoalsHidden.toggle()
-                }
-            } label: {
-                HStack(spacing: 4) {
-                    Text(isCompletedSubgoalsHidden
-                         ? "Показать"
-                         : "Скрыть")
-                    Text("заверш.")
-                }
-            }
-        }
-        .font(.custom("Jura", size: 14))
     }
     
     func CancelButtonView() -> some View {
@@ -281,15 +232,14 @@ private extension DetailGoalView {
                 dismiss()
             }
         }
-        .font(.custom("Jura", size: 17))
-        .fontWeight(.medium)
+        .font(.custom("Jura-Medium", size: 17))
         .foregroundStyle(.red)
     }
     
     func DoneButtonView() -> some View {
         Button("Готово") {
             if hasDuplicate() {
-                isErrorAlertPresented = true
+                isAlertPresented = true
                 return
             }
             save()
@@ -297,11 +247,10 @@ private extension DetailGoalView {
                 dismiss()
             }
         }
-        .font(.custom("Jura", size: 17))
-        .fontWeight(.medium)
+        .font(.custom("Jura-Medium", size: 17))
         .alert(
             "Попробуйте снова",
-            isPresented: $isErrorAlertPresented,
+            isPresented: $isAlertPresented,
             actions: {}
         ) {
             Text("Цель с таким названием уже существует.")

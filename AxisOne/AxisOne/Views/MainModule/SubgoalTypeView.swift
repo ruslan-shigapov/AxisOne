@@ -15,11 +15,35 @@ struct SubgoalTypeView: View {
     private var subgoals: FetchedResults<Subgoal>
     
     private var filteredSubgoals: [Subgoal] {
-        subgoals.filter { $0.type == type.rawValue }
+        subgoals
+            .filter { $0.type == type.rawValue }
+            .sorted {
+                guard let firstTimeOfDay = Constants.TimesOfDay(
+                    rawValue: $0.timeOfDay ?? ""),
+                      let secondTimeOfDay = Constants.TimesOfDay(
+                        rawValue: $1.timeOfDay ?? "")
+                else {
+                    return false
+                }
+                if firstTimeOfDay.order != secondTimeOfDay.order {
+                    return firstTimeOfDay.order < secondTimeOfDay.order
+                }
+                guard let firstLifeArea = Constants.LifeAreas(
+                    rawValue: $0.goal?.lifeArea ?? ""),
+                      let secondLifeArea = Constants.LifeAreas(
+                        rawValue: $1.goal?.lifeArea ?? "")
+                else {
+                    return false
+                }
+                return firstLifeArea.order < secondLifeArea.order
+            }
     }
     
     private var uncompletedSubgoals: [Subgoal] {
-        filteredSubgoals.filter { !$0.isCompleted }
+        if Calendar.current.isDateInToday(date) {
+            return filteredSubgoals.filter { !$0.isCompleted }
+        }
+        return filteredSubgoals
     }
     
     private var completedSubgoals: [Subgoal] {
@@ -34,9 +58,8 @@ struct SubgoalTypeView: View {
             List {
                 Section {
                     if uncompletedSubgoals.isEmpty {
-                        Text("Подцелей данного типа не имеется")
-                            .font(.custom("Jura", size: 17))
-                            .foregroundStyle(.secondary)
+                        EmptyRowTextView(
+                            text: "Подцелей данного типа не имеется")
                     } else {
                         ForEach(uncompletedSubgoals) {
                             SubgoalView(
@@ -45,10 +68,10 @@ struct SubgoalTypeView: View {
                         }
                     }
                 } header: {
-                    Text(type.plural)
-                        .font(.custom("Jura", size: 14))
+                    HeaderView(text: getHeaderText())
                 }
-                if !completedSubgoals.isEmpty {
+                if !completedSubgoals.isEmpty,
+                   Calendar.current.isDateInToday(date) {
                     Section {
                         ForEach(completedSubgoals) {
                             SubgoalView(
@@ -56,20 +79,16 @@ struct SubgoalTypeView: View {
                                 isToday: Calendar.current.isDateInToday(date))
                         }
                     } header: {
-                        Text("Выполнено")
-                            .font(.custom("Jura", size: 14))
+                        HeaderView(text: "Выполнено")
                     }
                 }
             }
-            .navigationTitle(getTitle())
+            .navigationTitle(type.plural)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem {
-                    Button {
+                    ToolbarButtonView(type: .cancel) {
                         dismiss()
-                    } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .tint(.secondary)
                     }
                 }
             }
@@ -85,20 +104,14 @@ struct SubgoalTypeView: View {
             predicate: SubgoalFilter.predicate(for: date))
     }
     
-    private func getTitle() -> String {
+    private func getHeaderText() -> String {
         let calendar = Calendar.current
         if calendar.isDateInToday(date) {
             return "Сегодня"
         } else if calendar.isDateInTomorrow(date) {
             return "Завтра"
-        } else if calendar.isDateInYesterday(date) {
-            return "Вчера"
         }
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ru_RU")
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter.string(from: date)
+        return date.formatted(date: .long, time: .omitted)
     }
 }
 
