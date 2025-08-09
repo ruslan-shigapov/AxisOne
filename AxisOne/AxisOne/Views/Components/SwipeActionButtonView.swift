@@ -7,18 +7,18 @@
 
 import SwiftUI
 
-enum SwipeActionButtonType {
-    case delete, toggleActive, move
+struct SwipeActionButtonView: View {
     
-    var role: ButtonRole? {
-        return switch self {
-        case .delete: .destructive
-        default: nil
+    enum SwipeActionButtonType {
+        case delete, toggleActive, move
+        
+        var role: ButtonRole? {
+            return switch self {
+            case .delete: .destructive
+            default: nil
+            }
         }
     }
-}
-
-struct SwipeActionButtonView: View {
     
     private var imageName: String {
         return switch type {

@@ -39,8 +39,8 @@ struct DetailSubgoalView: View {
     }
 
     // MARK: - Public Properties
-    var lifeArea: Constants.LifeAreas?
-    var subgoal: Subgoal?
+    let lifeArea: Constants.LifeAreas?
+    let subgoal: Subgoal?
     
     @Binding var subgoals: [Subgoal]
     @Binding var isModified: Bool
@@ -98,7 +98,7 @@ struct DetailSubgoalView: View {
                 }
                 if isModalPresentation {
                     ToolbarItem {
-                        ToolbarButtonView(type: .cancel) {
+                        NavBarImageButtonView(type: .cancel) {
                             dismiss()
                         }
                     }
@@ -160,7 +160,10 @@ struct DetailSubgoalView: View {
         }
         if selectedSubgoalType != .focus {
             subgoalToSave.time = isExact ? selectedTime : nil
-            subgoalToSave.timeOfDay = isExact ? nil : selectedTimeOfDay.rawValue
+            subgoalToSave.timeOfDay = isExact
+            ? Constants.TimesOfDay.getTimeOfDay(
+                from: subgoalToSave.time).rawValue
+            : selectedTimeOfDay.rawValue
             if !isUrgent, selectedSubgoalType != .habit {
                 subgoalToSave.timeOfDay = nil
             }
@@ -193,7 +196,10 @@ struct DetailSubgoalView: View {
         }
         if selectedSubgoalType != .focus {
             subgoal.time = isExact ? selectedTime : nil
-            subgoal.timeOfDay = isExact ? nil : selectedTimeOfDay.rawValue
+            subgoal.timeOfDay = isExact
+            ? Constants.TimesOfDay.getTimeOfDay(
+                from: subgoal.time).rawValue
+            : selectedTimeOfDay.rawValue
             if !isUrgent, selectedSubgoalType != .habit {
                 subgoal.timeOfDay = nil
             }
@@ -291,12 +297,6 @@ private extension DetailSubgoalView {
                 placeholder: selectedSubgoalType.placeholder,
                 text: $title)
         }
-    }
-    
-    func ToggleView(title: String, isOn: Binding<Bool>) -> some View {
-        Toggle(title, isOn: isOn)
-            .font(.custom("Jura", size: 17))
-            .tint(.accent)
     }
     
     func DatePickerView(

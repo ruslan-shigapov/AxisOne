@@ -15,24 +15,30 @@
 		E4563B222E0FE5450075B178 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B212E0FE5450075B178 /* Constants.swift */; };
 		E4563B242E0FE96A0075B178 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B232E0FE96A0075B178 /* SettingsView.swift */; };
 		E45F9C5A2E3AA0CE00B1B9D7 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F9C592E3AA0CE00B1B9D7 /* SummaryView.swift */; };
-		E45F9C5C2E3B635800B1B9D7 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F9C5B2E3B635800B1B9D7 /* CalendarView.swift */; };
+		E45F9C5C2E3B635800B1B9D7 /* CalendarScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F9C5B2E3B635800B1B9D7 /* CalendarScrollView.swift */; };
 		E493E69D2E19264E009CDDDE /* SubgoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E493E69C2E19264E009CDDDE /* SubgoalView.swift */; };
 		E493E69F2E19270F009CDDDE /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E493E69E2E19270F009CDDDE /* HistoryView.swift */; };
 		E493E6A12E1928DC009CDDDE /* AnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E493E6A02E1928DC009CDDDE /* AnalysisView.swift */; };
 		E49AA34A2E36595800D6DA71 /* InboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49AA3492E36595800D6DA71 /* InboxView.swift */; };
 		E49ACC742E44EBDE00BC0EF4 /* NavigationBarTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49ACC732E44EBDE00BC0EF4 /* NavigationBarTitleView.swift */; };
 		E49ACC762E450E8E00BC0EF4 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49ACC752E450E8E00BC0EF4 /* HeaderView.swift */; };
-		E49ACC7A2E452BD200BC0EF4 /* EmptyRowTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49ACC792E452BD200BC0EF4 /* EmptyRowTextView.swift */; };
+		E49ACC7A2E452BD200BC0EF4 /* RowLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49ACC792E452BD200BC0EF4 /* RowLabelView.swift */; };
 		E4C06C992E44A34100EB0A76 /* CheckmarkImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06C982E44A34100EB0A76 /* CheckmarkImageView.swift */; };
 		E4C06C9D2E44A4CA00EB0A76 /* SwipeActionButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06C9C2E44A4CA00EB0A76 /* SwipeActionButtonView.swift */; };
 		E4C06C9F2E44B46900EB0A76 /* ListRowTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06C9E2E44B46900EB0A76 /* ListRowTextView.swift */; };
 		E4C06CA12E44BFD500EB0A76 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06CA02E44BFD500EB0A76 /* EmptyStateView.swift */; };
-		E4C06CA32E44C19600EB0A76 /* ToolbarButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06CA22E44C19600EB0A76 /* ToolbarButtonView.swift */; };
+		E4C06CA32E44C19600EB0A76 /* NavBarImageButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06CA22E44C19600EB0A76 /* NavBarImageButtonView.swift */; };
 		E4C06CA52E44D28600EB0A76 /* TextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06CA42E44D28600EB0A76 /* TextFieldView.swift */; };
 		E4C06CA72E44D64E00EB0A76 /* ButtonMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06CA62E44D64E00EB0A76 /* ButtonMenuView.swift */; };
 		E4C06CAB2E44E4C600EB0A76 /* HeaderWithToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06CAA2E44E4C600EB0A76 /* HeaderWithToggleView.swift */; };
 		E4C06CAD2E44E8DE00EB0A76 /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06CAC2E44E8DE00EB0A76 /* FooterView.swift */; };
 		E4C06CAF2E44E98B00EB0A76 /* DeleteButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06CAE2E44E98B00EB0A76 /* DeleteButtonView.swift */; };
+		E4CCAE322E45CFCB001703C9 /* SubgoalListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CCAE312E45CFCB001703C9 /* SubgoalListView.swift */; };
+		E4CCAE342E45F0A0001703C9 /* SubgoalSorter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CCAE332E45F0A0001703C9 /* SubgoalSorter.swift */; };
+		E4CCAE382E46375D001703C9 /* CompletedSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CCAE372E46375D001703C9 /* CompletedSectionView.swift */; };
+		E4CCAE3A2E4641E8001703C9 /* SubgoalTypeSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CCAE392E4641E8001703C9 /* SubgoalTypeSectionView.swift */; };
+		E4CCAE3C2E47395D001703C9 /* NavBarLabelButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CCAE3B2E47395D001703C9 /* NavBarLabelButtonView.swift */; };
+		E4CCAE402E475010001703C9 /* ToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CCAE3F2E475010001703C9 /* ToggleView.swift */; };
 		E4CDF5F22E2BD778004A118C /* ReflectionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDF5F12E2BD778004A118C /* ReflectionFilter.swift */; };
 		E4EF52422E0FCFB400D5B7FE /* AxisOne.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523B2E0FCFB400D5B7FE /* AxisOne.xcdatamodeld */; };
 		E4EF52432E0FCFB400D5B7FE /* AxisOneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523C2E0FCFB400D5B7FE /* AxisOneApp.swift */; };
@@ -55,24 +61,30 @@
 		E4563B212E0FE5450075B178 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E4563B232E0FE96A0075B178 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		E45F9C592E3AA0CE00B1B9D7 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
-		E45F9C5B2E3B635800B1B9D7 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		E45F9C5B2E3B635800B1B9D7 /* CalendarScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarScrollView.swift; sourceTree = "<group>"; };
 		E493E69C2E19264E009CDDDE /* SubgoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalView.swift; sourceTree = "<group>"; };
 		E493E69E2E19270F009CDDDE /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		E493E6A02E1928DC009CDDDE /* AnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisView.swift; sourceTree = "<group>"; };
 		E49AA3492E36595800D6DA71 /* InboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InboxView.swift; sourceTree = "<group>"; };
 		E49ACC732E44EBDE00BC0EF4 /* NavigationBarTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarTitleView.swift; sourceTree = "<group>"; };
 		E49ACC752E450E8E00BC0EF4 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
-		E49ACC792E452BD200BC0EF4 /* EmptyRowTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyRowTextView.swift; sourceTree = "<group>"; };
+		E49ACC792E452BD200BC0EF4 /* RowLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowLabelView.swift; sourceTree = "<group>"; };
 		E4C06C982E44A34100EB0A76 /* CheckmarkImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckmarkImageView.swift; sourceTree = "<group>"; };
 		E4C06C9C2E44A4CA00EB0A76 /* SwipeActionButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeActionButtonView.swift; sourceTree = "<group>"; };
 		E4C06C9E2E44B46900EB0A76 /* ListRowTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowTextView.swift; sourceTree = "<group>"; };
 		E4C06CA02E44BFD500EB0A76 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
-		E4C06CA22E44C19600EB0A76 /* ToolbarButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButtonView.swift; sourceTree = "<group>"; };
+		E4C06CA22E44C19600EB0A76 /* NavBarImageButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarImageButtonView.swift; sourceTree = "<group>"; };
 		E4C06CA42E44D28600EB0A76 /* TextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldView.swift; sourceTree = "<group>"; };
 		E4C06CA62E44D64E00EB0A76 /* ButtonMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonMenuView.swift; sourceTree = "<group>"; };
 		E4C06CAA2E44E4C600EB0A76 /* HeaderWithToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderWithToggleView.swift; sourceTree = "<group>"; };
 		E4C06CAC2E44E8DE00EB0A76 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 		E4C06CAE2E44E98B00EB0A76 /* DeleteButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteButtonView.swift; sourceTree = "<group>"; };
+		E4CCAE312E45CFCB001703C9 /* SubgoalListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalListView.swift; sourceTree = "<group>"; };
+		E4CCAE332E45F0A0001703C9 /* SubgoalSorter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalSorter.swift; sourceTree = "<group>"; };
+		E4CCAE372E46375D001703C9 /* CompletedSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedSectionView.swift; sourceTree = "<group>"; };
+		E4CCAE392E4641E8001703C9 /* SubgoalTypeSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalTypeSectionView.swift; sourceTree = "<group>"; };
+		E4CCAE3B2E47395D001703C9 /* NavBarLabelButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarLabelButtonView.swift; sourceTree = "<group>"; };
+		E4CCAE3F2E475010001703C9 /* ToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleView.swift; sourceTree = "<group>"; };
 		E4CDF5F12E2BD778004A118C /* ReflectionFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflectionFilter.swift; sourceTree = "<group>"; };
 		E4EF52232E0EF53A00D5B7FE /* AxisOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AxisOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4EF52392E0FCFB400D5B7FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -103,8 +115,9 @@
 		E4563B272E0FE9B10075B178 /* MainModule */ = {
 			isa = PBXGroup;
 			children = (
-				E45F9C5B2E3B635800B1B9D7 /* CalendarView.swift */,
 				E4563B1B2E0FE4D30075B178 /* MainView.swift */,
+				E45F9C5B2E3B635800B1B9D7 /* CalendarScrollView.swift */,
+				E4CCAE392E4641E8001703C9 /* SubgoalTypeSectionView.swift */,
 				E493E69C2E19264E009CDDDE /* SubgoalView.swift */,
 				E4FA157E2E24053800AF7873 /* SubgoalTypeView.swift */,
 				E49AA3492E36595800D6DA71 /* InboxView.swift */,
@@ -116,7 +129,6 @@
 		E4563B282E0FE9C90075B178 /* GoalsModule */ = {
 			isa = PBXGroup;
 			children = (
-				E49ACC772E45238B00BC0EF4 /* Components */,
 				E4563B192E0FE4CA0075B178 /* GoalsView.swift */,
 				E40E86CF2E1025A900ED6DCA /* GoalView.swift */,
 				E4F8124B2E0FF539007CDA87 /* DetailGoalView.swift */,
@@ -135,29 +147,26 @@
 			path = JournalModule;
 			sourceTree = "<group>";
 		};
-		E49ACC772E45238B00BC0EF4 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				E4C06CA62E44D64E00EB0A76 /* ButtonMenuView.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
 		E4C06C972E44A32800EB0A76 /* Components */ = {
 			isa = PBXGroup;
 			children = (
 				E4C06CA02E44BFD500EB0A76 /* EmptyStateView.swift */,
-				E4C06CA22E44C19600EB0A76 /* ToolbarButtonView.swift */,
+				E4C06CA22E44C19600EB0A76 /* NavBarImageButtonView.swift */,
+				E4CCAE3B2E47395D001703C9 /* NavBarLabelButtonView.swift */,
 				E4C06C982E44A34100EB0A76 /* CheckmarkImageView.swift */,
 				E4C06C9E2E44B46900EB0A76 /* ListRowTextView.swift */,
 				E4C06C9C2E44A4CA00EB0A76 /* SwipeActionButtonView.swift */,
+				E4C06CA62E44D64E00EB0A76 /* ButtonMenuView.swift */,
+				E4CCAE3F2E475010001703C9 /* ToggleView.swift */,
 				E4C06CA42E44D28600EB0A76 /* TextFieldView.swift */,
-				E4C06CAC2E44E8DE00EB0A76 /* FooterView.swift */,
 				E4C06CAA2E44E4C600EB0A76 /* HeaderWithToggleView.swift */,
+				E49ACC792E452BD200BC0EF4 /* RowLabelView.swift */,
 				E4C06CAE2E44E98B00EB0A76 /* DeleteButtonView.swift */,
 				E49ACC732E44EBDE00BC0EF4 /* NavigationBarTitleView.swift */,
 				E49ACC752E450E8E00BC0EF4 /* HeaderView.swift */,
-				E49ACC792E452BD200BC0EF4 /* EmptyRowTextView.swift */,
+				E4C06CAC2E44E8DE00EB0A76 /* FooterView.swift */,
+				E4CCAE312E45CFCB001703C9 /* SubgoalListView.swift */,
+				E4CCAE372E46375D001703C9 /* CompletedSectionView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -224,6 +233,7 @@
 			children = (
 				E4EF523F2E0FCFB400D5B7FE /* Persistence.swift */,
 				E4FA15822E264BD300AF7873 /* SubgoalFilter.swift */,
+				E4CCAE332E45F0A0001703C9 /* SubgoalSorter.swift */,
 				E4CDF5F12E2BD778004A118C /* ReflectionFilter.swift */,
 			);
 			path = Services;
@@ -324,14 +334,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E49ACC7A2E452BD200BC0EF4 /* EmptyRowTextView.swift in Sources */,
+				E4CCAE3A2E4641E8001703C9 /* SubgoalTypeSectionView.swift in Sources */,
+				E49ACC7A2E452BD200BC0EF4 /* RowLabelView.swift in Sources */,
+				E4CCAE382E46375D001703C9 /* CompletedSectionView.swift in Sources */,
 				E4C06C9D2E44A4CA00EB0A76 /* SwipeActionButtonView.swift in Sources */,
+				E4CCAE342E45F0A0001703C9 /* SubgoalSorter.swift in Sources */,
 				E493E69D2E19264E009CDDDE /* SubgoalView.swift in Sources */,
 				E4EF52422E0FCFB400D5B7FE /* AxisOne.xcdatamodeld in Sources */,
 				E4C06CAD2E44E8DE00EB0A76 /* FooterView.swift in Sources */,
+				E4CCAE402E475010001703C9 /* ToggleView.swift in Sources */,
 				E40E86CE2E10035800ED6DCA /* DetailSubgoalView.swift in Sources */,
 				E4C06CAF2E44E98B00EB0A76 /* DeleteButtonView.swift in Sources */,
-				E45F9C5C2E3B635800B1B9D7 /* CalendarView.swift in Sources */,
+				E45F9C5C2E3B635800B1B9D7 /* CalendarScrollView.swift in Sources */,
 				E49ACC762E450E8E00BC0EF4 /* HeaderView.swift in Sources */,
 				E49ACC742E44EBDE00BC0EF4 /* NavigationBarTitleView.swift in Sources */,
 				E4563B1C2E0FE4D30075B178 /* MainView.swift in Sources */,
@@ -351,9 +365,11 @@
 				E4C06CAB2E44E4C600EB0A76 /* HeaderWithToggleView.swift in Sources */,
 				E40E86D02E1025A900ED6DCA /* GoalView.swift in Sources */,
 				E4FA157F2E24053800AF7873 /* SubgoalTypeView.swift in Sources */,
+				E4CCAE3C2E47395D001703C9 /* NavBarLabelButtonView.swift in Sources */,
 				E4563B1E2E0FE4DE0075B178 /* JournalView.swift in Sources */,
+				E4CCAE322E45CFCB001703C9 /* SubgoalListView.swift in Sources */,
 				E4EF52442E0FCFB400D5B7FE /* ContentView.swift in Sources */,
-				E4C06CA32E44C19600EB0A76 /* ToolbarButtonView.swift in Sources */,
+				E4C06CA32E44C19600EB0A76 /* NavBarImageButtonView.swift in Sources */,
 				E45F9C5A2E3AA0CE00B1B9D7 /* SummaryView.swift in Sources */,
 				E4C06CA72E44D64E00EB0A76 /* ButtonMenuView.swift in Sources */,
 				E4F8124C2E0FF539007CDA87 /* DetailGoalView.swift in Sources */,

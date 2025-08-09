@@ -38,8 +38,8 @@ struct AnalysisView: View {
     }
     
     // MARK: - Public Properties
-    var timeOfDay: Constants.TimesOfDay
-    var subgoals: [Subgoal]
+    let timeOfDay: Constants.TimesOfDay
+    let subgoals: [Subgoal]
     
     // MARK: - Body
     var body: some View {

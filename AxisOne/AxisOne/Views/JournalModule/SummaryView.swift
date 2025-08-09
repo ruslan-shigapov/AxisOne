@@ -11,7 +11,7 @@ struct SummaryView: View {
     
     @Environment(\.dismiss) private var dismiss
     
-    var date: Date
+    let date: Date
     
     var body: some View {
         NavigationStack {
@@ -20,7 +20,7 @@ struct SummaryView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem {
-                        ToolbarButtonView(type: .cancel) {
+                        NavBarImageButtonView(type: .cancel) {
                             dismiss()
                         }
                     }

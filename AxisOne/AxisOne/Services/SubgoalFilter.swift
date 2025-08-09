@@ -11,8 +11,8 @@ struct SubgoalFilter {
     
     static func predicate(
         for date: Date,
-        hasFocuses: Bool = true,
-        isActive: Bool = false
+        timeOfDay: Constants.TimesOfDay? = nil,
+        types: [Constants.SubgoalTypes]
     ) -> NSPredicate {
         guard let interval = Calendar.current.dateInterval(
             of: .day, for: date
@@ -50,21 +50,31 @@ struct SubgoalFilter {
                 deadlinePredicate,
                 habitPredicate
             ])
-        let finalPredicate = hasFocuses
+        let timeOfDayPredicate: NSPredicate? = {
+            guard let timeOfDay else { return nil }
+            return NSPredicate(format: "timeOfDay == %@", timeOfDay.rawValue)
+        }()
+        let typesPredicate: NSPredicate? = {
+            guard !types.isEmpty else { return nil }
+            return NSPredicate(format: "type IN %@", types.map { $0.rawValue })
+        }()
+        var predicates: [NSPredicate] = [basePredicate]
+        if let timeOfDayPredicate {
+            predicates.append(timeOfDayPredicate)
+        }
+        if let typesPredicate {
+            predicates.append(typesPredicate)
+        }
+        let combinedPredicate = NSCompoundPredicate(
+            andPredicateWithSubpredicates: predicates)
+        return types.contains(.focus)
         ? NSCompoundPredicate(
             orPredicateWithSubpredicates: [
-                basePredicate,
+                combinedPredicate,
                 NSPredicate(
                     format: "type == %@",
                     Constants.SubgoalTypes.focus.rawValue)
             ])
-        : basePredicate
-        return isActive
-        ? NSCompoundPredicate(
-            andPredicateWithSubpredicates: [
-                finalPredicate,
-                NSPredicate(format: "isActive == true")
-            ])
-        : finalPredicate
+        : combinedPredicate
     }
 }

@@ -13,7 +13,7 @@ struct InboxView: View {
     
     @FetchRequest(
         entity: Subgoal.entity(),
-        sortDescriptors: [.init(key: "time", ascending: true)],
+        sortDescriptors: [],
         predicate: NSPredicate(
             format: "type == %@",
             Constants.SubgoalTypes.inbox.rawValue))
@@ -27,16 +27,7 @@ struct InboxView: View {
                 }
                 return Calendar.current.isDate(deadline, inSameDayAs: date)
             }
-            .sorted {
-                guard let firstTimeOfDay = Constants.TimesOfDay(
-                    rawValue: $0.timeOfDay ?? ""),
-                      let secondTimeOfDay = Constants.TimesOfDay(
-                        rawValue: $1.timeOfDay ?? "")
-                else {
-                    return false
-                }
-                return firstTimeOfDay.order < secondTimeOfDay.order
-            }
+            .sorted(by: SubgoalSorter.compare)
     }
     
     private var uncompletedSubgoals: [Subgoal] {
@@ -49,7 +40,7 @@ struct InboxView: View {
         subgoals.filter { $0.isCompleted }
     }
     
-    var date: Date
+    let date: Date
     
     var body: some View {
         NavigationStack {
@@ -75,36 +66,24 @@ struct InboxView: View {
                     }
                 }
                 Section {
-                    if filteredSubgoals.isEmpty {
-                        EmptyRowTextView(
-                            text: "Подцелей данного типа не имеется")
-                    } else {
-                        ForEach(filteredSubgoals) {
-                            SubgoalView(
-                                subgoal: $0,
-                                isToday: Calendar.current.isDateInToday(date))
-                        }
-                    }
+                    SubgoalListView(
+                        subgoals: filteredSubgoals,
+                        emptyRowText: "Подцелей данного типа не имеется",
+                        date: date)
                 } header: {
                     HeaderView(text: "Сегодня")
                 }
                 if !completedSubgoals.isEmpty {
-                    Section {
-                        ForEach(completedSubgoals) {
-                            SubgoalView(
-                                subgoal: $0,
-                                isToday: Calendar.current.isDateInToday(date))
-                        }
-                    } header: {
-                        HeaderView(text: "Выполнено")
-                    }
+                    CompletedSectionView(
+                        subgoals: completedSubgoals,
+                        date: date)
                 }
             }
             .navigationTitle(Constants.SubgoalTypes.inbox.rawValue)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem {
-                    ToolbarButtonView(type: .cancel) {
+                    NavBarImageButtonView(type: .cancel) {
                         dismiss()
                     }
                 }

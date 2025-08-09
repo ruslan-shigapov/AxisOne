@@ -24,7 +24,7 @@ struct GoalView: View {
     
     // MARK: - Body
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 12) {
             CheckmarkImageView(isCompleted: $goal.isCompleted)
                 .onTapGesture {
                     withAnimation {
@@ -41,6 +41,8 @@ struct GoalView: View {
                 isModalViewPresented = true
             }
         }
+        .padding(12)
+        .listRowInsets(EdgeInsets())
         .swipeActions {
             if !goal.isCompleted {
                 SwipeActionButtonView(

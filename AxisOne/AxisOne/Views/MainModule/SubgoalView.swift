@@ -54,7 +54,7 @@ struct SubgoalView: View {
 
     // MARK: - Public Properties
     @ObservedObject var subgoal: Subgoal
-    var isToday: Bool
+    let isToday: Bool
     
     // MARK: - Body
     var body: some View {
@@ -62,17 +62,15 @@ struct SubgoalView: View {
             HStack {
                 if subgoal.type != Constants.SubgoalTypes.inbox.rawValue {
                     CapsuleView(
-                        color: lifeArea.color,
+                        color: subgoal.isActive ? lifeArea.color : .clear,
                         title: subgoal.goal?.lifeArea)
                 }
                 CapsuleView(color: .clear, title: subgoal.type)
                 if let time = subgoal.time {
-                    Spacer()
-                    Text(time.formatted(date: .omitted, time: .shortened))
-                    Image(systemName: "bell")
+                    ExactTimeView(time)
                 }
             }
-            HStack {
+            HStack(spacing: 12) {
                 if let subgoalType = Constants.SubgoalTypes(
                     rawValue: subgoal.type ?? ""),
                    subgoalType != Constants.SubgoalTypes.focus {
@@ -97,7 +95,9 @@ struct SubgoalView: View {
                     primaryText: subgoal.title,
                     secondaryText: subgoal.goal?.title,
                     isActive: .constant(isMissed),
-                    isCompleted: $subgoal.isCompleted)
+                    isCompleted: isToday
+                    ? $subgoal.isCompleted
+                    : .constant(false))
                 .onTapGesture {
                     isModalViewPresented = true
                 }
@@ -188,7 +188,7 @@ private extension SubgoalView {
     func CapsuleView(color: Color, title: String?) -> some View {
         Text(title ?? "")
             .font(.custom("Jura", size: 13))
-            .frame(width: 96, height: 24)
+            .frame(width: 90, height: 24)
             .background(
                 Capsule().fill(
                     LinearGradient(
@@ -202,6 +202,19 @@ private extension SubgoalView {
                     ))
             )
             .overlay(Capsule().stroke(.primary, lineWidth: 1))
+    }
+    
+    func ExactTimeView(_ time: Date) -> some View {
+        HStack {
+            Spacer()
+            Text(time.formatted(date: .omitted, time: .shortened))
+                .font(.custom("Jura", size: 17))
+            Image(systemName: "bell.fill")
+                .imageScale(.small)
+        }
+        .foregroundStyle(subgoal.isCompleted
+                         ? .secondary
+                         : .primary)
     }
 }
 

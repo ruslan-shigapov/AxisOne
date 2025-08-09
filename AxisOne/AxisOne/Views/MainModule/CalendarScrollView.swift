@@ -1,5 +1,5 @@
 //
-//  CalendarView.swift
+//  CalendarScrollView.swift
 //  AxisOne
 //
 //  Created by Ruslan Shigapov on 31.07.2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CalendarView: View {
+struct CalendarScrollView: View {
     
     @FetchRequest(entity: Subgoal.entity(), sortDescriptors: [])
     private var subgoals: FetchedResults<Subgoal>

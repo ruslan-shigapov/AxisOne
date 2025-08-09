@@ -15,7 +15,7 @@ struct ContentView: View {
     @AppStorage("focusOfDay")
     private var focusOfDay: String?
     
-    @State private var selectedTab: Constants.Tabs = .journal
+    @State private var selectedTab: Constants.Tabs = .main
     
     private var today: Date {
         Calendar.current.startOfDay(for: Date())

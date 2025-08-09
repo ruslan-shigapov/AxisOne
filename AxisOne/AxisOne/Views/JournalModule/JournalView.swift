@@ -13,7 +13,9 @@ struct JournalView: View {
     @FetchRequest(
         entity: Subgoal.entity(),
         sortDescriptors: [.init(key: "time", ascending: true)],
-        predicate: SubgoalFilter.predicate(for: .now, hasFocuses: false))
+        predicate: SubgoalFilter.predicate(
+            for: .now,
+            types: [.task, .habit, .milestone, .inbox]))
     private var subgoals: FetchedResults<Subgoal>
     
     @FetchRequest(
@@ -127,7 +129,7 @@ private extension JournalView {
     func SummarySectionView() -> some View {
         Section {
             if reflections.isEmpty {
-                EmptyRowTextView(text: "Пока недостаточно данных")
+                RowLabelView(type: .empty, text: "Пока недостаточно данных")
             } else {
                 VStack {
                     ForEach(

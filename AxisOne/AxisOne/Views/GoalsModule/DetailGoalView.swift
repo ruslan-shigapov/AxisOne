@@ -14,9 +14,11 @@ struct DetailGoalView: View {
     @Environment(\.dismiss) private var dismiss
     
     @AppStorage("isCompletedSubgoalsHidden")
-    private var isCompletedSubgoalsHidden: Bool = false
+    private var isCompletedSubgoalsHidden = false
     
     @State private var selectedLifeArea: Constants.LifeAreas
+    
+    @State private var isActive: Bool
     
     @State private var title: String
     @State private var notes: String
@@ -61,14 +63,16 @@ struct DetailGoalView: View {
                         isModified = true
                     }
                     TextFieldView(
-                        placeholder: "Добавьте уточнение",
+                        placeholder: "Можете добавить уточнение",
                         text: $notes)
                     .onChange(of: notes) {
                         isModified = true
                     }
-                } footer: {
-                    FooterView(text: "Необязательно, но полезно, если необходимо держать в фокусе некоторые подробности.")
                 }
+                ToggleView(title: "Приоритет", isOn: $isActive)
+                    .onChange(of: isActive) {
+                        isModified = true
+                    }
                 Section {
                     NavigationLink(
                         destination: DetailSubgoalView(
@@ -76,9 +80,7 @@ struct DetailGoalView: View {
                             subgoals: $subgoals,
                             isModified: $isSubgoalsModified)
                     ) {
-                        Text("Добавить")
-                            .font(.custom("Jura-Medium", size: 17))
-                            .foregroundStyle(.accent)
+                        RowLabelView(type: .addLink, text: "Добавить")
                     }
                     SubgoalListView()
                 } header: {
@@ -104,12 +106,33 @@ struct DetailGoalView: View {
                                           : "Детали")
                 }
                 ToolbarItem(placement: .topBarLeading) {
-                    CancelButtonView()
+                    NavBarLabelButtonView(type: .cancel) {
+                        context.rollback()
+                        DispatchQueue.main.async {
+                            dismiss()
+                        }
+                    }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    DoneButtonView()
-                        .disabled(!isFormValid)
+                    NavBarLabelButtonView(type: .done) {
+                        if hasDuplicate() {
+                            isAlertPresented = true
+                            return
+                        }
+                        save()
+                        DispatchQueue.main.async {
+                            dismiss()
+                        }
+                    }
+                    .disabled(!isFormValid)
                 }
+            }
+            .alert(
+                "Попробуйте снова",
+                isPresented: $isAlertPresented,
+                actions: {}
+            ) {
+                Text("Цель с таким названием уже существует.")
             }
         }
     }
@@ -120,6 +143,7 @@ struct DetailGoalView: View {
         _selectedLifeArea = State(
             initialValue: Constants.LifeAreas(
                 rawValue: goal?.lifeArea ?? "") ?? .health)
+        _isActive = State(initialValue: goal?.isActive ?? false)
         _title = State(initialValue: goal?.title ?? "")
         _notes = State(initialValue: goal?.notes ?? "")
         _subgoals = State(
@@ -148,7 +172,7 @@ struct DetailGoalView: View {
         goalToSave.lifeArea = selectedLifeArea.rawValue
         goalToSave.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
         goalToSave.notes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
-        goalToSave.isActive = goal?.isActive ?? false
+        goalToSave.isActive = isActive
         goalToSave.isCompleted = goal?.isCompleted ?? false
         if goal == nil {
             goalToSave.order = getOrder()
@@ -159,7 +183,7 @@ struct DetailGoalView: View {
         }
         for (index, subgoal) in subgoals.enumerated() {
             subgoal.order = Int16(index)
-            subgoal.isActive = goalToSave.isActive
+            subgoal.isActive = isActive
             goalToSave.addToSubgoals(subgoal)
         }
         try? context.save()
@@ -222,38 +246,6 @@ private extension DetailGoalView {
             Text(subgoal.title ?? "")
                 .foregroundStyle(subgoal.isCompleted ? .secondary : .primary)
                 .strikethrough(shouldStrikethrough(subgoal))
-        }
-    }
-    
-    func CancelButtonView() -> some View {
-        Button("Отмена") {
-            context.rollback()
-            DispatchQueue.main.async {
-                dismiss()
-            }
-        }
-        .font(.custom("Jura-Medium", size: 17))
-        .foregroundStyle(.red)
-    }
-    
-    func DoneButtonView() -> some View {
-        Button("Готово") {
-            if hasDuplicate() {
-                isAlertPresented = true
-                return
-            }
-            save()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                dismiss()
-            }
-        }
-        .font(.custom("Jura-Medium", size: 17))
-        .alert(
-            "Попробуйте снова",
-            isPresented: $isAlertPresented,
-            actions: {}
-        ) {
-            Text("Цель с таким названием уже существует.")
         }
     }
 }

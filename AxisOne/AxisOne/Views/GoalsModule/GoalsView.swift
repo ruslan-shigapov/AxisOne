@@ -46,17 +46,22 @@ struct GoalsView: View {
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 if !goals.isEmpty {
-                    EditButtonView()
+                    NavBarLabelButtonView(
+                        type: .edit,
+                        isEditModeActive: editMode == .active
+                    ) {
+                        toggleEditMode()
+                    }
                 }
             }
             ToolbarItem {
-                ToolbarButtonView(
+                NavBarImageButtonView(
                     type: .toggleCompletedVisibility,
                     isCompletedHidden: $isCompletedGoalsHidden
                 )
             }
             ToolbarItem {
-                ToolbarButtonView(type: .add) {
+                NavBarImageButtonView(type: .add) {
                     isModalViewPresented = true
                 }
             }
@@ -89,6 +94,17 @@ struct GoalsView: View {
         let filteredGoals = getGoals(for: lifeArea)
         let completedGoals = filteredGoals.filter(\.isCompleted)
         return Double(completedGoals.count) / Double(filteredGoals.count)
+    }
+    
+    private func toggleEditMode() {
+        DispatchQueue.main.async {
+            isEditing.toggle()
+        }
+        withAnimation {
+            editMode = editMode == .inactive
+            ? .active
+            : .inactive
+        }
     }
 }
 
@@ -141,27 +157,6 @@ private extension GoalsView {
             Text(lifeArea.rawValue)
                 .font(.custom("Jura-Medium", size: 16))
                 .foregroundColor(lifeArea.color)
-        }
-    }
-    
-    func EditButtonView() -> some View {
-        Button {
-            DispatchQueue.main.async {
-                isEditing.toggle()
-            }
-            withAnimation {
-                editMode = editMode == .inactive
-                ? .active
-                : .inactive
-            }
-        } label: {
-            if editMode == .active {
-                Text("Готово")
-                    .font(.custom("Jura-Bold", size: 17))
-            } else {
-                Text("Править")
-                    .font(.custom("Jura-Medium", size: 17))
-            }
         }
     }
 }
