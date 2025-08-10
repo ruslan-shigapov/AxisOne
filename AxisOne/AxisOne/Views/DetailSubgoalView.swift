@@ -34,6 +34,8 @@ struct DetailSubgoalView: View {
     
     @State private var isModalPresentation: Bool
             
+    private let currentTimeOfDay = Constants.TimesOfDay.getTimeOfDay(from: .now)
+    
     private var isFormValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
@@ -137,7 +139,7 @@ struct DetailSubgoalView: View {
         }
         _selectedTimeOfDay = State(
             initialValue: Constants.TimesOfDay(
-                rawValue: subgoal?.timeOfDay ?? "") ?? .morning)
+                rawValue: subgoal?.timeOfDay ?? "") ?? currentTimeOfDay)
         if let _ = subgoal?.time {
             isExact = true
         }

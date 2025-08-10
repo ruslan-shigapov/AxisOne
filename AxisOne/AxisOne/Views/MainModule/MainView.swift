@@ -31,9 +31,7 @@ struct MainView: View {
     @State private var selectedDate = Date()
     
     @State private var isDatePickerPresented = false
-    
-    @State private var isModalViewPresented = false
-    
+        
     @State private var selectedTimeOfDay = Constants.TimesOfDay.getTimeOfDay(
         from: .now)
         
@@ -62,8 +60,7 @@ struct MainView: View {
                 }
             SubgoalTypeSectionView(
                 date: selectedDate,
-                selectedSubgoalType: $selectedSubgoalType,
-                isModalViewPresented: $isModalViewPresented)
+                selectedSubgoalType: $selectedSubgoalType)
             Section {
                 TimeOfDayPickerView()
                     .onChange(of: selectedTimeOfDay) {
@@ -82,9 +79,10 @@ struct MainView: View {
             if !completedSubgoals.isEmpty,
                !isCompletedSubgoalsHidden,
                Calendar.current.isDateInToday(selectedDate) {
-                CompletedSectionView(
+                SubgoalListSectionView(
                     subgoals: completedSubgoals,
-                    date: selectedDate)
+                    date: selectedDate,
+                    headerTitle: "Выполнено")
             }
         }
         .toolbar {
@@ -104,9 +102,6 @@ struct MainView: View {
         }
         .sheet(item: $selectedSubgoalType) {
             SubgoalTypeView(type: $0, date: selectedDate)
-        }
-        .sheet(isPresented: $isModalViewPresented) {
-            InboxView(date: selectedDate)
         }
     }
 }

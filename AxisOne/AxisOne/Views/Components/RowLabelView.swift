@@ -23,10 +23,10 @@ struct RowLabelView: View {
     
     let type: RowLabelType
     
-    let text: String
+    var text: String? = nil
     
     var body: some View {
-        Text(text)
+        Text(text ?? "Добавить")
             .font(.custom("Jura-Medium", size: 17))
             .foregroundStyle(color)
     }

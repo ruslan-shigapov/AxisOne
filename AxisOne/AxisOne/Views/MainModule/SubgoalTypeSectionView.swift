@@ -13,6 +13,19 @@ struct SubgoalTypeSectionView: View {
     @FetchRequest
     private var subgoals: FetchedResults<Subgoal>
     
+    @FetchRequest(
+        entity: Subgoal.entity(),
+        sortDescriptors: [],
+        predicate: NSCompoundPredicate(
+            andPredicateWithSubpredicates: [
+                NSPredicate(
+                    format: "type == %@",
+                    Constants.SubgoalTypes.inbox.rawValue),
+                NSPredicate(format: "deadline == nil"),
+                NSPredicate(format: "isCompleted == false")
+            ]))
+    private var inLineSubgoals: FetchedResults<Subgoal>
+    
     @AppStorage("isFocusesHidden")
     private var isFocusesHidden = false
     
@@ -23,9 +36,7 @@ struct SubgoalTypeSectionView: View {
     let date: Date
     
     @Binding var selectedSubgoalType: Constants.SubgoalTypes?
-    
-    @Binding var isModalViewPresented: Bool
-    
+        
     // MARK: - Body
     var body: some View {
         Section {
@@ -42,11 +53,9 @@ struct SubgoalTypeSectionView: View {
     init(
         date: Date,
         selectedSubgoalType: Binding<Constants.SubgoalTypes?>,
-        isModalViewPresented: Binding<Bool>
     ) {
         self.date = date
         self._selectedSubgoalType = selectedSubgoalType
-        self._isModalViewPresented = isModalViewPresented
         _subgoals = FetchRequest(
             entity: Subgoal.entity(),
             sortDescriptors: [],
@@ -96,8 +105,7 @@ extension SubgoalTypeSectionView {
                     .foregroundStyle(.accent)
                 Spacer()
                 Text(String(getSubgoalCount(subgoalType)))
-                    .font(.custom("Jura", size: 22))
-                    .fontWeight(.semibold)
+                    .font(.custom("Jura-SemiBold", size: 22))
             }
             Text(subgoalType.plural)
                 .fontWeight(.medium)
@@ -125,8 +133,10 @@ extension SubgoalTypeSectionView {
                     .foregroundStyle(.secondary)
                 Spacer()
                 Text(String(count))
-                    .font(.custom("Jura", size: 22))
-                    .fontWeight(.semibold)
+                    .font(.custom("Jura-SemiBold", size: 22))
+                if subgoalType == .inbox {
+                    Text("( \(inLineSubgoals.count) )")
+                }
             }
             if subgoalType == .focus,
                count > 0,
@@ -154,11 +164,7 @@ extension SubgoalTypeSectionView {
                 .fill(Color(.secondarySystemBackground))
         }
         .onTapGesture {
-            if subgoalType == .inbox {
-                isModalViewPresented = true
-            } else {
-                selectedSubgoalType = subgoalType
-            }
+            selectedSubgoalType = subgoalType
         }
     }
     

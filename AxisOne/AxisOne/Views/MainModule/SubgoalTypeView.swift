@@ -14,12 +14,17 @@ struct SubgoalTypeView: View {
     @FetchRequest
     private var subgoals: FetchedResults<Subgoal>
     
-    private var uncompletedSubgoals: [Subgoal] {
-        if Calendar.current.isDateInToday(date) {
-            return subgoals.filter { !$0.isCompleted }
-        }
-        return Array(subgoals)
-    }
+    @FetchRequest(
+            entity: Subgoal.entity(),
+            sortDescriptors: [],
+            predicate: NSCompoundPredicate(
+                andPredicateWithSubpredicates: [
+                    NSPredicate(
+                        format: "type == %@",
+                        Constants.SubgoalTypes.inbox.rawValue),
+                    NSPredicate(format: "deadline == nil")
+                ]))
+        private var inLineSubgoals: FetchedResults<Subgoal>
     
     private var completedSubgoals: [Subgoal] {
         subgoals.filter { $0.isCompleted }
@@ -31,9 +36,24 @@ struct SubgoalTypeView: View {
     var body: some View {
         NavigationStack {
             List {
+                if type == .inbox {
+                    NavigationLink(
+                        destination: DetailSubgoalView(
+                            subgoals: .constant([]),
+                            isModified: .constant(false))
+                    ) {
+                        RowLabelView(type: .addLink)
+                    }
+                    if !inLineSubgoals.isEmpty {
+                        SubgoalListSectionView(
+                            subgoals: Array(inLineSubgoals),
+                            date: date,
+                            headerTitle: "На очереди")
+                    }
+                }
                 Section {
                     SubgoalListView(
-                        subgoals: uncompletedSubgoals,
+                        subgoals: subgoals.filter { !$0.isCompleted },
                         emptyRowText: "Подцелей данного типа не имеется",
                         date: date)
                 } header: {
@@ -41,9 +61,10 @@ struct SubgoalTypeView: View {
                 }
                 if !completedSubgoals.isEmpty,
                    Calendar.current.isDateInToday(date) {
-                    CompletedSectionView(
+                    SubgoalListSectionView(
                         subgoals: completedSubgoals,
-                        date: date)
+                        date: date,
+                        headerTitle: "Выполнено")
                 }
             }
             .navigationTitle(type.plural)

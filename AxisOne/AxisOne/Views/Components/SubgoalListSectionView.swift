@@ -11,6 +11,7 @@ struct SubgoalListSectionView: View {
     
     let subgoals: [Subgoal]
     let date: Date
+    let headerTitle: String
     
     var body: some View {
         Section {
@@ -20,7 +21,7 @@ struct SubgoalListSectionView: View {
                     isToday: Calendar.current.isDateInToday(date))
             }
         } header: {
-            HeaderView(text: "Выполнено")
+            HeaderView(text: headerTitle)
         }
     }
 }

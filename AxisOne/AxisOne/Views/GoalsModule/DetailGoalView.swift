@@ -80,7 +80,7 @@ struct DetailGoalView: View {
                             subgoals: $subgoals,
                             isModified: $isSubgoalsModified)
                     ) {
-                        RowLabelView(type: .addLink, text: "Добавить")
+                        RowLabelView(type: .addLink)
                     }
                     SubgoalListView()
                 } header: {

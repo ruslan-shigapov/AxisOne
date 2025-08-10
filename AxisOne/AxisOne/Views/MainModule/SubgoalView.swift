@@ -98,13 +98,14 @@ struct SubgoalView: View {
                     isCompleted: isToday
                     ? $subgoal.isCompleted
                     : .constant(false))
-                .onTapGesture {
-                    isModalViewPresented = true
-                }
             }
         }
         .padding(12)
         .listRowInsets(EdgeInsets())
+        .background(Rectangle().fill(Color(.secondarySystemBackground)))
+        .onTapGesture {
+            isModalViewPresented = true
+        }
         .swipeActions {
             SwipeActionButtonView(type: .move) {
                 isConfirmationDialogPresented = true
