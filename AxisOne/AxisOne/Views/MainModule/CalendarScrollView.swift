@@ -59,17 +59,13 @@ struct CalendarScrollView: View {
                     .frame(width: 55, height: 75)
                     .padding(8)
                     .background {
-                        RoundedRectangle(cornerRadius: 16)
+                        RoundedRectangle(cornerRadius: 10)
                             .fill(
                                 Calendar.current.isDate(
                                     date,
                                     inSameDayAs: selectedDate)
                                 ? .accent
                                 : Color(.secondarySystemBackground))
-                    }
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(.secondary, lineWidth: 0.35)
                     }
                     .onTapGesture {
                         selectedDate = date

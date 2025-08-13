@@ -123,6 +123,17 @@ enum Constants {
         case weekly = "Еженедельно"
         
         var id: Self { self }
+        
+        func getNecessity(on date: Date, startDate: Date) -> Bool {
+            let weekday = Calendar.current.component(.weekday, from: date)
+            return switch self {
+            case .daily: true
+            case .weekdays: weekday >= 2 && weekday <= 6
+            case .weekends: weekday == 1 || weekday == 7
+            case .weekly:
+                Calendar.current.component(.weekday, from: startDate) == weekday
+            }
+        }
     }
     
     enum TimesOfDay: String, CaseIterable, Identifiable {
@@ -160,7 +171,7 @@ enum Constants {
             return switch Calendar.current.component(.hour, from: date) {
             case 5..<12: .morning
             case 12..<18: .afternoon
-            case 18...23: .evening
+            case 18..<23: .evening
             default: .night
             }
         }

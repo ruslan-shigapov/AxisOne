@@ -95,6 +95,7 @@ struct DetailGoalView: View {
                     }
                 }
             }
+            .scrollDismissesKeyboard(.interactively)
             .onChange(of: isSubgoalsModified) {
                 if $1 { isModified = true }
             }

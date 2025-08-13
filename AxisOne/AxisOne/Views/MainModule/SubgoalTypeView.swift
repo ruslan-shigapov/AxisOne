@@ -26,6 +26,13 @@ struct SubgoalTypeView: View {
                 ]))
         private var inLineSubgoals: FetchedResults<Subgoal>
     
+    private var uncompletedSubgoals: [Subgoal] {
+        if Calendar.current.isDateInToday(date) {
+            return subgoals.filter { !$0.isCompleted }
+        }
+        return Array(subgoals)
+    }
+    
     private var completedSubgoals: [Subgoal] {
         subgoals.filter { $0.isCompleted }
     }
@@ -53,7 +60,7 @@ struct SubgoalTypeView: View {
                 }
                 Section {
                     SubgoalListView(
-                        subgoals: subgoals.filter { !$0.isCompleted },
+                        subgoals: uncompletedSubgoals,
                         emptyRowText: "Подцелей данного типа не имеется",
                         date: date)
                 } header: {

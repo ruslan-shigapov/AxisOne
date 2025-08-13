@@ -11,8 +11,17 @@ struct SubgoalSorter {
     
     static func compare(lhs: Subgoal, rhs: Subgoal) -> Bool {
         if let lhsTime = lhs.time, let rhsTime = rhs.time {
-            if lhsTime != rhsTime {
-                return lhsTime < rhsTime
+            let lhsComponents = Calendar.current.dateComponents(
+                [.hour, .minute],
+                from: lhsTime)
+            let rhsComponents = Calendar.current.dateComponents(
+                [.hour, .minute],
+                from: rhsTime)
+            if lhsComponents.hour != rhsComponents.hour {
+                return lhsComponents.hour ?? 0 < rhsComponents.hour ?? 0
+            }
+            if lhsComponents.minute != rhsComponents.minute {
+                return lhsComponents.minute ?? 0 < rhsComponents.minute ?? 0
             }
         } else if let _ = lhs.time {
             return true

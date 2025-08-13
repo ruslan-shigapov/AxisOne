@@ -13,19 +13,6 @@ struct SubgoalTypeSectionView: View {
     @FetchRequest
     private var subgoals: FetchedResults<Subgoal>
     
-    @FetchRequest(
-        entity: Subgoal.entity(),
-        sortDescriptors: [],
-        predicate: NSCompoundPredicate(
-            andPredicateWithSubpredicates: [
-                NSPredicate(
-                    format: "type == %@",
-                    Constants.SubgoalTypes.inbox.rawValue),
-                NSPredicate(format: "deadline == nil"),
-                NSPredicate(format: "isCompleted == false")
-            ]))
-    private var inLineSubgoals: FetchedResults<Subgoal>
-    
     @AppStorage("isFocusesHidden")
     private var isFocusesHidden = false
     
@@ -69,6 +56,18 @@ struct SubgoalTypeSectionView: View {
         subgoals
             .filter { $0.type == type.rawValue }
             .filter { !$0.isCompleted || !Calendar.current.isDateInToday(date) }
+            .filter {
+                if $0.type == Constants.SubgoalTypes.habit.rawValue {
+                    guard let startDate = $0.startDate,
+                          let frequency = Constants.Frequencies(
+                            rawValue: $0.frequency ?? ""
+                    ) else {
+                        return false
+                    }
+                    return frequency.getNecessity(on: date, startDate: startDate)
+                }
+                return true
+            }
             .count
     }
 }
@@ -114,7 +113,7 @@ extension SubgoalTypeSectionView {
         .font(.custom("Jura", size: 17))
         .padding(12)
         .background {
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: 10)
                 .fill(Color(.secondarySystemBackground))
         }
     }
@@ -134,9 +133,6 @@ extension SubgoalTypeSectionView {
                 Spacer()
                 Text(String(count))
                     .font(.custom("Jura-SemiBold", size: 22))
-                if subgoalType == .inbox {
-                    Text("( \(inLineSubgoals.count) )")
-                }
             }
             if subgoalType == .focus,
                count > 0,
@@ -152,7 +148,7 @@ extension SubgoalTypeSectionView {
                 .fontWeight(.light)
                 .padding(12)
                 .background {
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: 10)
                         .fill(Color.secondary.opacity(0.1))
                 }
             }
@@ -160,7 +156,7 @@ extension SubgoalTypeSectionView {
         .font(.custom("Jura", size: 17))
         .padding(12)
         .background {
-            RoundedRectangle(cornerRadius: 16)
+            RoundedRectangle(cornerRadius: 10)
                 .fill(Color(.secondarySystemBackground))
         }
         .onTapGesture {

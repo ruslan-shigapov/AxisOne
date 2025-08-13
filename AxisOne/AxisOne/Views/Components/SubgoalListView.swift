@@ -13,11 +13,26 @@ struct SubgoalListView: View {
     let emptyRowText: String
     let date: Date
     
+    var filteredSubgoals: [Subgoal] {
+        subgoals.filter {
+            if $0.type == Constants.SubgoalTypes.habit.rawValue {
+                guard let startDate = $0.startDate,
+                      let frequency = Constants.Frequencies(
+                        rawValue: $0.frequency ?? ""
+                ) else {
+                    return false
+                }
+                return frequency.getNecessity(on: date, startDate: startDate)
+            }
+            return true
+        }
+    }
+    
     var body: some View {
-        if subgoals.isEmpty {
+        if filteredSubgoals.isEmpty {
             RowLabelView(type: .empty, text: emptyRowText)
         } else {
-            ForEach(subgoals.sorted(by: SubgoalSorter.compare)) {
+            ForEach(filteredSubgoals.sorted(by: SubgoalSorter.compare)) {
                 SubgoalView(
                     subgoal: $0,
                     isToday: Calendar.current.isDateInToday(date))

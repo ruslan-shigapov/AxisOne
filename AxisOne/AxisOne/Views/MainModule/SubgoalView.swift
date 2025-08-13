@@ -142,15 +142,9 @@ struct SubgoalView: View {
             isPresented: $isConfirmationAlertPresented,
             actions: {
                 Button("Да") {
-                    subgoal.deadline = Date()
-                    if let _ = subgoal.time {
-                        subgoal.time = Date()
-                    } else {
-                        subgoal.timeOfDay = Constants.TimesOfDay.getTimeOfDay(
-                            from: Date()).rawValue
+                    withAnimation {
+                        completeNow()
                     }
-                    subgoal.isCompleted = true
-                    try? context.save()
                 }
                 Button("Нет", role: .cancel) {}
             }
@@ -167,7 +161,23 @@ struct SubgoalView: View {
     
     // MARK: - Private Methods
     private func toggleCompletion() {
-        subgoal.isCompleted.toggle()
+        if subgoal.type == Constants.SubgoalTypes.inbox.rawValue,
+              subgoal.isCompleted == false,
+              subgoal.deadline == nil {
+            completeNow()
+        } else {
+            subgoal.isCompleted.toggle()
+            subgoal.order = getOrder()
+            try? context.save()
+        }
+    }
+    
+    private func completeNow() {
+        subgoal.deadline = .now
+        subgoal.timeOfDay = Constants.TimesOfDay.getTimeOfDay(
+            from: .now).rawValue
+        subgoal.time = nil
+        subgoal.isCompleted = true
         subgoal.order = getOrder()
         try? context.save()
     }

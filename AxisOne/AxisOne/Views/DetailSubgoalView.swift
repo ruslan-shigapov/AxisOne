@@ -13,11 +13,14 @@ struct DetailSubgoalView: View {
     @Environment(\.managedObjectContext) private var context
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
-    
+        
     @State private var selectedSubgoalType: Constants.SubgoalTypes
     
     @State private var title: String
     @State private var notes: String
+    
+    @State private var isDatePickerPresented: Bool = false
+    @State private var isTimePickerPresented: Bool = false
     
     @State private var isUrgent = false
     @State private var isExact = false
@@ -70,7 +73,7 @@ struct DetailSubgoalView: View {
                         CompletionView()
                     }
                     if selectedSubgoalType == .habit {
-                        DatePickerView(
+                        DatePickerGroupView(
                             title: "Приступить",
                             selection: $selectedStartDate)
                         RepetitionView()
@@ -81,12 +84,14 @@ struct DetailSubgoalView: View {
                     SaveButtonView()
                         .disabled(!isFormValid)
                 }
+                .disabled(subgoal?.isCompleted ?? false)
                 if let subgoal {
                     DeleteButtonView(title: "Удалить подцель") {
                         delete(subgoal)
                     }
                 }
             }
+            .scrollDismissesKeyboard(.interactively)
             .onChange(of: isUrgent) { _, newValue in
                 if !newValue {
                     isExact = false
@@ -228,6 +233,24 @@ struct DetailSubgoalView: View {
             dismiss()
         }
     }
+    
+    private func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy"
+        if Calendar.current.isDateInToday(date) {
+            return "Сегодня"
+        } else if Calendar.current.isDateInTomorrow(date) {
+            return "Завтра"
+        } else {
+            return formatter.string(from: date)
+        }
+    }
+    
+    private func formatTime(_ time: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: time)
+    }
 }
 
 // MARK: - Views
@@ -283,11 +306,11 @@ private extension DetailSubgoalView {
                     endPoint: .bottom
                 )
                 if selectedSubgoalType == type {
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: 10)
                         .stroke(.primary, lineWidth: 3)
                 }
             })
-        .cornerRadius(16)
+        .cornerRadius(10)
     }
     
     func TextFieldWithImageView() -> some View {
@@ -301,25 +324,63 @@ private extension DetailSubgoalView {
         }
     }
     
-    func DatePickerView(
+    func DateRowLabel(title: String, value: String) -> some View {
+        LabeledContent(title) {
+            Text(value)
+                .foregroundStyle(title != "Приступить" ? .accent : .secondary)
+        }
+        .font(.custom("Jura-Medium", size: 17))
+        .background(Rectangle().fill(Color(.secondarySystemBackground)))
+    }
+    
+    func DatePickerGroupView(
         title: String,
         selection: Binding<Date>
     ) -> some View {
-        DatePicker(
-            title,
-            selection: selection,
-            displayedComponents: .date)
-        .font(.custom("Jura", size: 17))
-        .environment(
-            \.locale,
-             Locale(identifier: "ru_RU"))
+        Group {
+            DateRowLabel(
+                title: title,
+                value: formatDate(selection.wrappedValue))
+            .onTapGesture {
+                withAnimation {
+                    isDatePickerPresented.toggle()
+                }
+            }
+            if isDatePickerPresented {
+                DatePicker("", selection: selection, displayedComponents: .date)
+                    .datePickerStyle(.wheel)
+            }
+        }
+    }
+    
+    func TimePickerGroupView(
+        title: String,
+        selection: Binding<Date>
+    ) -> some View {
+        Group {
+            DateRowLabel(
+                title: title,
+                value: formatTime(selection.wrappedValue))
+            .onTapGesture {
+                withAnimation {
+                    isTimePickerPresented.toggle()
+                }
+            }
+            if isTimePickerPresented {
+                DatePicker(
+                    "",
+                    selection: selection,
+                    displayedComponents: .hourAndMinute)
+                .datePickerStyle(.wheel)
+            }
+        }
     }
     
     func DeadlineGroupView() -> some View {
         Group {
             ToggleView(title: "Срок", isOn: $isUrgent)
             if isUrgent {
-                DatePickerView(title: "Дата", selection: $selectedDeadline)
+                DatePickerGroupView(title: "Дата", selection: $selectedDeadline)
             }
         }
     }
@@ -328,11 +389,9 @@ private extension DetailSubgoalView {
         Group {
             ToggleView(title: "Точное время", isOn: $isExact)
             if isExact {
-                DatePicker(
-                    "Напомнить",
-                    selection: $selectedTime,
-                    displayedComponents: .hourAndMinute)
-                .font(.custom("Jura", size: 17))
+                TimePickerGroupView(
+                    title: "Напомнить",
+                    selection: $selectedTime)
             } else {
                 ButtonMenuView(
                     title: "Время дня",
