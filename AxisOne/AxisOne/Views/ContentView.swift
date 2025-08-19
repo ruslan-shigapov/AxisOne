@@ -12,7 +12,7 @@ struct ContentView: View {
     // MARK: - Private Properties
     @Environment(\.managedObjectContext) private var context
     
-    @State private var selectedTab: Constants.Tabs = .goals
+    @State private var selectedTab: Constants.Tabs = .main
     
     private var today: Date {
         Calendar.current.startOfDay(for: Date())
