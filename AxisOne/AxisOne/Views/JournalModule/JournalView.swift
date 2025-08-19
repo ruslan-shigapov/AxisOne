@@ -53,7 +53,7 @@ struct JournalView: View {
         .toolbar {
             ToolbarItem {
                 NavigationLink(destination: HistoryView()) {
-                    Image(systemName: "clock")
+                    NavBarButtonImageView(type: .history)
                 }
             }
         }
@@ -103,7 +103,8 @@ private extension JournalView {
                     .font(.custom("Jura", size: 17))
                 }
         } header: {
-            HeaderView(text: "Время дня")
+            Text("Время дня")
+                .font(Constants.Fonts.juraSubheadline)
         }
     }
     
@@ -158,12 +159,13 @@ private extension JournalView {
                 }
             }
         } header: {
-            HeaderView(text: "Итоги")
+            Text("Итоги")
+                .font(Constants.Fonts.juraSubheadline)
         } footer: {
             if !reflections.isEmpty {
                 let ending = reflections.count == 1 ? "анализа" : "анализов"
-                FooterView(
-                    text: "Данные на основе \(reflections.count) само\(ending). Нажмите, чтобы узнать подробнее.")
+                Text("Данные на основе \(reflections.count) само\(ending). Нажмите, чтобы узнать подробнее.")
+                    .font(Constants.Fonts.juraFootnote)
             }
         }
     }

@@ -18,7 +18,7 @@ struct DeleteButtonView: View {
         Button(title, role: .destructive) {
             isAlertPresented = true
         }
-        .font(.custom("Jura-Medium", size: 17))
+        .font(Constants.Fonts.juraMediumBody)
         .alert("Вы уверены?", isPresented: $isAlertPresented) {
             Button("Удалить", role: .destructive) {
                 action()

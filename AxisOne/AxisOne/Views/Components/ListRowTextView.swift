@@ -11,28 +11,27 @@ struct ListRowTextView: View {
     
     let primaryText: String?
     let secondaryText: String?
-        
-    @Binding var isActive: Bool
-    @Binding var isCompleted: Bool
-    
+    let isActive: Bool
+    let isCompleted: Bool
     var activeColor: Color?
     
     var body: some View {
         VStack(alignment: .leading) {
             Text(primaryText ?? "")
-                .font(.custom("Jura-Medium", size: 17))
+                .font(Constants.Fonts.juraMediumBody)
                 .lineLimit(2)
-                .foregroundStyle(isActive
-                                 ? activeColor ?? .red
-                                 : isCompleted ? .secondary : .primary)
+                .foregroundStyle(
+                    isActive
+                    ? activeColor ?? .red
+                    : isCompleted ? .secondary : .primary)
             if let secondaryText, !secondaryText.isEmpty {
                 Text(secondaryText)
-                    .font(.custom("Jura-Light", size: 17))
+                    .font(Constants.Fonts.juraLightCallout)
                     .lineLimit(1)
                     .foregroundStyle(.secondary)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .contentShape(Rectangle())
+        .contentShape(.rect)
     }
 }

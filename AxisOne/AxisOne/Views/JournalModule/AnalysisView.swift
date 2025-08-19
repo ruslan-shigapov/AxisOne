@@ -63,7 +63,8 @@ struct AnalysisView: View {
                         }
                 }
             } header: {
-                HeaderView(text: "Подцели")
+                Text("Подцели")
+                    .font(Constants.Fonts.juraSubheadline)
             }
             Section {
                 DisclosureGroup(isExpanded: $isExpanded) {
@@ -74,16 +75,20 @@ struct AnalysisView: View {
                         .padding(.trailing, 8)
                 }
             } header: {
-                HeaderView(text: "Чувства")
+                Text("Чувства")
+                    .font(Constants.Fonts.juraSubheadline)
             } footer: {
-                FooterView(text: "Выберите от 3 до 5 эмоций к каждой подцели для исчерпывающего анализа в будущем.")
+                Text("Выберите от 3 до 5 эмоций к каждой подцели для исчерпывающего анализа в будущем.")
+                    .font(Constants.Fonts.juraFootnote)
             }
             Section {
                 TextFieldView(
                     placeholder: "Что думаете по этому поводу?",
                     text: $thoughts)
             } header: {
-                HeaderView(text: "Размышления")
+                Text("Размышления")
+                    .font(Constants.Fonts.juraSubheadline)
+                
             }
         }
         .onAppear {

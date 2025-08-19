@@ -36,6 +36,8 @@ struct DetailSubgoalView: View {
     @State private var selectedHabitFrequency: Constants.Frequencies
     
     @State private var isModalPresentation: Bool
+    
+    @State private var isConfirmationDialogPresented = false
             
     private let currentTimeOfDay = Constants.TimesOfDay.getTimeOfDay(from: .now)
     
@@ -85,6 +87,19 @@ struct DetailSubgoalView: View {
                         .disabled(!isFormValid)
                 }
                 .disabled(subgoal?.isCompleted ?? false)
+                if /*let _ = subgoal,*/ lifeArea == nil {
+                    Section {
+                        Button("Сделать целью") {
+                            isConfirmationDialogPresented = true
+                        }
+                        .font(.custom("Jura-Medium", size: 17))
+                        NavigationLink(destination: GoalListView()) {
+                            RowLabelView(
+                                type: .addLink,
+                                text: "Привязать к цели")
+                        }
+                    }
+                }
                 if let subgoal {
                     DeleteButtonView(title: "Удалить подцель") {
                         delete(subgoal)
@@ -100,16 +115,43 @@ struct DetailSubgoalView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    NavigationBarTitleView(
+                    NavBarTitleView(
                         text: subgoal?.type ?? "Новая подцель")
                 }
                 if isModalPresentation {
                     ToolbarItem {
-                        NavBarImageButtonView(type: .cancel) {
+                        Button {
                             dismiss()
+                        } label: {
+                            NavBarButtonImageView(type: .cancel)
                         }
                     }
                 }
+            }
+            .confirmationDialog(
+                "Выберите сферу жизни",
+                isPresented: $isConfirmationDialogPresented,
+                titleVisibility: .visible
+            ) {
+                ForEach(Constants.LifeAreas.allCases) { lifeArea in
+                    Button(lifeArea.rawValue) {
+                        guard let subgoal else { return }
+                        let goal = Goal(context: context)
+                        goal.lifeArea = lifeArea.rawValue
+                        goal.title = title.trimmingCharacters(
+                            in: .whitespacesAndNewlines)
+                        goal.notes = notes.trimmingCharacters(
+                            in: .whitespacesAndNewlines)
+                        goal.order = getGoalOrder(for: lifeArea.rawValue)
+                        context.delete(subgoal)
+                        try? context.save()
+                        DispatchQueue.main.async {
+                            dismiss()
+                        }
+                    }
+                    .foregroundStyle(.white)
+                }
+                Button("Отмена", role: .cancel) {}
             }
         }
     }
@@ -251,6 +293,16 @@ struct DetailSubgoalView: View {
         formatter.dateFormat = "HH:mm"
         return formatter.string(from: time)
     }
+    
+    private func getGoalOrder(for lifeArea: String) -> Int16 {
+        let fetchRequest = Goal.fetchRequest()
+        fetchRequest.predicate = .init(
+            format: "lifeArea == %@",
+            argumentArray: [lifeArea])
+        fetchRequest.sortDescriptors = [.init(key: "order", ascending: true)]
+        let lastGoal = try? context.fetch(fetchRequest).last
+        return (lastGoal?.order ?? 0) + 1
+    }
 }
 
 // MARK: - Views
@@ -270,9 +322,11 @@ private extension DetailSubgoalView {
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color(.systemBackground))
         } header: {
-            HeaderView(text: "Тип")
+            Text("Тип")
+                .font(Constants.Fonts.juraSubheadline)
         } footer: {
-            FooterView(text: selectedSubgoalType.description)
+            Text(selectedSubgoalType.description)
+                .font(Constants.Fonts.juraFootnote)
         }
     }
     
@@ -397,7 +451,6 @@ private extension DetailSubgoalView {
                     title: "Время дня",
                     items: Constants.TimesOfDay.allCases.dropLast(),
                     selectedItem: $selectedTimeOfDay,
-                    onSelect: { selectedTimeOfDay = $0 },
                     itemText: { $0.rawValue })
             }
         }
@@ -426,7 +479,6 @@ private extension DetailSubgoalView {
             title: "Повторять",
             items: Constants.Frequencies.allCases,
             selectedItem: $selectedHabitFrequency,
-            onSelect: { selectedHabitFrequency = $0 },
             itemText: { $0.rawValue })
     }
     
@@ -441,11 +493,15 @@ private extension DetailSubgoalView {
         .font(.custom("Jura-Medium", size: 17))
         .frame(maxWidth: .infinity)
     }
+    
+    func GoalListView() -> some View {
+        EmptyView()
+    }
 }
 
 #Preview {
     DetailSubgoalView(
-        lifeArea: .personal,
+        lifeArea: nil,
         subgoals: .constant([]),
         isModified: .constant(false))
 }

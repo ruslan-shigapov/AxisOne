@@ -15,8 +15,7 @@ struct GoalView: View {
     @State private var isModalViewPresented = false
     
     private var lifeAreaColor: Color {
-        Constants.LifeAreas(rawValue: goal.lifeArea ?? "")?
-            .color ?? .secondary
+        Constants.LifeAreas(rawValue: goal.lifeArea ?? "")?.color ?? .primary
     }
     
     // MARK: - Public Properties
@@ -25,29 +24,28 @@ struct GoalView: View {
     // MARK: - Body
     var body: some View {
         HStack(spacing: 12) {
-            CheckmarkImageView(isCompleted: $goal.isCompleted)
+            CheckmarkImageView(isCompleted: goal.isCompleted)
                 .onTapGesture {
                     withAnimation {
-                        toggleCompletion()
+                        toggleComplete()
                     }
                 }
             ListRowTextView(
                 primaryText: goal.title,
                 secondaryText: goal.notes,
-                isActive: $goal.isActive,
-                isCompleted: $goal.isCompleted,
+                isActive: goal.isActive,
+                isCompleted: goal.isCompleted,
                 activeColor: lifeAreaColor)
             .onTapGesture {
                 isModalViewPresented = true
             }
         }
-        .padding(12)
         .listRowInsets(EdgeInsets())
+        .padding(12)
         .swipeActions {
             if !goal.isCompleted {
                 SwipeActionButtonView(
-                    type: .toggleActive,
-                    isActive: $goal.isActive,
+                    type: .toggleActive(isActive: goal.isActive),
                     activationColor: lifeAreaColor
                 ) {
                     toggleActive()
@@ -63,27 +61,40 @@ struct GoalView: View {
     }
     
     // MARK: - Private Methods
-    private func toggleCompletion() {
+    private func toggleComplete() {
         goal.isCompleted.toggle()
         if goal.isCompleted {
             goal.isActive = false
             goal.subgoals?.forEach {
                 ($0 as? Subgoal)?.isActive = false
             }
+            goal.order = getOrder()
         }
-        goal.order = getOrder()
-        try? context.save()
+        do {
+            try context.save()
+        } catch {
+            print("Error goal completion toggling: \(error)")
+        }
     }
     
     private func getOrder() -> Int16 {
-        guard let lifeArea = goal.lifeArea else { return 0 }
+        let areaPredicate: NSPredicate
+        if let lifeArea = goal.lifeArea {
+            areaPredicate = .init(format: "lifeArea == %@", lifeArea)
+        } else {
+            areaPredicate = NSPredicate(format: "lifeArea == nil")
+        }
         let fetchRequest = Goal.fetchRequest()
-        fetchRequest.predicate = .init(
-            format: "lifeArea == %@",
-            argumentArray: [lifeArea])
-        fetchRequest.sortDescriptors = [.init(key: "order", ascending: true)]
-        let lastGoal = try? context.fetch(fetchRequest).last
-        return (lastGoal?.order ?? 0) + 1
+        fetchRequest.predicate = areaPredicate
+        fetchRequest.sortDescriptors = [.init(key: "order", ascending: false)]
+        fetchRequest.fetchLimit = 1
+        do {
+            let lastGoal = try context.fetch(fetchRequest).first
+            return (lastGoal?.order ?? 0) + 1
+        } catch {
+            print("Error goal order getting to complete: \(error)")
+            return 0
+        }
     }
     
     private func toggleActive() {
@@ -91,12 +102,20 @@ struct GoalView: View {
         goal.subgoals?.forEach {
             ($0 as? Subgoal)?.isActive.toggle()
         }
-        try? context.save()
+        do {
+            try context.save()
+        } catch {
+            print("Error goal activation toggling: \(error)")
+        }
     }
     
     private func delete() {
         context.delete(goal)
-        try? context.save()
+        do {
+            try context.save()
+        } catch {
+            print("Error goal deleting by swipe: \(error)")
+        }
     }
 }
 

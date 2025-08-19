@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct NavBarImageButtonView: View {
+struct NavBarButtonImageView: View {
     
     enum NavBarImageButtonType {
         case toggleCompletedVisibility, add, cancel
@@ -39,8 +39,11 @@ struct NavBarImageButtonView: View {
             }
         } label: {
             Image(systemName: imageName)
+                .resizable()
+                .scaledToFit()
                 .fontWeight(type == .add ? .medium : .regular)
                 .tint(type == .cancel ? .secondary : .accent)
+                .frame(width: 44, height: 44)
         }
     }
 }

@@ -19,8 +19,8 @@ struct SubgoalView: View {
     @State private var isConfirmationAlertPresented = false
     @State private var isErrorAlertPresented = false
 
-    private var lifeArea: Constants.LifeAreas {
-        Constants.LifeAreas(rawValue: subgoal.goal?.lifeArea ?? "") ?? .health
+    private var lifeArea: Constants.LifeAreas? {
+        Constants.LifeAreas(rawValue: subgoal.goal?.lifeArea ?? "")
     }
     
     private var goalTitle: String {
@@ -38,18 +38,9 @@ struct SubgoalView: View {
     }
     
     private var isMissed: Bool {
-        guard subgoal.type != Constants.SubgoalTypes.focus.rawValue else {
-            return false
-        }
         guard !subgoal.isCompleted, isToday else { return false }
-        if let deadline = subgoal.deadline {
-            guard Calendar.current.isDate(deadline, inSameDayAs: Date()) else {
-                return false
-            }
-        }
-        guard timeOfDay != .unknown else { return false }
         return timeOfDay.order < Constants.TimesOfDay.getTimeOfDay(
-            from: Date()).order
+            from: .now).order
     }
 
     // MARK: - Public Properties
@@ -62,7 +53,9 @@ struct SubgoalView: View {
             HStack {
                 if subgoal.type != Constants.SubgoalTypes.inbox.rawValue {
                     CapsuleView(
-                        color: subgoal.isActive ? lifeArea.color : .clear,
+                        color: subgoal.isActive
+                        ? (lifeArea?.color ?? .clear)
+                        : .clear,
                         title: subgoal.goal?.lifeArea)
                 }
                 CapsuleView(color: .clear, title: subgoal.type)
@@ -75,8 +68,8 @@ struct SubgoalView: View {
                     rawValue: subgoal.type ?? ""),
                    subgoalType != Constants.SubgoalTypes.focus {
                     CheckmarkImageView(isCompleted: isToday
-                                       ? $subgoal.isCompleted
-                                       : .constant(false))
+                                       ? subgoal.isCompleted
+                                       : false)
                         .onTapGesture {
                             if isToday {
                                 withAnimation {
@@ -94,10 +87,8 @@ struct SubgoalView: View {
                 ListRowTextView(
                     primaryText: subgoal.title,
                     secondaryText: subgoal.goal?.title,
-                    isActive: .constant(isMissed),
-                    isCompleted: isToday
-                    ? $subgoal.isCompleted
-                    : .constant(false))
+                    isActive: isMissed,
+                    isCompleted: isToday ? subgoal.isCompleted : false)
             }
         }
         .padding(12)
@@ -124,13 +115,17 @@ struct SubgoalView: View {
                 isModalPresentation: true)
         }
         .confirmationDialog(
-            "Перенести на...",
+            "Назначить на...",
             isPresented: $isConfirmationDialogPresented,
             titleVisibility: .visible
         ) {
             ForEach(Constants.TimesOfDay.allCases.dropLast()) { value in
                 Button(value.rawValue) {
+                    if subgoal.deadline == nil {
+                        subgoal.deadline = .now
+                    }
                     subgoal.timeOfDay = value.rawValue
+                    subgoal.time = nil
                     try? context.save()
                 }
                 .disabled(timeOfDay == value)

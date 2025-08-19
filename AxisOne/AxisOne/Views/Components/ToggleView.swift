@@ -14,7 +14,7 @@ struct ToggleView: View {
     
     var body: some View {
         Toggle(title, isOn: $isOn)
-            .font(.custom("Jura", size: 17))
+            .font(Constants.Fonts.juraBody)
             .tint(.accent)
     }
 }

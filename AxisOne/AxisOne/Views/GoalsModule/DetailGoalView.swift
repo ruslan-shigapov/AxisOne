@@ -17,20 +17,12 @@ struct DetailGoalView: View {
     private var isCompletedSubgoalsHidden = false
     
     @State private var selectedLifeArea: Constants.LifeAreas
-    
-    @State private var isActive: Bool
-    
     @State private var title: String
     @State private var notes: String
-    
+    @State private var isActive: Bool
     @State private var subgoals: [Subgoal] = []
-    
     @State private var isModified = false
     @State private var isSubgoalsModified = false
-    
-    @State private var isEditing = false
-    @State private var editMode: EditMode = .inactive
-    
     @State private var isAlertPresented = false
     
     private var isFormValid: Bool {
@@ -49,10 +41,9 @@ struct DetailGoalView: View {
                     title: "Сфера жизни",
                     items: Constants.LifeAreas.allCases,
                     selectedItem: $selectedLifeArea,
-                    onSelect: { selectedLifeArea = $0 },
                     itemText: { $0.rawValue },
                     itemColor: { $0.color })
-                .onChange(of: selectedLifeArea) { 
+                .onChange(of: selectedLifeArea) {
                     isModified = true
                 }
                 Section {
@@ -73,49 +64,38 @@ struct DetailGoalView: View {
                     .onChange(of: isActive) {
                         isModified = true
                     }
-                Section {
-                    NavigationLink(
-                        destination: DetailSubgoalView(
-                            lifeArea: selectedLifeArea,
-                            subgoals: $subgoals,
-                            isModified: $isSubgoalsModified)
-                    ) {
-                        RowLabelView(type: .addLink)
-                    }
-                    SubgoalListView()
-                } header: {
-                    HeaderWithToggleView(
-                        title: Text("Подцели"),
-                        contentName: "заверш.",
-                        isContentHidden: $isCompletedSubgoalsHidden)
-                }
+                SubgoalSectionView(
+                    selectedLifeArea: selectedLifeArea,
+                    subgoals: $subgoals,
+                    isModified: $isSubgoalsModified,
+                    isCompletedHidden: $isCompletedSubgoalsHidden)
                 if let goal {
                     DeleteButtonView(title: "Удалить цель") {
                         delete(goal)
                     }
                 }
             }
-            .scrollDismissesKeyboard(.interactively)
             .onChange(of: isSubgoalsModified) {
-                if $1 { isModified = true }
+                if $1 {
+                    isModified = true
+                }
             }
+            .scrollDismissesKeyboard(.interactively)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    NavigationBarTitleView(text: goal == nil
-                                          ? "Новая цель"
-                                          : "Детали")
+                    NavBarTitleView(text: goal == nil ? "Новая цель" : "Детали")
                 }
                 ToolbarItem(placement: .topBarLeading) {
-                    NavBarLabelButtonView(type: .cancel) {
+                    NavBarTextButtonView(type: .cancel) {
                         context.rollback()
                         DispatchQueue.main.async {
                             dismiss()
                         }
                     }
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavBarLabelButtonView(type: .done) {
+                ToolbarItem {
+                    NavBarTextButtonView(type: .done) {
                         if hasDuplicate() {
                             isAlertPresented = true
                             return
@@ -141,20 +121,19 @@ struct DetailGoalView: View {
     // MARK: - Initialize
     init(goal: Goal? = nil) {
         self.goal = goal
-        _selectedLifeArea = State(
-            initialValue: Constants.LifeAreas(
-                rawValue: goal?.lifeArea ?? "") ?? .health)
+        let lifeArea = Constants.LifeAreas(rawValue: goal?.lifeArea ?? "")
+        _selectedLifeArea = State(initialValue: lifeArea ?? .health)
         _isActive = State(initialValue: goal?.isActive ?? false)
         _title = State(initialValue: goal?.title ?? "")
         _notes = State(initialValue: goal?.notes ?? "")
-        _subgoals = State(
-            initialValue: (goal?.subgoals as? Set<Subgoal> ?? []).sorted {
-                if $0.isCompleted != $1.isCompleted {
-                    return !$0.isCompleted
-                } else {
-                    return $0.order < $1.order
-                }
-            })
+        let subgoals = goal?.subgoals as? Set<Subgoal> ?? []
+        _subgoals = State(initialValue: subgoals.sorted {
+            if $0.isCompleted != $1.isCompleted {
+                !$0.isCompleted
+            } else {
+                $0.order < $1.order
+            }
+        })
     }
     
     // MARK: - Private Methods
@@ -187,66 +166,38 @@ struct DetailGoalView: View {
             subgoal.isActive = isActive
             goalToSave.addToSubgoals(subgoal)
         }
-        try? context.save()
+        do {
+            try context.save()
+        } catch {
+            print("Error goal saving: \(error)")
+        }
     }
     
     private func getOrder() -> Int16 {
         let fetchRequest = Goal.fetchRequest()
         fetchRequest.predicate = .init(
             format: "lifeArea == %@",
-            argumentArray: [selectedLifeArea.rawValue])
-        fetchRequest.sortDescriptors = [.init(key: "order", ascending: true)]
-        let lastGoal = try? context.fetch(fetchRequest).last
-        return (lastGoal?.order ?? 0) + 1
-    }
-    
-    private func shouldStrikethrough(_ subgoal: Subgoal) -> Bool {
-        let type = Constants.SubgoalTypes(rawValue: subgoal.type ?? "")
-        return (type == .task || type == .milestone) && subgoal.isCompleted
+            selectedLifeArea.rawValue)
+        fetchRequest.sortDescriptors = [.init(key: "order", ascending: false)]
+        fetchRequest.fetchLimit = 1
+        do {
+            let lastGoal = try context.fetch(fetchRequest).first
+            return (lastGoal?.order ?? 0) + 1
+        } catch {
+            print("Error goal order getting to save: \(error)")
+            return 0
+        }
     }
     
     private func delete(_ goal: Goal) {
         context.delete(goal)
-        try? context.save()
+        do {
+            try context.save()
+        } catch {
+            print("Error goal deleting by button: \(error)")
+        }
         DispatchQueue.main.async {
             dismiss()
-        }
-    }
-}
-
-// MARK: - Views
-private extension DetailGoalView {
-    
-    func SubgoalListView() -> some View {
-        List {
-            ForEach(subgoals.filter {
-                !isCompletedSubgoalsHidden || !$0.isCompleted
-            }) { subgoal in
-                NavigationLink(
-                    destination: DetailSubgoalView(
-                        lifeArea: selectedLifeArea,
-                        subgoal: subgoal,
-                        subgoals: $subgoals,
-                        isModified: $isSubgoalsModified)
-                ) {
-                    SubgoalRowView(subgoal)
-                }
-                .font(.custom("Jura", size: 17))
-            }
-        }
-    }
-    
-    func SubgoalRowView(_ subgoal: Subgoal) -> some View {
-        HStack {
-            Image(
-                systemName: (
-                    Constants.SubgoalTypes(
-                        rawValue: subgoal.type ?? "")?.imageName) ?? "")
-                .font(.system(size: 22))
-                .foregroundStyle(.secondary)
-            Text(subgoal.title ?? "")
-                .foregroundStyle(subgoal.isCompleted ? .secondary : .primary)
-                .strikethrough(shouldStrikethrough(subgoal))
         }
     }
 }

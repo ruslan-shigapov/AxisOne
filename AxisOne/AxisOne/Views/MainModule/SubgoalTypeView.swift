@@ -52,34 +52,32 @@ struct SubgoalTypeView: View {
                         RowLabelView(type: .addLink)
                     }
                     if !inLineSubgoals.isEmpty {
-                        SubgoalListSectionView(
-                            subgoals: Array(inLineSubgoals),
-                            date: date,
-                            headerTitle: "На очереди")
+                        Section {
+                            ForEach(inLineSubgoals) {
+                                SubgoalView(subgoal: $0, isToday: Calendar.current.isDateInToday(date))
+                            }
+                        } header: {
+                            Text("На очереди")
+                                .font(Constants.Fonts.juraSubheadline)
+                        }
                     }
+                    
                 }
-                Section {
-                    SubgoalListView(
-                        subgoals: uncompletedSubgoals,
-                        emptyRowText: "Подцелей данного типа не имеется",
-                        date: date)
-                } header: {
-                    HeaderView(text: getHeaderText())
-                }
-                if !completedSubgoals.isEmpty,
-                   Calendar.current.isDateInToday(date) {
-                    SubgoalListSectionView(
-                        subgoals: completedSubgoals,
-                        date: date,
-                        headerTitle: "Выполнено")
-                }
+                SubgoalListSectionsView(
+                    date: date,
+                    subgoals: subgoals,
+                    title: getHeaderText(),
+                    emptyRowText: "Подцелей данного типа не имеется",
+                    isCompletedHidden: false)
             }
             .navigationTitle(type.plural)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem {
-                    NavBarImageButtonView(type: .cancel) {
+                    Button {
                         dismiss()
+                    } label: {
+                        NavBarButtonImageView(type: .cancel)
                     }
                 }
             }

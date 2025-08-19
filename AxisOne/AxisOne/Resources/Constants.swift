@@ -70,7 +70,7 @@ enum Constants {
         case habit = "Привычка"
         case milestone = "Веха"
         case focus = "Фокус"
-        case inbox = "\"Входящие\""
+        case inbox = "Входящие"
         
         var imageName: String {
             switch self {
@@ -146,10 +146,10 @@ enum Constants {
         
         var imageName: String {
             switch self {
-            case .morning: "sunrise"
-            case .afternoon: "sun.max"
-            case .evening: "sunset"
-            case .night: "moon.stars"
+            case .morning: "sunrise.fill"
+            case .afternoon: "sun.max.fill"
+            case .evening: "sunset.fill"
+            case .night: "moon.stars.fill"
             case .unknown: ""
             }
         }
@@ -194,6 +194,23 @@ enum Constants {
         }
         
         var id: Self { self }
+    }
+    
+    // MARK: - Texts
+    enum Texts {
+        static let done = "Готово"
+        static let cancel = "Отменить"
+    }
+    
+    // MARK: - Fonts
+    enum Fonts {
+        static let juraBody = Font.custom("Jura", size: 17)
+        static let juraMediumBody = Font.custom("Jura-Medium", size: 17)
+        static let juraBoldBody = Font.custom("Jura-Bold", size: 17)
+        static let juraLightCallout = Font.custom("Jura-Light", size: 16)
+        static let juraSubheadline = Font.custom("Jura", size: 15)
+        static let juraMediumSubheadline = Font.custom("Jura-Medium", size: 15)
+        static let juraFootnote = Font.custom("Jura", size: 13)
     }
     
     // MARK: - Colors

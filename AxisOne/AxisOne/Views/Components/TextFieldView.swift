@@ -10,11 +10,10 @@ import SwiftUI
 struct TextFieldView: View {
     
     let placeholder: String
-    
     @Binding var text: String
     
     var body: some View {
         TextField(placeholder, text: $text, axis: .vertical)
-            .font(.custom("Jura", size: 17))
+            .font(Constants.Fonts.juraBody)
     }
 }

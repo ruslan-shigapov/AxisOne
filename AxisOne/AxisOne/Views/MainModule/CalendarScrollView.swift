@@ -56,7 +56,7 @@ struct CalendarScrollView: View {
                             .font(.custom("Jura-Light", size: 13))
                     }
                     .font(.custom("Jura-Medium", size: 17))
-                    .frame(width: 55, height: 75)
+                    .frame(width: 55, height: 65)
                     .padding(8)
                     .background {
                         RoundedRectangle(cornerRadius: 10)
@@ -65,16 +65,16 @@ struct CalendarScrollView: View {
                                     date,
                                     inSameDayAs: selectedDate)
                                 ? .accent
-                                : Color(.secondarySystemBackground))
+                                : .clear)
+                            .stroke(.white, lineWidth: 0.4)
                     }
                     .onTapGesture {
                         selectedDate = date
                         
                     }
                 }
-                .padding(1)
-                .padding(.top, 15)
             }
+            .padding()
         }
         .listRowInsets(EdgeInsets())
         .listRowBackground(Color.clear)

@@ -11,20 +11,15 @@ struct ButtonMenuView<Item: Identifiable>: View {
     
     let title: String
     let items: [Item]
-    
     @Binding var selectedItem: Item
-
-    let onSelect: (Item) -> Void
-
     let itemText: (Item) -> String
-    
     var itemColor: (Item) -> Color? = { _ in nil }
     
     var body: some View {
         Menu {
             ForEach(items) { item in
                 Button {
-                    onSelect(item)
+                    selectedItem = item
                 } label: {
                     Text(itemText(item))
                 }
@@ -32,15 +27,18 @@ struct ButtonMenuView<Item: Identifiable>: View {
         } label: {
             LabeledContent {
                 Text(itemText(selectedItem))
-                    .foregroundStyle(itemColor(selectedItem) ?? .gray)
+                    .foregroundStyle(itemColor(selectedItem) ?? .secondary)
                     .fontWeight(.medium)
                 Image(systemName: "arrow.up.and.down")
-                    .foregroundStyle(.gray)
+                    .foregroundStyle(.secondary)
+                    .imageScale(.small)
             } label: {
                 Text(title)
                     .foregroundColor(.primary)
             }
+            .frame(maxHeight: .infinity)
+            .background(.clear)
         }
-        .font(.custom("Jura", size: 17))
+        .font(Constants.Fonts.juraBody)
     }
 }

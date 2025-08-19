@@ -20,8 +20,10 @@ struct SummaryView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem {
-                        NavBarImageButtonView(type: .cancel) {
+                        Button {
                             dismiss()
+                        } label: {
+                            NavBarButtonImageView(type: .cancel)
                         }
                     }
                 }

@@ -16,10 +16,12 @@ struct EmptyStateView: View {
         VStack {
             Text(primaryText)
                 .fontWeight(.medium)
-            Text(secondaryText ?? "")
-                .foregroundStyle(.secondary)
+            if let secondaryText {
+                Text(secondaryText)
+                    .foregroundStyle(.secondary)
+            }
         }
-        .font(.custom("Jura", size: 17))
+        .font(Constants.Fonts.juraBody)
         .multilineTextAlignment(.center)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }

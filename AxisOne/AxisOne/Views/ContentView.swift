@@ -12,10 +12,7 @@ struct ContentView: View {
     // MARK: - Private Properties
     @Environment(\.managedObjectContext) private var context
     
-    @AppStorage("focusOfDay")
-    private var focusOfDay: String?
-    
-    @State private var selectedTab: Constants.Tabs = .main
+    @State private var selectedTab: Constants.Tabs = .goals
     
     private var today: Date {
         Calendar.current.startOfDay(for: Date())
@@ -27,7 +24,7 @@ struct ContentView: View {
             ForEach(Constants.Tabs.allCases) { tab in
                 NavigationStack {
                     tab.view
-                        .navigationTitle(tab.rawValue)
+                        .navigationTitle(tab != .main ? tab.rawValue : "")
                         .background(Constants.Colors.background)
                         .scrollContentBackground(.hidden)
                 }
@@ -37,13 +34,13 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            resetHabitsIfNeeded()
-            resetFocusOfDayIfNeeded()
+            resetHabitsIfNeeded() // TODO: вынести в менеджер для подцелей ?
         }
     }
     
     // MARK: - Initialize
     init() {
+        // TODO: вернуться к этому, когда будет ясность со шрифтами и цветами
         setupNavBarAppearance()
         setupTabBarAppearance()
         setupSegmentedControlAppearance()
@@ -55,42 +52,29 @@ struct ContentView: View {
         fetchRequest.predicate = NSPredicate(
             format: "type == %@",
             Constants.SubgoalTypes.habit.rawValue)
-        let habits = try? context.fetch(fetchRequest)
-        habits?.forEach {
-            guard let lastReset = $0.lastReset else {
-                $0.lastReset = today
-                return
+        do {
+            let habits = try context.fetch(fetchRequest)
+            habits.forEach {
+                guard let lastReset = $0.lastReset else {
+                    $0.lastReset = today
+                    return
+                }
+                if !Calendar.current.isDate(lastReset, inSameDayAs: today) {
+                    $0.isCompleted = false
+                    $0.lastReset = today
+                }
             }
-            if !Calendar.current.isDate(lastReset, inSameDayAs: today) {
-                $0.isCompleted = false
-                $0.lastReset = today
-            }
+            try context.save()
+        } catch {
+            print("Error habits reseting: \(error)")
         }
-        try? context.save()
-    }
-    
-    private func resetFocusOfDayIfNeeded() {
-        let fetchRequest = Subgoal.fetchRequest()
-        fetchRequest.predicate = NSPredicate(
-            format: "type == %@",
-            Constants.SubgoalTypes.focus.rawValue)
-        let focuses = try? context.fetch(fetchRequest)
-        let wasResetToday = focuses?.contains {
-            guard let lastReset = $0.lastReset else {
-                $0.lastReset = today
-                return false
-            }
-            return Calendar.current.isDate(lastReset, inSameDayAs: today)
-        }
-        guard let wasResetToday, !wasResetToday else { return }
-        focusOfDay = focuses?.randomElement()?.title
     }
     
     private func setupNavBarAppearance() {
         guard let largeTitleFont = UIFont(name: "Jura-Bold", size: 34) else {
             return
         }
-        guard let titleFont = UIFont(name: "Jura-Bold", size: 20) else {
+        guard let titleFont = UIFont(name: "Jura-Bold", size: 17) else {
             return
         }
         guard let backButtonFont = UIFont(name: "Jura-Medium", size: 17) else {
@@ -108,6 +92,7 @@ struct ContentView: View {
         navBarAppearance.backButtonAppearance.normal.titleTextAttributes = [
             .font: backButtonFont
         ]
+        navBarAppearance.backgroundColor = UIColor(named: "Silver")
         UINavigationBar.appearance().standardAppearance = navBarAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
     }

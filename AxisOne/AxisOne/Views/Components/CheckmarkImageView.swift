@@ -9,11 +9,11 @@ import SwiftUI
 
 struct CheckmarkImageView: View {
     
-    @Binding var isCompleted: Bool
+    let isCompleted: Bool
     
     var body: some View {
         Image(systemName: isCompleted ? "checkmark.circle.fill" : "circle")
-            .font(.system(size: 22))
+            .imageScale(.large)
             .foregroundStyle(.secondary)
     }
 }
