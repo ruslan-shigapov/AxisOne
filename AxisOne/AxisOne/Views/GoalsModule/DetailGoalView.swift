@@ -10,7 +10,7 @@ import SwiftUI
 struct DetailGoalView: View {
     
     // MARK: - Private Properties
-    @Environment(\.managedObjectContext) private var context
+    @Environment(\.goalService) private var goalService
     @Environment(\.dismiss) private var dismiss
     
     @AppStorage("isCompletedSubgoalsHidden")
@@ -71,7 +71,11 @@ struct DetailGoalView: View {
                     isCompletedHidden: $isCompletedSubgoalsHidden)
                 if let goal {
                     DeleteButtonView(title: "Удалить цель") {
-                        delete(goal)
+                        do {
+                            try goalService.delete(goal)
+                        } catch {
+                            print(error)
+                        }
                     }
                 }
             }
@@ -88,7 +92,7 @@ struct DetailGoalView: View {
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     NavBarTextButtonView(type: .cancel) {
-                        context.rollback()
+                        goalService.rollback()
                         DispatchQueue.main.async {
                             dismiss()
                         }
@@ -96,11 +100,26 @@ struct DetailGoalView: View {
                 }
                 ToolbarItem {
                     NavBarTextButtonView(type: .done) {
-                        if hasDuplicate() {
-                            isAlertPresented = true
-                            return
+                        do {
+                            if try goalService.hasDuplicate(
+                                by: title,
+                                excludingGoal: goal
+                            ) {
+                                isAlertPresented = true
+                                return
+                            }
+                            try goalService.save(
+                                goal,
+                                lifeArea: selectedLifeArea.rawValue,
+                                title: title.trimmingCharacters(
+                                    in: .whitespacesAndNewlines),
+                                notes: notes.trimmingCharacters(
+                                    in: .whitespacesAndNewlines),
+                                isActive: isActive,
+                                subgoals: subgoals)
+                        } catch {
+                            print(error)
                         }
-                        save()
                         DispatchQueue.main.async {
                             dismiss()
                         }
@@ -134,71 +153,6 @@ struct DetailGoalView: View {
                 $0.order < $1.order
             }
         })
-    }
-    
-    // MARK: - Private Methods
-    private func hasDuplicate() -> Bool {
-        guard goal == nil else { return false }
-        let fetchRequest = Goal.fetchRequest()
-        fetchRequest.predicate = .init(
-            format: "title ==[c] %@",
-            title.trimmingCharacters(in: .whitespacesAndNewlines))
-        let count = try? context.count(for: fetchRequest)
-        return count ?? 0 > 0
-    }
-    
-    private func save() {
-        let goalToSave = goal ?? Goal(context: context)
-        goalToSave.lifeArea = selectedLifeArea.rawValue
-        goalToSave.title = title.trimmingCharacters(in: .whitespacesAndNewlines)
-        goalToSave.notes = notes.trimmingCharacters(in: .whitespacesAndNewlines)
-        goalToSave.isActive = isActive
-        goalToSave.isCompleted = goal?.isCompleted ?? false
-        if goal == nil {
-            goalToSave.order = getOrder()
-        }
-        let oldSubgoals = goalToSave.subgoals as? Set<Subgoal> ?? []
-        for subgoal in oldSubgoals.subtracting(subgoals) {
-            context.delete(subgoal)
-        }
-        for (index, subgoal) in subgoals.enumerated() {
-            subgoal.order = Int16(index)
-            subgoal.isActive = isActive
-            goalToSave.addToSubgoals(subgoal)
-        }
-        do {
-            try context.save()
-        } catch {
-            print("Error goal saving: \(error)")
-        }
-    }
-    
-    private func getOrder() -> Int16 {
-        let fetchRequest = Goal.fetchRequest()
-        fetchRequest.predicate = .init(
-            format: "lifeArea == %@",
-            selectedLifeArea.rawValue)
-        fetchRequest.sortDescriptors = [.init(key: "order", ascending: false)]
-        fetchRequest.fetchLimit = 1
-        do {
-            let lastGoal = try context.fetch(fetchRequest).first
-            return (lastGoal?.order ?? 0) + 1
-        } catch {
-            print("Error goal order getting to save: \(error)")
-            return 0
-        }
-    }
-    
-    private func delete(_ goal: Goal) {
-        context.delete(goal)
-        do {
-            try context.save()
-        } catch {
-            print("Error goal deleting by button: \(error)")
-        }
-        DispatchQueue.main.async {
-            dismiss()
-        }
     }
 }
 

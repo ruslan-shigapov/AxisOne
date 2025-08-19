@@ -10,7 +10,7 @@ import SwiftUI
 struct GoalListView: View {
     
     // MARK: - Private Properties
-    @Environment(\.managedObjectContext) private var context
+    @Environment(\.goalService) private var goalService
     
     @AppStorage("isHealthSectionExpanded")
     private var isHealthSectionExpanded = true
@@ -51,11 +51,11 @@ struct GoalListView: View {
                         filteredGoals.move(fromOffsets: $0, toOffset: $1)
                         for (index, goal) in filteredGoals.enumerated() {
                             goal.order = Int16(index)
-                        }
-                        do {
-                            try context.save()
-                        } catch {
-                            print("Error goal moving: \(error)")
+                            do {
+                                try goalService.saveOrders()
+                            } catch {
+                                print(error)
+                            }
                         }
                     }
                     .moveDisabled(!isEditMode)

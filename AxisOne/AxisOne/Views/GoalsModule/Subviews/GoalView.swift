@@ -10,8 +10,8 @@ import SwiftUI
 struct GoalView: View {
     
     // MARK: - Private Properties
-    @Environment(\.managedObjectContext) private var context
-    
+    @Environment(\.goalService) private var goalService
+
     @State private var isModalViewPresented = false
     
     private var lifeAreaColor: Color {
@@ -27,7 +27,11 @@ struct GoalView: View {
             CheckmarkImageView(isCompleted: goal.isCompleted)
                 .onTapGesture {
                     withAnimation {
-                        toggleComplete()
+                        do {
+                            try goalService.toggleComplete(of: goal)
+                        } catch {
+                            print(error)
+                        }
                     }
                 }
             ListRowTextView(
@@ -48,73 +52,23 @@ struct GoalView: View {
                     type: .toggleActive(isActive: goal.isActive),
                     activationColor: lifeAreaColor
                 ) {
-                    toggleActive()
+                    do {
+                        try goalService.toggleActive(of: goal)
+                    } catch {
+                        print(error)
+                    }
                 }
             }
             SwipeActionButtonView(type: .delete) {
-                delete()
+                do {
+                    try goalService.delete(goal)
+                } catch {
+                    print(error)
+                }
             }
         }
         .sheet(isPresented: $isModalViewPresented) {
             DetailGoalView(goal: goal)
-        }
-    }
-    
-    // MARK: - Private Methods
-    private func toggleComplete() {
-        goal.isCompleted.toggle()
-        if goal.isCompleted {
-            goal.isActive = false
-            goal.subgoals?.forEach {
-                ($0 as? Subgoal)?.isActive = false
-            }
-            goal.order = getOrder()
-        }
-        do {
-            try context.save()
-        } catch {
-            print("Error goal completion toggling: \(error)")
-        }
-    }
-    
-    private func getOrder() -> Int16 {
-        let areaPredicate: NSPredicate
-        if let lifeArea = goal.lifeArea {
-            areaPredicate = .init(format: "lifeArea == %@", lifeArea)
-        } else {
-            areaPredicate = NSPredicate(format: "lifeArea == nil")
-        }
-        let fetchRequest = Goal.fetchRequest()
-        fetchRequest.predicate = areaPredicate
-        fetchRequest.sortDescriptors = [.init(key: "order", ascending: false)]
-        fetchRequest.fetchLimit = 1
-        do {
-            let lastGoal = try context.fetch(fetchRequest).first
-            return (lastGoal?.order ?? 0) + 1
-        } catch {
-            print("Error goal order getting to complete: \(error)")
-            return 0
-        }
-    }
-    
-    private func toggleActive() {
-        goal.isActive.toggle()
-        goal.subgoals?.forEach {
-            ($0 as? Subgoal)?.isActive.toggle()
-        }
-        do {
-            try context.save()
-        } catch {
-            print("Error goal activation toggling: \(error)")
-        }
-    }
-    
-    private func delete() {
-        context.delete(goal)
-        do {
-            try context.save()
-        } catch {
-            print("Error goal deleting by swipe: \(error)")
         }
     }
 }

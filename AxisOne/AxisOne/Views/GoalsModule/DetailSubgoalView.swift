@@ -10,7 +10,7 @@ import SwiftUI
 struct DetailSubgoalView: View {
     
     // MARK: - Private Properties
-    @Environment(\.managedObjectContext) private var context
+    @Environment(\.subgoalService) private var subgoalService
     @Environment(\.dismiss) private var dismiss
         
     @State private var selectedSubgoalType: Constants.SubgoalTypes
@@ -94,7 +94,51 @@ struct DetailSubgoalView: View {
                         CompletionView(value: $partCompletion)
                     }
                     SaveButtonView {
-                        isModalPresentation ? update() : save()
+                        do {
+                            if isModalPresentation {
+                                try subgoalService.update(
+                                    subgoal,
+                                    type: selectedSubgoalType,
+                                    title: title,
+                                    notes: notes,
+                                    isUrgent: isUrgent,
+                                    deadline: selectedDeadline,
+                                    isExactly: isExactly,
+                                    time: selectedTime,
+                                    timeOfDay: selectedTimeOfDay,
+                                    partCompletion: partCompletion,
+                                    startDate: selectedStartDate,
+                                    habitFrequency: selectedHabitFrequency
+                                )
+                                
+                            } else {
+                                try subgoalService.save(
+                                    subgoal,
+                                    type: selectedSubgoalType,
+                                    title: title,
+                                    notes: notes,
+                                    isUrgent: isUrgent,
+                                    deadline: selectedDeadline,
+                                    isExactly: isExactly,
+                                    time: selectedTime,
+                                    timeOfDay: selectedTimeOfDay,
+                                    partCompletion: partCompletion,
+                                    startDate: selectedStartDate,
+                                    habitFrequency: selectedHabitFrequency,
+                                    lifeArea: lifeArea
+                                ) {
+                                    if let subgoal,
+                                       let index = subgoals.firstIndex(
+                                        of: subgoal) {
+                                        subgoals[index] = $0
+                                    } else {
+                                        subgoals.insert($0, at: 0)
+                                    }
+                                }
+                            }
+                        } catch {
+                            print(error)
+                        }
                         isModified.toggle()
                         DispatchQueue.main.async {
                             dismiss()
@@ -110,7 +154,19 @@ struct DetailSubgoalView: View {
                 }
                 if let subgoal {
                     DeleteButtonView(title: "Удалить подцель") {
-                        delete(subgoal)
+                        if isModalPresentation {
+                            do {
+                                try subgoalService.delete(subgoal)
+                            } catch {
+                                print(error)
+                            }
+                        } else {
+                            subgoals.removeAll { $0 == subgoal }
+                            isModified.toggle()
+                        }
+                        DispatchQueue.main.async {
+                            dismiss()
+                        }
                     }
                 }
             }
@@ -142,7 +198,16 @@ struct DetailSubgoalView: View {
             ) {
                 ForEach(Constants.LifeAreas.allCases) { lifeArea in
                     Button(lifeArea.rawValue) {
-                        transformToGoal(for: lifeArea)
+                        do {
+                            try subgoalService.transformToGoal(
+                                subgoal,
+                                lifeArea: lifeArea,
+                                title: title,
+                                notes: notes
+                            )
+                        } catch {
+                            print(error)
+                        }
                         DispatchQueue.main.async {
                             dismiss()
                         }
@@ -191,127 +256,6 @@ struct DetailSubgoalView: View {
         let frequency = Constants.Frequencies(
             rawValue: subgoal?.frequency ?? "")
         _selectedHabitFrequency = State(initialValue: frequency ?? .daily)
-    }
-    
-    // MARK: - Private Methods
-    private func save() {
-        let subgoalToSave = subgoal ?? Subgoal(context: context)
-        subgoalToSave.type = selectedSubgoalType.rawValue
-        subgoalToSave.title = title
-        subgoalToSave.notes = notes
-        subgoalToSave.isCompleted = subgoal?.isCompleted ?? false
-        if selectedSubgoalType != .habit, selectedSubgoalType != .focus {
-            subgoalToSave.deadline = isUrgent ? selectedDeadline : nil
-        }
-        if selectedSubgoalType != .focus {
-            subgoalToSave.time = isExactly ? selectedTime : nil
-            subgoalToSave.timeOfDay = isExactly
-            ? Constants.TimesOfDay.getTimeOfDay(
-                from: subgoalToSave.time).rawValue
-            : selectedTimeOfDay.rawValue
-            if !isUrgent, selectedSubgoalType != .habit {
-                subgoalToSave.timeOfDay = nil
-            }
-        }
-        if selectedSubgoalType == .milestone {
-            subgoalToSave.completion = partCompletion
-        }
-        if selectedSubgoalType == .habit {
-            subgoalToSave.startDate = selectedStartDate
-            subgoalToSave.frequency = selectedHabitFrequency.rawValue
-        }
-        if let subgoal, let index = subgoals.firstIndex(of: subgoal) {
-            subgoals[index] = subgoalToSave
-        } else if lifeArea == nil {
-            do {
-                try context.save()
-            } catch {
-                print("Error inbox saving: \(error)")
-            }
-        } else {
-            subgoals.insert(subgoalToSave, at: 0)
-        }
-    }
-    
-    private func update() {
-        guard let subgoal else { return }
-        subgoal.title = title
-        subgoal.notes = notes
-        if selectedSubgoalType != .habit, selectedSubgoalType != .focus {
-            if !Calendar.current.isDateInToday(selectedDeadline) {
-                subgoal.isCompleted = false
-            }
-            subgoal.deadline = isUrgent ? selectedDeadline : nil
-        }
-        if selectedSubgoalType != .focus {
-            subgoal.time = isExactly ? selectedTime : nil
-            subgoal.timeOfDay = isExactly
-            ? Constants.TimesOfDay.getTimeOfDay(from: subgoal.time).rawValue
-            : selectedTimeOfDay.rawValue
-            if !isUrgent, selectedSubgoalType != .habit {
-                subgoal.timeOfDay = nil
-            }
-        }
-        if selectedSubgoalType == .milestone {
-            subgoal.completion = partCompletion
-        }
-        if selectedSubgoalType == .habit {
-            subgoal.startDate = selectedStartDate
-            subgoal.frequency = selectedHabitFrequency.rawValue
-        }
-        do {
-            try context.save()
-        } catch {
-            print("Error subgoal updating: \(error)")
-        }
-    }
-    
-    private func delete(_ subgoal: Subgoal) {
-        if isModalPresentation {
-            context.delete(subgoal)
-            do {
-                try context.save()
-            } catch {
-                print("Error subgoal deleting by button: \(error)")
-            }
-        } else {
-            subgoals.removeAll { $0 == subgoal }
-            isModified.toggle()
-        }
-        DispatchQueue.main.async {
-            dismiss()
-        }
-    }
-    
-    private func transformToGoal(for lifeArea: Constants.LifeAreas) {
-        guard let subgoal else { return }
-        let goal = Goal(context: context)
-        goal.lifeArea = lifeArea.rawValue
-        goal.title = title.trimmingCharacters(
-            in: .whitespacesAndNewlines)
-        goal.notes = notes.trimmingCharacters(
-            in: .whitespacesAndNewlines)
-        goal.order = getGoalOrder(for: lifeArea.rawValue)
-        context.delete(subgoal)
-        do {
-            try context.save()
-        } catch {
-            print("Error transforming to goal: \(error)")
-        }
-    }
-    
-    private func getGoalOrder(for lifeArea: String) -> Int16 {
-        let fetchRequest = Goal.fetchRequest()
-        fetchRequest.predicate = .init(format: "lifeArea == %@", lifeArea)
-        fetchRequest.sortDescriptors = [.init(key: "order", ascending: false)]
-        fetchRequest.fetchLimit = 1
-        do {
-            let lastGoal = try context.fetch(fetchRequest).first
-            return (lastGoal?.order ?? 0) + 1
-        } catch {
-            print("Error goal order getting to transform: \(error)")
-            return 0
-        }
     }
 }
 
