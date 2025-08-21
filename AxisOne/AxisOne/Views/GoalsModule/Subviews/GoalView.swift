@@ -9,7 +9,6 @@ import SwiftUI
 
 struct GoalView: View {
     
-    // MARK: - Private Properties
     @Environment(\.goalService) private var goalService
 
     @State private var isModalViewPresented = false
@@ -18,15 +17,13 @@ struct GoalView: View {
         Constants.LifeAreas(rawValue: goal.lifeArea ?? "")?.color ?? .primary
     }
     
-    // MARK: - Public Properties
     @ObservedObject var goal: Goal
     
-    // MARK: - Body
     var body: some View {
         HStack(spacing: 12) {
             CheckmarkImageView(isCompleted: goal.isCompleted)
                 .onTapGesture {
-                    withAnimation {
+                    withAnimation(.snappy) {
                         do {
                             try goalService.toggleComplete(of: goal)
                         } catch {

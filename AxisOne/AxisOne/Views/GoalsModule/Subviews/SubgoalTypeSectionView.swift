@@ -9,15 +9,12 @@ import SwiftUI
 
 struct SubgoalTypeSectionView: View {
     
-    // MARK: - Private Properties
     @Environment(\.colorScheme) private var colorScheme
     
-    // MARK: - Public Properties
     @Binding var selectedSubgoalType: Constants.SubgoalTypes
     let lifeArea: Constants.LifeAreas?
     let completion: () -> Void
     
-    // MARK: - Body
     var body: some View {
         Section {
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
@@ -41,7 +38,6 @@ struct SubgoalTypeSectionView: View {
     }
 }
 
-// MARK: - Views
 private extension SubgoalTypeSectionView {
     
     func ChooseButtonView(for type: Constants.SubgoalTypes) -> some View {

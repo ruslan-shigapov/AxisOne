@@ -9,7 +9,6 @@ import SwiftUI
 
 struct GoalsView: View {
     
-    // MARK: - Private Properties    
     @FetchRequest(entity: Goal.entity(), sortDescriptors: [])
     private var goals: FetchedResults<Goal>
 
@@ -19,7 +18,6 @@ struct GoalsView: View {
     @State private var editMode: EditMode = .inactive
     @State private var isModalViewPresented = false
 
-    // MARK: - Body
     var body: some View {
         ZStack {
             if goals.isEmpty {
@@ -33,6 +31,8 @@ struct GoalsView: View {
                     isCompletedHidden: isCompletedGoalsHidden)
             }
         }
+//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+//        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 if !goals.isEmpty {
@@ -42,9 +42,9 @@ struct GoalsView: View {
                 }
             }
             ToolbarItem {
-                HStack {
+                HStack(spacing: 16) {
                     Button {
-                        withAnimation {
+                        withAnimation(.snappy) {
                             isCompletedGoalsHidden.toggle()
                         }
                     } label: {
@@ -66,10 +66,9 @@ struct GoalsView: View {
         .environment(\.editMode, $editMode)
     }
     
-    // MARK: - Private Methods
     private func toggleEditMode() {
         DispatchQueue.main.async {
-            withAnimation {
+            withAnimation(.snappy) {
                 editMode = editMode == .inactive ? .active : .inactive
             }
         }

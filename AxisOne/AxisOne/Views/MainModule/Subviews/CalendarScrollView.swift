@@ -43,7 +43,7 @@ struct CalendarScrollView: View {
     }
     
     @Binding var selectedDate: Date
-
+    
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHGrid(rows: [GridItem()], spacing: 12) {
@@ -51,12 +51,13 @@ struct CalendarScrollView: View {
                     VStack(spacing: 4) {
                         Text(weekdayFormatter.string(from: date))
                             .foregroundStyle(.secondary)
+                            .fontWeight(.medium)
                         Text(dateFormatter.string(from: date))
                         Text(getDaysFromToday(for: date))
-                            .font(.custom("Jura-Light", size: 13))
+                            .font(Constants.Fonts.juraFootnote)
                     }
-                    .font(.custom("Jura-Medium", size: 17))
-                    .frame(width: 55, height: 65)
+                    .font(Constants.Fonts.juraBody)
+                    .frame(width: 55, height: 60)
                     .padding(8)
                     .background {
                         RoundedRectangle(cornerRadius: 10)
@@ -66,18 +67,15 @@ struct CalendarScrollView: View {
                                     inSameDayAs: selectedDate)
                                 ? .accent
                                 : .clear)
-                            .stroke(.white, lineWidth: 0.4)
+                            .stroke(.primary, lineWidth: 0.4)
                     }
                     .onTapGesture {
                         selectedDate = date
-                        
                     }
                 }
             }
             .padding()
         }
-        .listRowInsets(EdgeInsets())
-        .listRowBackground(Color.clear)
     }
     
     private func getDaysFromToday(for date: Date) -> String {
@@ -85,14 +83,17 @@ struct CalendarScrollView: View {
         let days = calendar.dateComponents(
             [.day],
             from: today,
-            to: calendar.startOfDay(for: date)).day
+            to: calendar.startOfDay(for: date))
+            .day
         guard let days else { return "???" }
-        if days == 0 {
-            return "Сегодня"
+        return if days == 0 {
+            Constants.Texts.today
+        } else if days == -1 {
+            Constants.Texts.yesterday
         } else if days == 1 {
-            return "Завтра"
+            Constants.Texts.tomorrow
         } else {
-            return "+ \(days) дн."
+            "+ \(days) дн."
         }
     }
 }

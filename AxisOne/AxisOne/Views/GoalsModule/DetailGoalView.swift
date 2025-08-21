@@ -76,6 +76,9 @@ struct DetailGoalView: View {
                         } catch {
                             print(error)
                         }
+                        DispatchQueue.main.async {
+                            dismiss()
+                        }
                     }
                 }
             }
@@ -88,7 +91,8 @@ struct DetailGoalView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    NavBarTitleView(text: goal == nil ? "Новая цель" : "Детали")
+                    Text(goal == nil ? "Новая цель" : "Детали")
+                        .font(Constants.Fonts.juraHeadline)
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     NavBarTextButtonView(type: .cancel) {

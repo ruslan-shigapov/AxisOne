@@ -11,8 +11,14 @@ enum SubgoalError: Error {
     case savingFailed(Error)
     case updatingFailed(Error)
     case deletingFailed(Error)
-    case orderFetchingFailed(Error)
-    case transformingToGoal(Error)
+    case goalOrderFetchingFailed(Error)
+    case transformingToGoalFailed(Error)
+    case rescheduleFailed(Error)
+    case subgoalOrderFetchingFailed(Error)
+    case completionTogglingFailed(Error)
+    case completingNowFailed(Error)
+    case habitsFetchingFailed(Error)
+    case habitsResetingFailed(Error)
 }
 
 final class SubgoalService {
@@ -31,7 +37,7 @@ final class SubgoalService {
         }
     }
     
-    private func getGoalOrder(for lifeArea: String) throws -> Int16 {
+    private func getGoalOrder(in lifeArea: String) throws -> Int16 {
         let fetchRequest = Goal.fetchRequest()
         fetchRequest.predicate = .init(format: "lifeArea == %@", lifeArea)
         fetchRequest.sortDescriptors = [.init(key: "order", ascending: false)]
@@ -40,7 +46,33 @@ final class SubgoalService {
             let lastGoal = try context.fetch(fetchRequest).first
             return (lastGoal?.order ?? 0) + 1
         } catch {
-            throw SubgoalError.orderFetchingFailed(error)
+            throw SubgoalError.goalOrderFetchingFailed(error)
+        }
+    }
+    
+    private func getSubgoalOrder(_ subgoal: Subgoal) throws -> Int16 {
+        let fetchRequest = Subgoal.fetchRequest()
+        let goalTitle = subgoal.goal?.title ?? ""
+        fetchRequest.predicate = .init(format: "goal.title == %@", goalTitle)
+        fetchRequest.sortDescriptors = [.init(key: "order", ascending: false)]
+        fetchRequest.fetchLimit = 1
+        do {
+            let lastGoal = try context.fetch(fetchRequest).first
+            return (lastGoal?.order ?? 0) + 1
+        } catch {
+            throw SubgoalError.subgoalOrderFetchingFailed(error)
+        }
+    }
+    
+    private func getHabits() throws -> [Subgoal] {
+        let fetchRequest = Subgoal.fetchRequest()
+        fetchRequest.predicate = NSPredicate(
+            format: "type == %@",
+            Constants.SubgoalTypes.habit.rawValue)
+        do {
+            return try context.fetch(fetchRequest)
+        } catch {
+            throw SubgoalError.habitsFetchingFailed(error)
         }
     }
     
@@ -87,11 +119,11 @@ final class SubgoalService {
             subgoalToSave.frequency = habitFrequency.rawValue
         }
         if lifeArea == nil {
+            try saveContext {
+                .savingFailed($0)
+            }
+        } else {
             completion(subgoalToSave)
-            return
-        }
-        try saveContext {
-            .savingFailed($0)
         }
     }
     
@@ -159,10 +191,59 @@ final class SubgoalService {
             in: .whitespacesAndNewlines)
         goal.notes = notes.trimmingCharacters(
             in: .whitespacesAndNewlines)
-        goal.order = try getGoalOrder(for: lifeArea.rawValue)
+        goal.order = try getGoalOrder(in: lifeArea.rawValue)
         context.delete(subgoal)
         try saveContext {
-            .transformingToGoal($0)
+            .transformingToGoalFailed($0)
+        }
+    }
+    
+    func reschedule(
+        _ subgoal: Subgoal,
+        to timeOfDay: Constants.TimesOfDay
+    ) throws {
+        subgoal.timeOfDay = timeOfDay.rawValue
+        subgoal.time = nil
+        try saveContext {
+            .rescheduleFailed($0)
+        }
+    }
+    
+    func toggleComplete(of subgoal: Subgoal) throws {
+        subgoal.isCompleted.toggle()
+        subgoal.order = try getSubgoalOrder(subgoal)
+        try saveContext {
+            .completionTogglingFailed($0)
+        }
+    }
+    
+    func completeNow(_ subgoal: Subgoal) throws {
+        subgoal.deadline = .now
+        subgoal.timeOfDay = Constants.TimesOfDay.getTimeOfDay(
+            from: .now).rawValue
+        subgoal.time = nil
+        subgoal.isCompleted = true
+        subgoal.order = try getSubgoalOrder(subgoal)
+        try saveContext {
+            .completingNowFailed($0)
+        }
+    }
+    
+    func resetHabitsIfNeeded() throws {
+        let today = Calendar.current.startOfDay(for: .now)
+        let habits = try getHabits()
+        habits.forEach {
+            guard let lastReset = $0.lastReset else {
+                $0.lastReset = today
+                return
+            }
+            if !Calendar.current.isDate(lastReset, inSameDayAs: today) {
+                $0.isCompleted = false
+                $0.lastReset = today
+            }
+        }
+        try saveContext {
+            .habitsResetingFailed($0)
         }
     }
 }

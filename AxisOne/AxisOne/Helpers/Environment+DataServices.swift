@@ -1,5 +1,5 @@
 //
-//  GoalService+Environment.swift
+//  Environment+DataServices.swift
 //  AxisOne
 //
 //  Created by Ruslan Shigapov on 19.08.2025.
@@ -15,10 +15,23 @@ private struct GoalServiceKey: EnvironmentKey {
     }()
 }
 
+private struct SubgoalServiceKey: EnvironmentKey {
+    
+    static var defaultValue: SubgoalService = {
+        let context = PersistenceController.shared.container.viewContext
+        return SubgoalService(context: context)
+    }()
+}
+
 extension EnvironmentValues {
     
     var goalService: GoalService {
         get { self[GoalServiceKey.self] }
         set { self[GoalServiceKey.self] = newValue }
+    }
+    
+    var subgoalService: SubgoalService {
+        get { self[SubgoalServiceKey.self] }
+        set { self[SubgoalServiceKey.self] = newValue }
     }
 }

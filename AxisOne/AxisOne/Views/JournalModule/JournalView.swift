@@ -12,7 +12,7 @@ struct JournalView: View {
     // MARK: - Private Properties
     @FetchRequest(
         entity: Subgoal.entity(),
-        sortDescriptors: [.init(key: "time", ascending: true)],
+        sortDescriptors: [],
         predicate: SubgoalFilter.predicate(
             for: .now,
             types: [.task, .habit, .milestone, .inbox]))
@@ -24,7 +24,7 @@ struct JournalView: View {
         predicate: ReflectionFilter.predicate(for: .now))
     private var reflections: FetchedResults<Reflection>
     
-    @State private var isModalPresented = false
+    @State private var isModalViewPresented = false
     
     private var groupedSubgoals: [Constants.TimesOfDay: [Subgoal]] {
         Dictionary(grouping: subgoals) {
@@ -57,11 +57,12 @@ struct JournalView: View {
                 }
             }
         }
-        .sheet(isPresented: $isModalPresented) {
-            SummaryView(date: Date())
+        .sheet(isPresented: $isModalViewPresented) {
+            SummaryView(date: .now)
         }
     }
     
+    // MARK: - Private Methods
     private func getGroupedValues() -> [(Constants.LifeAreas, String, Double)] {
         let reflectedSubgoals = reflections
             .compactMap { $0.reactions as? Set<Reaction> }
@@ -75,7 +76,8 @@ struct JournalView: View {
             }
             let allSubgoals = subgoals.filter {
                 $0.goal?.lifeArea ?? "" == lifeArea.rawValue
-            }.count
+            }
+                .count
             let completed = matching.filter(\.isCompleted).count
             let progress = allSubgoals > 0
             ? Double(completed) / Double(allSubgoals)
@@ -100,7 +102,7 @@ private extension JournalView {
                     ) {
                         TimeOfDayRowView(timeOfDay)
                     }
-                    .font(.custom("Jura", size: 17))
+                    .font(Constants.Fonts.juraBody)
                 }
         } header: {
             Text("Время дня")
@@ -115,7 +117,6 @@ private extension JournalView {
                     .foregroundStyle(.accent)
                 Text(String(groupedSubgoals[timeOfDay]?.count ?? 0))
             }
-            .fontWeight(.medium)
         }
     }
     
@@ -145,17 +146,17 @@ private extension JournalView {
                                 Text(lifeArea.rawValue)
                                     .fontWeight(.medium)
                                 Text(text)
-                                    .font(.custom("Jura", size: 13))
+                                    .font(Constants.Fonts.juraFootnote)
                             }
                         }
                         .foregroundStyle(lifeArea.color)
-                        .font(.custom("Jura", size: 17))
+                        .font(Constants.Fonts.juraBody)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    isModalPresented = true
+                    isModalViewPresented = true
                 }
             }
         } header: {

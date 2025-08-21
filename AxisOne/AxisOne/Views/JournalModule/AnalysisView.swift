@@ -96,17 +96,19 @@ struct AnalysisView: View {
             thoughts = reflections.first?.thoughts ?? ""
         }
         .navigationTitle("Самоанализ")
-        .background(Constants.Colors.background)
+        .background {
+            Constants.Colors.darkBackground.verticalGradient()
+                .ignoresSafeArea()
+        }
         .scrollContentBackground(.hidden)
         .toolbar {
             ToolbarItem {
-                Button("Готово") {
+                NavBarTextButtonView(type: .done) {
                     save()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         dismiss()
                     }
                 }
-                .font(.custom("Jura-Medium", size: 17))
                 .disabled(!isFormValid)
                 .foregroundStyle(isFormValid ? .accent : .secondary)
             }
@@ -184,7 +186,7 @@ struct AnalysisView: View {
     
     private func toggleEmotion(_ emotion: String) {
         guard let subgoal = selectedSubgoal else { return }
-        withAnimation(.easeInOut(duration: 0.2)) {
+        withAnimation(.snappy) {
             var emotions = selectedGroupedEmotions[subgoal] ?? []
             if emotions.contains(emotion) {
                 emotions.removeAll(where: { $0 == emotion })
@@ -221,7 +223,7 @@ private extension AnalysisView {
             }
         } label: {
             Text(subgoal.title ?? "")
-                .font(.custom("Jura", size: 17))
+                .font(Constants.Fonts.juraBody)
                 .foregroundStyle(subgoal == selectedSubgoal
                                  ? .primary
                                  : .secondary)
@@ -261,7 +263,7 @@ private extension AnalysisView {
     
     func EmotionView(_ title: String, isSelected: Bool) -> some View {
         Text(title)
-            .font(.custom("Jura-Medium", size: 14))
+            .font(Constants.Fonts.juraSubheadline)
             .padding(.horizontal, 10)
             .padding(.vertical, 8)
             .frame(maxWidth: .infinity)

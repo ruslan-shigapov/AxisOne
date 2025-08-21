@@ -18,7 +18,7 @@ struct ListRowTextView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(primaryText ?? "")
-                .font(Constants.Fonts.juraMediumBody)
+                .font(Constants.Fonts.juraBody)
                 .lineLimit(2)
                 .foregroundStyle(
                     isActive

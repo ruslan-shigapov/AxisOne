@@ -20,7 +20,7 @@ struct TimeGroupView: View {
         if isExactly {
             LabeledDateView(title: "Напомнить",  value: format(selectedTime))
                 .onTapGesture {
-                    withAnimation {
+                    withAnimation(.snappy) {
                         isPickerPresented.toggle()
                     }
                 }

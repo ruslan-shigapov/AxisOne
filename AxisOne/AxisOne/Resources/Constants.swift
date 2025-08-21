@@ -200,29 +200,27 @@ enum Constants {
     enum Texts {
         static let done = "Готово"
         static let cancel = "Отменить"
+        static let today = "Сегодня"
+        static let yesterday = "Вчера"
+        static let tomorrow = "Завтра"
     }
     
     // MARK: - Fonts
     enum Fonts {
-        static let juraBody = Font.custom("Jura", size: 17)
+        static let juraLargeTitle = Font.custom("Jura-Bold", size: 34)
+        static let juraTitleBold = Font.custom("Jura-Bold", size: 20)
+        static let juraHeadline = Font.custom("Jura-Bold", size: 17)
         static let juraMediumBody = Font.custom("Jura-Medium", size: 17)
-        static let juraBoldBody = Font.custom("Jura-Bold", size: 17)
-        static let juraLightCallout = Font.custom("Jura-Light", size: 16)
-        static let juraSubheadline = Font.custom("Jura", size: 15)
+        static let juraBody = Font.custom("Jura", size: 17)
+        static let juraLightCallout = Font.custom("Jura-Light", size: 16) 
         static let juraMediumSubheadline = Font.custom("Jura-Medium", size: 15)
+        static let juraSubheadline = Font.custom("Jura", size: 15)
+        static let juraMediumFootnote = Font.custom("Jura-Medium", size: 13)
         static let juraFootnote = Font.custom("Jura", size: 13)
     }
     
     // MARK: - Colors
     enum Colors {
-        static let background = LinearGradient(
-            gradient: Gradient(
-                colors: [
-                    Color("Background").opacity(0.45),
-                    Color("Background")
-                ]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
+        static let darkBackground = Color("Background")
     }
 }

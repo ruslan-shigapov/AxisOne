@@ -10,14 +10,14 @@ import SwiftUI
 struct SwipeActionButtonView: View {
     
     enum SwipeActionButtonType: Equatable {
-        case delete, toggleActive(isActive: Bool), move
+        case delete, toggleActive(isActive: Bool), reschedule
         
         var imageName: String {
             return switch self {
             case .delete: "trash"
             case .toggleActive(let isActive):
                 isActive ? "bookmark.slash" : "bookmark"
-            case .move: "arrow.up.and.down.text.horizontal"
+            case .reschedule: "arrow.up.and.down.text.horizontal"
             }
         }
     }
@@ -26,7 +26,7 @@ struct SwipeActionButtonView: View {
         return switch type {
         case .delete: nil
         case .toggleActive(let isActive): isActive ? .gray : activationColor
-        case .move: .accent
+        case .reschedule: .accent
         }
     }
     
@@ -36,7 +36,7 @@ struct SwipeActionButtonView: View {
     
     var body: some View {
         Button(role: type == .delete ? .destructive : nil) {
-            withAnimation {
+            withAnimation(.snappy) {
                 action()
             }
         } label: {

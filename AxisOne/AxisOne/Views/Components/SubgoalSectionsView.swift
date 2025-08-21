@@ -1,5 +1,5 @@
 //
-//  SubgoalListSectionsView.swift
+//  SubgoalSectionsView.swift
 //  AxisOne
 //
 //  Created by Ruslan Shigapov on 17.08.2025.
@@ -7,9 +7,8 @@
 
 import SwiftUI
 
-struct SubgoalListSectionsView: View {
+struct SubgoalSectionsView: View {
     
-    // MARK: - Private Properties
     private var isToday: Bool {
         Calendar.current.isDateInToday(date)
     }
@@ -39,14 +38,12 @@ struct SubgoalListSectionsView: View {
             .sorted(by: SubgoalSorter.compare)
     }
     
-    // MARK: - Public Properties
     let date: Date
     let subgoals: FetchedResults<Subgoal>
     let title: String
     let emptyRowText: String
     let isCompletedHidden: Bool
     
-    // MARK: - Body
     var body: some View {
         Section {
             if filteredSubgoals.isEmpty {
@@ -68,7 +65,6 @@ struct SubgoalListSectionsView: View {
         }
     }
     
-    // MARK: - Private Methods 
     private func SubgoalViews(_ subgoals: [Subgoal]) -> some View {
         ForEach(subgoals) {
             SubgoalView(subgoal: $0, isToday: isToday)

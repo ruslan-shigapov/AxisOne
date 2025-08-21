@@ -28,6 +28,7 @@ struct DetailSubgoalView: View {
     @State private var isConfirmationDialogPresented = false
             
     private let currentTimeOfDay = Constants.TimesOfDay.getTimeOfDay(from: .now)
+    
     private var isFormValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
@@ -93,52 +94,23 @@ struct DetailSubgoalView: View {
                     if selectedSubgoalType == .milestone {
                         CompletionView(value: $partCompletion)
                     }
-                    SaveButtonView {
-                        do {
-                            if isModalPresentation {
-                                try subgoalService.update(
-                                    subgoal,
-                                    type: selectedSubgoalType,
-                                    title: title,
-                                    notes: notes,
-                                    isUrgent: isUrgent,
-                                    deadline: selectedDeadline,
-                                    isExactly: isExactly,
-                                    time: selectedTime,
-                                    timeOfDay: selectedTimeOfDay,
-                                    partCompletion: partCompletion,
-                                    startDate: selectedStartDate,
-                                    habitFrequency: selectedHabitFrequency
-                                )
-                                
-                            } else {
-                                try subgoalService.save(
-                                    subgoal,
-                                    type: selectedSubgoalType,
-                                    title: title,
-                                    notes: notes,
-                                    isUrgent: isUrgent,
-                                    deadline: selectedDeadline,
-                                    isExactly: isExactly,
-                                    time: selectedTime,
-                                    timeOfDay: selectedTimeOfDay,
-                                    partCompletion: partCompletion,
-                                    startDate: selectedStartDate,
-                                    habitFrequency: selectedHabitFrequency,
-                                    lifeArea: lifeArea
-                                ) {
-                                    if let subgoal,
-                                       let index = subgoals.firstIndex(
-                                        of: subgoal) {
-                                        subgoals[index] = $0
-                                    } else {
-                                        subgoals.insert($0, at: 0)
-                                    }
-                                }
-                            }
-                        } catch {
-                            print(error)
-                        }
+                    SaveButtonView(
+                        isModalPresentation: isModalPresentation,
+                        lifeArea: lifeArea,
+                        subgoal: subgoal,
+                        selectedSubgoalType: selectedSubgoalType,
+                        title: title,
+                        notes: notes,
+                        isUrgent: isUrgent,
+                        selectedDeadline: selectedDeadline,
+                        isExactly: isExactly,
+                        selectedTime: selectedTime,
+                        selectedTimeOfDay: selectedTimeOfDay,
+                        partCompletion: partCompletion,
+                        selectedStartDate: selectedStartDate,
+                        selectedHabitFrequency: selectedHabitFrequency,
+                        subgoals: $subgoals
+                    ) {
                         isModified.toggle()
                         DispatchQueue.main.async {
                             dismiss()
@@ -179,7 +151,8 @@ struct DetailSubgoalView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    NavBarTitleView(text: subgoal?.type ?? "Новая подцель")
+                    Text(subgoal?.type ?? "Новая подцель")
+                        .font(Constants.Fonts.juraHeadline)
                 }
                 if isModalPresentation {
                     ToolbarItem {

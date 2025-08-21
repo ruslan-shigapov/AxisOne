@@ -10,21 +10,15 @@ import SwiftUI
 struct SubgoalView: View {
     
     // MARK: - Private Properties
-    @Environment(\.managedObjectContext) private var context
+    @Environment(\.subgoalService) private var subgoalService
     
     @State private var isModalViewPresented = false
-    
     @State private var isConfirmationDialogPresented = false
-    
     @State private var isConfirmationAlertPresented = false
     @State private var isErrorAlertPresented = false
 
     private var lifeArea: Constants.LifeAreas? {
         Constants.LifeAreas(rawValue: subgoal.goal?.lifeArea ?? "")
-    }
-    
-    private var goalTitle: String {
-        subgoal.goal?.title ?? ""
     }
     
     private var timeOfDay: Constants.TimesOfDay {
@@ -49,12 +43,12 @@ struct SubgoalView: View {
     
     // MARK: - Body
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             HStack {
                 if subgoal.type != Constants.SubgoalTypes.inbox.rawValue {
                     CapsuleView(
                         color: subgoal.isActive
-                        ? (lifeArea?.color ?? .clear)
+                        ? lifeArea?.color ?? .clear
                         : .clear,
                         title: subgoal.goal?.lifeArea)
                 }
@@ -67,22 +61,23 @@ struct SubgoalView: View {
                 if let subgoalType = Constants.SubgoalTypes(
                     rawValue: subgoal.type ?? ""),
                    subgoalType != Constants.SubgoalTypes.focus {
-                    CheckmarkImageView(isCompleted: isToday
-                                       ? subgoal.isCompleted
-                                       : false)
-                        .onTapGesture {
-                            if isToday {
-                                withAnimation {
-                                    toggleCompletion()
-                                }
+                    CheckmarkImageView(
+                        isCompleted: isToday
+                        ? subgoal.isCompleted
+                        : false)
+                    .onTapGesture {
+                        if isToday {
+                            withAnimation(.snappy) {
+                                toggleCompletion()
+                            }
+                        } else {
+                            if subgoalType == .habit {
+                                isErrorAlertPresented = true
                             } else {
-                                if subgoalType == .habit {
-                                    isErrorAlertPresented = true
-                                } else {
-                                    isConfirmationAlertPresented = true
-                                }
+                                isConfirmationAlertPresented = true
                             }
                         }
+                    }
                 }
                 ListRowTextView(
                     primaryText: subgoal.title,
@@ -91,19 +86,21 @@ struct SubgoalView: View {
                     isCompleted: isToday ? subgoal.isCompleted : false)
             }
         }
-        .padding(12)
         .listRowInsets(EdgeInsets())
-        .background(Rectangle().fill(Color(.secondarySystemBackground)))
+        .padding(12)
         .onTapGesture {
             isModalViewPresented = true
         }
         .swipeActions {
-            SwipeActionButtonView(type: .move) {
+            SwipeActionButtonView(type: .reschedule) {
                 isConfirmationDialogPresented = true
             }
             SwipeActionButtonView(type: .delete) {
-                context.delete(subgoal)
-                try? context.save()
+                do {
+                    try subgoalService.delete(subgoal)
+                } catch {
+                    print(error)
+                }
             }
         }
         .sheet(isPresented: $isModalViewPresented) {
@@ -115,7 +112,7 @@ struct SubgoalView: View {
                 isModalPresentation: true)
         }
         .confirmationDialog(
-            "Назначить на...",
+            "Перенести на...",
             isPresented: $isConfirmationDialogPresented,
             titleVisibility: .visible
         ) {
@@ -124,9 +121,11 @@ struct SubgoalView: View {
                     if subgoal.deadline == nil {
                         subgoal.deadline = .now
                     }
-                    subgoal.timeOfDay = value.rawValue
-                    subgoal.time = nil
-                    try? context.save()
+                    do {
+                        try subgoalService.reschedule(subgoal, to: value)
+                    } catch {
+                        print(error)
+                    }
                 }
                 .disabled(timeOfDay == value)
             }
@@ -137,8 +136,12 @@ struct SubgoalView: View {
             isPresented: $isConfirmationAlertPresented,
             actions: {
                 Button("Да") {
-                    withAnimation {
-                        completeNow()
+                    withAnimation(.snappy) {
+                        do {
+                            try subgoalService.completeNow(subgoal)
+                        } catch {
+                            print(error)
+                        }
                     }
                 }
                 Button("Нет", role: .cancel) {}
@@ -156,35 +159,17 @@ struct SubgoalView: View {
     
     // MARK: - Private Methods
     private func toggleCompletion() {
-        if subgoal.type == Constants.SubgoalTypes.inbox.rawValue,
-              subgoal.isCompleted == false,
-              subgoal.deadline == nil {
-            completeNow()
-        } else {
-            subgoal.isCompleted.toggle()
-            subgoal.order = getOrder()
-            try? context.save()
+        do {
+            if subgoal.type == Constants.SubgoalTypes.inbox.rawValue,
+               subgoal.isCompleted == false,
+               subgoal.deadline == nil {
+                try subgoalService.completeNow(subgoal)
+            } else {
+                try subgoalService.toggleComplete(of: subgoal)
+            }
+        } catch {
+            print(error)
         }
-    }
-    
-    private func completeNow() {
-        subgoal.deadline = .now
-        subgoal.timeOfDay = Constants.TimesOfDay.getTimeOfDay(
-            from: .now).rawValue
-        subgoal.time = nil
-        subgoal.isCompleted = true
-        subgoal.order = getOrder()
-        try? context.save()
-    }
-    
-    private func getOrder() -> Int16 {
-        let fetchRequest = Subgoal.fetchRequest()
-        fetchRequest.predicate = .init(
-            format: "goal.title == %@",
-            argumentArray: [goalTitle])
-        fetchRequest.sortDescriptors = [.init(key: "order", ascending: true)]
-        let lastSubgoal = try? context.fetch(fetchRequest).last
-        return (lastSubgoal?.order ?? 0) + 1
     }
 }
 
@@ -193,34 +178,21 @@ private extension SubgoalView {
     
     func CapsuleView(color: Color, title: String?) -> some View {
         Text(title ?? "")
-            .font(.custom("Jura", size: 13))
+            .font(Constants.Fonts.juraFootnote)
             .frame(width: 90, height: 24)
-            .background(
-                Capsule().fill(
-                    LinearGradient(
-                        gradient: Gradient(
-                            colors: [
-                                color.opacity(0.45),
-                                color
-                            ]),
-                        startPoint: .top,
-                        endPoint: .bottom
-                    ))
-            )
-            .overlay(Capsule().stroke(.primary, lineWidth: 1))
+            .background(color.verticalGradient().clipShape(Capsule()))
+            .overlay(Capsule().stroke(.primary, lineWidth: 0.4))
     }
     
     func ExactTimeView(_ time: Date) -> some View {
         HStack {
             Spacer()
             Text(time.formatted(date: .omitted, time: .shortened))
-                .font(.custom("Jura", size: 17))
+                .font(Constants.Fonts.juraBody)
             Image(systemName: "bell.fill")
                 .imageScale(.small)
         }
-        .foregroundStyle(subgoal.isCompleted
-                         ? .secondary
-                         : .primary)
+        .foregroundStyle(subgoal.isCompleted ? .secondary : .primary)
     }
 }
 

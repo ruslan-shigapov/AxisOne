@@ -58,7 +58,10 @@ struct HistoryView: View {
             }
         }
         .navigationTitle("История")
-        .background(Constants.Colors.background)
+        .background {
+            Constants.Colors.darkBackground.verticalGradient()
+                .ignoresSafeArea()
+        }
         .scrollContentBackground(.hidden)
     }
 }

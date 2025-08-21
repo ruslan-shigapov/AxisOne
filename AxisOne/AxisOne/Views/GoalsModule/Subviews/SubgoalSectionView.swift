@@ -9,13 +9,11 @@ import SwiftUI
 
 struct SubgoalSectionView: View {
     
-    // MARK: - Public Properties
     let selectedLifeArea: Constants.LifeAreas
     @Binding var subgoals: [Subgoal]
     @Binding var isModified: Bool
     @Binding var isCompletedHidden: Bool
     
-    // MARK: - Body
     var body: some View {
         Section {
             NavigationLink(
@@ -32,7 +30,6 @@ struct SubgoalSectionView: View {
         }
     }
     
-    // MARK: - Private Methods
     private func shouldStrikethrough(
         _ subgoal: Subgoal,
         of type: Constants.SubgoalTypes?
@@ -41,7 +38,6 @@ struct SubgoalSectionView: View {
     }
 }
 
-// MARK: - Views
 private extension SubgoalSectionView {
     
     func SubgoalsView() -> some View {
@@ -77,7 +73,7 @@ private extension SubgoalSectionView {
     func SubgoalSectionHeaderView() -> some View {
         LabeledContent("Подцели") {
             Button {
-                withAnimation {
+                withAnimation(.snappy) {
                     isCompletedHidden.toggle()
                 }
             } label: {

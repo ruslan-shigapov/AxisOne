@@ -17,7 +17,7 @@ struct DateGroupView: View {
     var body: some View {
         LabeledDateView(title: title, value: format(selectedDate))
             .onTapGesture {
-                withAnimation {
+                withAnimation(.snappy) {
                     isPickerPresented.toggle()
                 }
             }
@@ -31,9 +31,11 @@ struct DateGroupView: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yyyy"
         return if Calendar.current.isDateInToday(date) {
-            "Сегодня"
+            Constants.Texts.today
+        } else if Calendar.current.isDateInYesterday(date) {
+            Constants.Texts.yesterday
         } else if Calendar.current.isDateInTomorrow(date) {
-            "Завтра"
+            Constants.Texts.tomorrow
         } else {
             formatter.string(from: date)
         }

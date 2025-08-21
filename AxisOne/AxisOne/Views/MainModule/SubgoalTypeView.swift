@@ -9,37 +9,29 @@ import SwiftUI
 
 struct SubgoalTypeView: View {
     
+    // MARK: - Private Properties
     @Environment(\.dismiss) private var dismiss
 
     @FetchRequest
     private var subgoals: FetchedResults<Subgoal>
     
     @FetchRequest(
-            entity: Subgoal.entity(),
-            sortDescriptors: [],
-            predicate: NSCompoundPredicate(
-                andPredicateWithSubpredicates: [
-                    NSPredicate(
-                        format: "type == %@",
-                        Constants.SubgoalTypes.inbox.rawValue),
-                    NSPredicate(format: "deadline == nil")
-                ]))
-        private var inLineSubgoals: FetchedResults<Subgoal>
+        entity: Subgoal.entity(),
+        sortDescriptors: [],
+        predicate: NSCompoundPredicate(
+            andPredicateWithSubpredicates: [
+                NSPredicate(
+                    format: "type == %@",
+                    Constants.SubgoalTypes.inbox.rawValue),
+                NSPredicate(format: "deadline == nil")
+            ]))
+    private var inLineSubgoals: FetchedResults<Subgoal>
     
-    private var uncompletedSubgoals: [Subgoal] {
-        if Calendar.current.isDateInToday(date) {
-            return subgoals.filter { !$0.isCompleted }
-        }
-        return Array(subgoals)
-    }
-    
-    private var completedSubgoals: [Subgoal] {
-        subgoals.filter { $0.isCompleted }
-    }
-    
+    // MARK: - Public Properties
     let type: Constants.SubgoalTypes
     let date: Date
     
+    // MARK: - Body
     var body: some View {
         NavigationStack {
             List {
@@ -61,9 +53,8 @@ struct SubgoalTypeView: View {
                                 .font(Constants.Fonts.juraSubheadline)
                         }
                     }
-                    
                 }
-                SubgoalListSectionsView(
+                SubgoalSectionsView(
                     date: date,
                     subgoals: subgoals,
                     title: getHeaderText(),
@@ -84,6 +75,7 @@ struct SubgoalTypeView: View {
         }
     }
     
+    // MARK: - Initialize
     init(type: Constants.SubgoalTypes, date: Date) {
         self.type = type
         self.date = date
@@ -93,14 +85,18 @@ struct SubgoalTypeView: View {
             predicate: SubgoalFilter.predicate(for: date, types: [type]))
     }
     
+    // MARK: - Private Methods
     private func getHeaderText() -> String {
         let calendar = Calendar.current
-        if calendar.isDateInToday(date) {
-            return "Сегодня"
+        return if calendar.isDateInToday(date) {
+            Constants.Texts.today
+        } else if calendar.isDateInYesterday(date) {
+            Constants.Texts.yesterday
         } else if calendar.isDateInTomorrow(date) {
-            return "Завтра"
+            Constants.Texts.tomorrow
+        } else {
+            date.formatted(date: .long, time: .omitted)
         }
-        return date.formatted(date: .long, time: .omitted)
     }
 }
 

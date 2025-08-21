@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     
     // MARK: - Private Properties
-    @Environment(\.managedObjectContext) private var context
+    @Environment(\.subgoalService) private var subgoalService
     
     @State private var selectedTab: Constants.Tabs = .main
     
@@ -25,7 +25,10 @@ struct ContentView: View {
                 NavigationStack {
                     tab.view
                         .navigationTitle(tab != .main ? tab.rawValue : "")
-                        .background(Constants.Colors.background)
+                        .background {
+                            Constants.Colors.darkBackground.verticalGradient()
+                                .ignoresSafeArea()
+                        }
                         .scrollContentBackground(.hidden)
                 }
                 .tabItem {
@@ -34,42 +37,22 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            resetHabitsIfNeeded() // TODO: вынести в менеджер для подцелей ?
+            do {
+                try subgoalService.resetHabitsIfNeeded()
+            } catch {
+                print(error)
+            }
         }
     }
     
     // MARK: - Initialize
     init() {
-        // TODO: вернуться к этому, когда будет ясность со шрифтами и цветами
         setupNavBarAppearance()
         setupTabBarAppearance()
         setupSegmentedControlAppearance()
     }
     
-    // MARK: - Private Methods 
-    private func resetHabitsIfNeeded() {
-        let fetchRequest = Subgoal.fetchRequest()
-        fetchRequest.predicate = NSPredicate(
-            format: "type == %@",
-            Constants.SubgoalTypes.habit.rawValue)
-        do {
-            let habits = try context.fetch(fetchRequest)
-            habits.forEach {
-                guard let lastReset = $0.lastReset else {
-                    $0.lastReset = today
-                    return
-                }
-                if !Calendar.current.isDate(lastReset, inSameDayAs: today) {
-                    $0.isCompleted = false
-                    $0.lastReset = today
-                }
-            }
-            try context.save()
-        } catch {
-            print("Error habits reseting: \(error)")
-        }
-    }
-    
+    // MARK: - Private Methods     
     private func setupNavBarAppearance() {
         guard let largeTitleFont = UIFont(name: "Jura-Bold", size: 34) else {
             return
@@ -81,6 +64,8 @@ struct ContentView: View {
             return
         }
         let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.backgroundEffect = UIBlurEffect(
+            style: .systemUltraThinMaterial)
         navBarAppearance.largeTitleTextAttributes = [
             .font: largeTitleFont,
             .foregroundColor: UIColor.label
@@ -92,7 +77,6 @@ struct ContentView: View {
         navBarAppearance.backButtonAppearance.normal.titleTextAttributes = [
             .font: backButtonFont
         ]
-        navBarAppearance.backgroundColor = UIColor(named: "Silver")
         UINavigationBar.appearance().standardAppearance = navBarAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
     }
@@ -102,9 +86,12 @@ struct ContentView: View {
             return
         }
         let tabBarAppearance = UITabBarAppearance()
+        tabBarAppearance.backgroundEffect = UIBlurEffect(
+            style: .systemUltraThinMaterial)
         let itemAppearance = tabBarAppearance.stackedLayoutAppearance
         itemAppearance.normal.titleTextAttributes = [.font: titleFont]
         UITabBar.appearance().standardAppearance = tabBarAppearance
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
     }
     
     private func setupSegmentedControlAppearance() {
