@@ -31,8 +31,6 @@ struct GoalsView: View {
                     isCompletedHidden: isCompletedGoalsHidden)
             }
         }
-//        .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-//        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 if !goals.isEmpty {

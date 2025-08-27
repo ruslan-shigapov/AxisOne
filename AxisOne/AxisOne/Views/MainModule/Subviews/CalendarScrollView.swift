@@ -15,6 +15,13 @@ struct CalendarScrollView: View {
     private let today = Calendar.current.startOfDay(for: .now)
     
     private var dates: [Date] {
+        guard let yesterday = Calendar.current.date(
+            byAdding: .day,
+            value: -1,
+            to: today
+        ) else {
+            return []
+        }
         let allDates = subgoals.compactMap {
             return switch $0.type {
             case Constants.SubgoalTypes.task.rawValue: $0.deadline
@@ -23,11 +30,10 @@ struct CalendarScrollView: View {
             case Constants.SubgoalTypes.inbox.rawValue: $0.deadline
             default: nil
             }
-        } + [today]
-        let uniqueDates = Set(
-            allDates.map { Calendar.current.startOfDay(for: $0) })
-            .filter { $0 >= today }
-        return Array(uniqueDates).sorted()
+        } + [yesterday, today]
+        return Set(allDates.map { Calendar.current.startOfDay(for: $0) })
+            .filter { $0 >= yesterday }
+            .sorted()
     }
     
     private var dateFormatter: DateFormatter {
@@ -67,7 +73,7 @@ struct CalendarScrollView: View {
                                     inSameDayAs: selectedDate)
                                 ? .accent
                                 : .clear)
-                            .stroke(.primary, lineWidth: 0.4)
+                            .stroke(.primary, lineWidth: 0.3)
                     }
                     .onTapGesture {
                         selectedDate = date

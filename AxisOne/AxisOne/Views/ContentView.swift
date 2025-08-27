@@ -11,6 +11,7 @@ struct ContentView: View {
     
     // MARK: - Private Properties
     @Environment(\.subgoalService) private var subgoalService
+    @Environment(\.colorScheme) private var colorScheme
     
     @State private var selectedTab: Constants.Tabs = .main
     
@@ -25,10 +26,10 @@ struct ContentView: View {
                 NavigationStack {
                     tab.view
                         .navigationTitle(tab != .main ? tab.rawValue : "")
-                        .background {
-                            Constants.Colors.darkBackground.verticalGradient()
-                                .ignoresSafeArea()
-                        }
+                        .background(
+                            colorScheme == .dark
+                            ? Constants.Colors.darkBackground
+                            : Constants.Colors.lightBackground)
                         .scrollContentBackground(.hidden)
                 }
                 .tabItem {
@@ -38,7 +39,7 @@ struct ContentView: View {
         }
         .onAppear {
             do {
-                try subgoalService.resetHabitsIfNeeded()
+                try subgoalService.resetDailyValues()
             } catch {
                 print(error)
             }
@@ -65,7 +66,7 @@ struct ContentView: View {
         }
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backgroundEffect = UIBlurEffect(
-            style: .systemUltraThinMaterial)
+            style: .systemThickMaterial)
         navBarAppearance.largeTitleTextAttributes = [
             .font: largeTitleFont,
             .foregroundColor: UIColor.label
@@ -87,7 +88,7 @@ struct ContentView: View {
         }
         let tabBarAppearance = UITabBarAppearance()
         tabBarAppearance.backgroundEffect = UIBlurEffect(
-            style: .systemUltraThinMaterial)
+            style: .systemThickMaterial)
         let itemAppearance = tabBarAppearance.stackedLayoutAppearance
         itemAppearance.normal.titleTextAttributes = [.font: titleFont]
         UITabBar.appearance().standardAppearance = tabBarAppearance

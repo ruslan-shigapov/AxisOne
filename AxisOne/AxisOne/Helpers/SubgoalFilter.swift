@@ -52,7 +52,33 @@ struct SubgoalFilter {
             ])
         let timeOfDayPredicate: NSPredicate? = {
             guard let timeOfDay else { return nil }
-            return NSPredicate(format: "timeOfDay == %@", timeOfDay.rawValue)
+            if Calendar.current.isDateInToday(date) {
+                return NSCompoundPredicate(
+                    orPredicateWithSubpredicates: [
+                        NSPredicate(
+                            format: "todayMoved != nil AND todayMoved == %@",
+                            timeOfDay.rawValue),
+                        NSPredicate(
+                            format: "todayMoved == nil AND timeOfDay == %@",
+                            timeOfDay.rawValue)
+                    ])
+            } else if Calendar.current.isDateInYesterday(date) {
+                return NSCompoundPredicate(
+                    orPredicateWithSubpredicates: [
+                        NSPredicate(
+                            format: """
+                            yesterdayMoved != nil AND yesterdayMoved == %@
+                            """,
+                            timeOfDay.rawValue),
+                        NSPredicate(
+                            format: "yesterdayMoved == nil AND timeOfDay == %@",
+                            timeOfDay.rawValue)
+                    ])
+            } else {
+                return NSPredicate(
+                    format: "timeOfDay == %@",
+                    timeOfDay.rawValue)
+            }
         }()
         let typesPredicate: NSPredicate? = {
             guard !types.isEmpty else { return nil }

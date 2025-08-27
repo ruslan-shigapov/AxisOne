@@ -41,7 +41,7 @@ struct TimeOfDayPickerView: View {
             }
             .background {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(.ultraThinMaterial)
+                    .fill(.thickMaterial)
             }
         }
         .frame(height: 30)

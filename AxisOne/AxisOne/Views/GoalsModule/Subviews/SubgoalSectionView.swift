@@ -84,6 +84,6 @@ private extension SubgoalSectionView {
                 .textCase(.none)
             }
         }
-        .font(Constants.Fonts.juraSubheadline)
+        .font(Constants.Fonts.juraMediumSubheadline)
     }
 }

@@ -12,6 +12,11 @@ struct MainNavigationBarView: View {
     // MARK: - Private Properties
     @AppStorage("isCalendarExpanded")
     private var isCalendarExpanded: Bool = true
+    
+    private var isInCurrentDates: Bool {
+        Calendar.current.isDateInToday(selectedDate) ||
+        Calendar.current.isDateInYesterday(selectedDate)
+    }
         
     // MARK: - Public Properties
     @Binding var selectedDate: Date
@@ -51,9 +56,9 @@ struct MainNavigationBarView: View {
         }
         .background {
             RoundedRectangle(cornerRadius: 20)
-                .fill(.ultraThinMaterial)
+                .fill(.thickMaterial)
                 .ignoresSafeArea()
-                .offset(y: -105) 
+                .offset(y: -100) 
         }
     }
     
@@ -77,7 +82,7 @@ private extension MainNavigationBarView {
     func ToolBarView() -> some View {
         HStack(spacing: 20) {
             Spacer()
-            if Calendar.current.isDateInToday(selectedDate) {
+            if isInCurrentDates {
                 Button {
                     isCompletedSubgoalsHidden.toggle()
                 } label: {

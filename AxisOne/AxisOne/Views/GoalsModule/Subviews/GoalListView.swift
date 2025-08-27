@@ -100,7 +100,7 @@ private extension GoalListView {
                 .tint(lifeArea.color)
         } label: {
             Text(lifeArea.rawValue)
-                .font(Constants.Fonts.juraMediumSubheadline)
+                .font(Constants.Fonts.juraSemiboldSubheadline)
                 .foregroundColor(lifeArea.color)
         }
         .padding(.trailing, 8)

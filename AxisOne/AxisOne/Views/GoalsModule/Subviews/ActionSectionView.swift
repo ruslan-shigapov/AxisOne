@@ -25,7 +25,7 @@ struct ActionSectionView: View {
         }
     }
     
-    // TODO: /TASK 1/ превращение входящих в любой тип подцелей
+    // TODO: /TASK/ превращение входящих в любой тип подцелей
     private func GoalsView() -> some View {
         EmptyView()
     }

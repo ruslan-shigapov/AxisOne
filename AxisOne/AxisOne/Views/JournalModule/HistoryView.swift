@@ -10,6 +10,7 @@ import SwiftUI
 struct HistoryView: View {
 
     @Environment(\.managedObjectContext) private var context
+    @Environment(\.colorScheme) private var colorScheme
 
     @FetchRequest(
         entity: Reflection.entity(),
@@ -58,10 +59,10 @@ struct HistoryView: View {
             }
         }
         .navigationTitle("История")
-        .background {
-            Constants.Colors.darkBackground.verticalGradient()
-                .ignoresSafeArea()
-        }
+        .background(
+            colorScheme == .dark
+            ? Constants.Colors.darkBackground
+            : Constants.Colors.lightBackground)
         .scrollContentBackground(.hidden)
     }
 }

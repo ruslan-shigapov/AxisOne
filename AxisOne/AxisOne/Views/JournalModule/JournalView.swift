@@ -106,7 +106,7 @@ private extension JournalView {
                 }
         } header: {
             Text("Время дня")
-                .font(Constants.Fonts.juraSubheadline)
+                .font(Constants.Fonts.juraMediumSubheadline)
         }
     }
     
@@ -161,7 +161,7 @@ private extension JournalView {
             }
         } header: {
             Text("Итоги")
-                .font(Constants.Fonts.juraSubheadline)
+                .font(Constants.Fonts.juraMediumSubheadline)
         } footer: {
             if !reflections.isEmpty {
                 let ending = reflections.count == 1 ? "анализа" : "анализов"

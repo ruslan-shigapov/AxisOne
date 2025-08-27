@@ -9,15 +9,17 @@ import SwiftUI
 
 struct SettingsView: View {
     
+    @Environment(\.colorScheme) private var colorScheme
+    
     var body: some View {
         List {
             
         }
         .navigationTitle("Настройки")
-        .background {
-            Constants.Colors.darkBackground.verticalGradient()
-                .ignoresSafeArea()
-        }
+        .background(
+            colorScheme == .dark
+            ? Constants.Colors.darkBackground
+            : Constants.Colors.lightBackground)
         .scrollContentBackground(.hidden)
     }
 }

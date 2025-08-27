@@ -17,8 +17,8 @@ enum SubgoalError: Error {
     case subgoalOrderFetchingFailed(Error)
     case completionTogglingFailed(Error)
     case completingNowFailed(Error)
-    case habitsFetchingFailed(Error)
-    case habitsResetingFailed(Error)
+    case fetchingFailed(Error)
+    case dailyResetingFailed(Error)
 }
 
 final class SubgoalService {
@@ -64,15 +64,12 @@ final class SubgoalService {
         }
     }
     
-    private func getHabits() throws -> [Subgoal] {
+    private func getSubgoals() throws -> [Subgoal] {
         let fetchRequest = Subgoal.fetchRequest()
-        fetchRequest.predicate = NSPredicate(
-            format: "type == %@",
-            Constants.SubgoalTypes.habit.rawValue)
         do {
             return try context.fetch(fetchRequest)
         } catch {
-            throw SubgoalError.habitsFetchingFailed(error)
+            throw SubgoalError.fetchingFailed(error)
         }
     }
     
@@ -200,17 +197,28 @@ final class SubgoalService {
     
     func reschedule(
         _ subgoal: Subgoal,
-        to timeOfDay: Constants.TimesOfDay
+        to timeOfDay: Constants.TimesOfDay,
+        isToday: Bool
     ) throws {
-        subgoal.timeOfDay = timeOfDay.rawValue
-        subgoal.time = nil
+        if subgoal.type == Constants.SubgoalTypes.habit.rawValue {
+            if isToday {
+                subgoal.todayMoved = timeOfDay.rawValue
+            } else {
+                subgoal.yesterdayMoved = timeOfDay.rawValue
+            }
+        } else {
+            subgoal.timeOfDay = timeOfDay.rawValue
+            subgoal.time = nil
+        }
         try saveContext {
             .rescheduleFailed($0)
         }
     }
     
-    func toggleComplete(of subgoal: Subgoal) throws {
-        subgoal.isCompleted.toggle()
+    func toggleComplete(of subgoal: Subgoal, isYesterday: Bool) throws {
+        isYesterday
+        ? subgoal.wasCompleted.toggle()
+        : subgoal.isCompleted.toggle()
         subgoal.order = try getSubgoalOrder(subgoal)
         try saveContext {
             .completionTogglingFailed($0)
@@ -229,21 +237,26 @@ final class SubgoalService {
         }
     }
     
-    func resetHabitsIfNeeded() throws {
+    func resetDailyValues() throws {
         let today = Calendar.current.startOfDay(for: .now)
-        let habits = try getHabits()
-        habits.forEach {
+        let subgoals = try getSubgoals()
+        subgoals.forEach {
             guard let lastReset = $0.lastReset else {
                 $0.lastReset = today
                 return
             }
             if !Calendar.current.isDate(lastReset, inSameDayAs: today) {
-                $0.isCompleted = false
+                if $0.type == Constants.SubgoalTypes.habit.rawValue {
+                    $0.wasCompleted = $0.isCompleted
+                    $0.isCompleted = false
+                }
+                $0.yesterdayMoved = $0.todayMoved
+                $0.todayMoved = nil
                 $0.lastReset = today
             }
         }
         try saveContext {
-            .habitsResetingFailed($0)
+            .dailyResetingFailed($0)
         }
     }
 }

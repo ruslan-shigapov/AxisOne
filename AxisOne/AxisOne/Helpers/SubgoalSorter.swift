@@ -9,7 +9,16 @@ import Foundation
 
 struct SubgoalSorter {
     
-    static func compare(lhs: Subgoal, rhs: Subgoal) -> Bool {
+    static func compare(lhs: Subgoal, rhs: Subgoal, for date: Date) -> Bool {
+        if let lhsRawValue = Constants.TimesOfDay.getComparableTimeOfDay(
+            for: lhs,
+            on: date),
+           let rhsRawValue = Constants.TimesOfDay.getComparableTimeOfDay(
+            for: rhs,
+            on: date),
+           lhsRawValue != rhsRawValue {
+            return lhsRawValue.order < rhsRawValue.order
+        }
         if let lhsTime = lhs.time, let rhsTime = rhs.time {
             let lhsComponents = Calendar.current.dateComponents(
                 [.hour, .minute],
@@ -27,13 +36,6 @@ struct SubgoalSorter {
             return true
         } else if let _ = rhs.time {
             return false
-        }
-        if let lhsRawValue = Constants.TimesOfDay(
-            rawValue: lhs.timeOfDay ?? ""),
-           let rhsRawValue = Constants.TimesOfDay(
-            rawValue: rhs.timeOfDay ?? ""),
-           lhsRawValue != rhsRawValue {
-            return lhsRawValue.order < rhsRawValue.order
         }
         if lhs.isActive != rhs.isActive {
             return lhs.isActive

@@ -30,7 +30,7 @@ struct SubgoalTypeSectionView: View {
                     : .secondarySystemBackground))
         } header: {
             Text("Тип")
-                .font(Constants.Fonts.juraSubheadline)
+                .font(Constants.Fonts.juraMediumSubheadline)
         } footer: {
             Text(selectedSubgoalType.description)
                 .font(Constants.Fonts.juraFootnote)

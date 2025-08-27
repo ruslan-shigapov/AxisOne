@@ -12,6 +12,7 @@ struct AnalysisView: View {
     // MARK: - Private Properties
     @Environment(\.managedObjectContext) private var context
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var colorScheme
     
     @FetchRequest
     private var reflections: FetchedResults<Reflection>
@@ -64,7 +65,7 @@ struct AnalysisView: View {
                 }
             } header: {
                 Text("Подцели")
-                    .font(Constants.Fonts.juraSubheadline)
+                    .font(Constants.Fonts.juraMediumSubheadline)
             }
             Section {
                 DisclosureGroup(isExpanded: $isExpanded) {
@@ -76,7 +77,7 @@ struct AnalysisView: View {
                 }
             } header: {
                 Text("Чувства")
-                    .font(Constants.Fonts.juraSubheadline)
+                    .font(Constants.Fonts.juraMediumSubheadline)
             } footer: {
                 Text("Выберите от 3 до 5 эмоций к каждой подцели для исчерпывающего анализа в будущем.")
                     .font(Constants.Fonts.juraFootnote)
@@ -87,7 +88,7 @@ struct AnalysisView: View {
                     text: $thoughts)
             } header: {
                 Text("Размышления")
-                    .font(Constants.Fonts.juraSubheadline)
+                    .font(Constants.Fonts.juraMediumSubheadline)
                 
             }
         }
@@ -96,10 +97,10 @@ struct AnalysisView: View {
             thoughts = reflections.first?.thoughts ?? ""
         }
         .navigationTitle("Самоанализ")
-        .background {
-            Constants.Colors.darkBackground.verticalGradient()
-                .ignoresSafeArea()
-        }
+        .background(
+            colorScheme == .dark
+            ? Constants.Colors.darkBackground
+            : Constants.Colors.lightBackground)
         .scrollContentBackground(.hidden)
         .toolbar {
             ToolbarItem {
@@ -263,7 +264,7 @@ private extension AnalysisView {
     
     func EmotionView(_ title: String, isSelected: Bool) -> some View {
         Text(title)
-            .font(Constants.Fonts.juraSubheadline)
+            .font(Constants.Fonts.juraMediumSubheadline)
             .padding(.horizontal, 10)
             .padding(.vertical, 8)
             .frame(maxWidth: .infinity)

@@ -9,33 +9,18 @@ import SwiftUI
 
 struct SubgoalSectionsView: View {
     
-    private var isToday: Bool {
-        Calendar.current.isDateInToday(date)
-    }
-    
     private var filteredSubgoals: [Subgoal] {
-        isToday ? subgoals.filter { !$0.isCompleted } : Array(subgoals)
+        subgoals
             .filter {
-                if $0.type == Constants.SubgoalTypes.habit.rawValue {
-                    guard let startDate = $0.startDate,
-                          let frequency = Constants.Frequencies(
-                            rawValue: $0.frequency ?? ""
-                    ) else {
-                        return false
-                    }
-                    return frequency.getNecessity(
-                        on: date,
-                        startDate: startDate)
-                }
-                return true
+                !(date.isInRecentDates && isCompleted($0)) && shouldInclude($0)
             }
-            .sorted(by: SubgoalSorter.compare)
+            .sorted { SubgoalSorter.compare(lhs: $0, rhs: $1, for: date) }
     }
     
     private var completedSubgoals: [Subgoal] {
         subgoals
-            .filter { $0.isCompleted }
-            .sorted(by: SubgoalSorter.compare)
+            .filter { isCompleted($0) && shouldInclude($0) }
+            .sorted { SubgoalSorter.compare(lhs: $0, rhs: $1, for: date) }
     }
     
     let date: Date
@@ -53,21 +38,42 @@ struct SubgoalSectionsView: View {
             }
         } header: {
             Text(title)
-                .font(Constants.Fonts.juraSubheadline)
+                .font(Constants.Fonts.juraMediumSubheadline)
         }
-        if !completedSubgoals.isEmpty, !isCompletedHidden, isToday {
+        if !completedSubgoals.isEmpty,
+           !isCompletedHidden,
+           date.isInRecentDates {
             Section {
                 SubgoalViews(completedSubgoals)
             } header: {
                 Text("Выполнено")
-                    .font(Constants.Fonts.juraSubheadline)
+                    .font(Constants.Fonts.juraMediumSubheadline)
             }
         }
     }
     
+    private func isCompleted(_ subgoal: Subgoal) -> Bool {
+        Calendar.current.isDateInYesterday(date)
+        ? subgoal.wasCompleted
+        : subgoal.isCompleted
+    }
+    
+    private func shouldInclude(_ subgoal: Subgoal) -> Bool {
+        if subgoal.type == Constants.SubgoalTypes.habit.rawValue,
+           let startDate = subgoal.startDate,
+           let frequency = Constants.Frequencies(
+            rawValue: subgoal.frequency ?? ""
+           ) {
+            return frequency.getNecessity(
+                on: date,
+                startDate: startDate)
+        }
+        return true
+    }
+    
     private func SubgoalViews(_ subgoals: [Subgoal]) -> some View {
         ForEach(subgoals) {
-            SubgoalView(subgoal: $0, isToday: isToday)
+            SubgoalView(subgoal: $0, currentDate: date)
         }
     }
 }

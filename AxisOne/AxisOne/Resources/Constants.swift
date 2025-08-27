@@ -175,6 +175,25 @@ enum Constants {
             default: .night
             }
         }
+        
+        static func getComparableTimeOfDay(
+            for subgoal: Subgoal,
+            on date: Date
+        ) -> Self? {
+            return if Calendar.current.isDateInToday(date),
+                      let todayMoved = subgoal.todayMoved {
+                Self(rawValue: todayMoved)
+            } else if Calendar.current.isDateInYesterday(date),
+                      let yesterdayMoved = subgoal.yesterdayMoved {
+                Self(rawValue: yesterdayMoved)
+            } else {
+                if let timeOfDay = subgoal.timeOfDay {
+                    Self(rawValue: timeOfDay)
+                } else {
+                    nil
+                }
+            }
+        }
     }
     
     enum Feelings: String, CaseIterable, Identifiable {
@@ -213,14 +232,17 @@ enum Constants {
         static let juraMediumBody = Font.custom("Jura-Medium", size: 17)
         static let juraBody = Font.custom("Jura", size: 17)
         static let juraLightCallout = Font.custom("Jura-Light", size: 16) 
+        static let juraSemiboldSubheadline = Font.custom(
+            "Jura-SemiBold",
+            size: 15)
         static let juraMediumSubheadline = Font.custom("Jura-Medium", size: 15)
-        static let juraSubheadline = Font.custom("Jura", size: 15)
         static let juraMediumFootnote = Font.custom("Jura-Medium", size: 13)
         static let juraFootnote = Font.custom("Jura", size: 13)
     }
     
     // MARK: - Colors
     enum Colors {
-        static let darkBackground = Color("Background")
+        static let darkBackground = Color("DarkBackground")
+        static let lightBackground = Color("LightBackground")
     }
 }

@@ -44,16 +44,16 @@ struct SubgoalTypesView: View {
     // MARK: - Private Methods
     private func getSubgoalCount(_ type: Constants.SubgoalTypes) -> Int {
         subgoals
-            .filter { $0.type == type.rawValue }
-            .filter { !$0.isCompleted || !Calendar.current.isDateInToday(date) }
             .filter {
-                if $0.type == Constants.SubgoalTypes.habit.rawValue {
-                    guard let startDate = $0.startDate,
-                          let frequency = Constants.Frequencies(
-                            rawValue: $0.frequency ?? ""
-                    ) else {
-                        return false
-                    }
+                guard $0.type == type.rawValue else { return false }
+                if date.isInRecentDates && $0.isCompleted {
+                    return false
+                }
+                if $0.type == Constants.SubgoalTypes.habit.rawValue,
+                   let startDate = $0.startDate,
+                   let frequency = Constants.Frequencies(
+                    rawValue: $0.frequency ?? ""
+                   ) {
                     return frequency.getNecessity(
                         on: date,
                         startDate: startDate)
@@ -74,22 +74,21 @@ private extension SubgoalTypesView {
         VStack {
             ZStack {
                 Circle()
-                    .fill(Color(.secondarySystemBackground))
-                    .frame(width: 55, height: 55)
+                    .fill(.accent)
+                    .frame(width: 50, height: 50)
                     .overlay {
                         Image(systemName: type.imageName)
-                            .foregroundStyle(.accent)
-                            .font(.system(size: 34))
-                            .fontWeight(.light)
+                            .foregroundStyle(.white)
+                            .font(.system(size: 50, weight: .ultraLight))
                     }
                 Text("\(count)")
                     .background {
                         Circle()
-                            .fill(.ultraThinMaterial)
-                            .stroke(.primary, lineWidth: 0.4)
+                            .fill(.thickMaterial)
+                            .stroke(.primary, lineWidth: 0.3)
                             .frame(width: 22, height: 22)
                     }
-                    .offset(x: 22, y: -22)
+                    .offset(x: 20, y: -20)
             }
             Text(type.plural)
         }

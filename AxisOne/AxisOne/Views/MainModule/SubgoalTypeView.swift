@@ -46,11 +46,11 @@ struct SubgoalTypeView: View {
                     if !inLineSubgoals.isEmpty {
                         Section {
                             ForEach(inLineSubgoals) {
-                                SubgoalView(subgoal: $0, isToday: Calendar.current.isDateInToday(date))
+                                SubgoalView(subgoal: $0, currentDate: date)
                             }
                         } header: {
                             Text("На очереди")
-                                .font(Constants.Fonts.juraSubheadline)
+                                .font(Constants.Fonts.juraMediumSubheadline)
                         }
                     }
                 }

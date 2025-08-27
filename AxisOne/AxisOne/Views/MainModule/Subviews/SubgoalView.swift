@@ -21,25 +21,57 @@ struct SubgoalView: View {
         Constants.LifeAreas(rawValue: subgoal.goal?.lifeArea ?? "")
     }
     
+    private var isToday: Bool {
+        Calendar.current.isDateInToday(currentDate)
+    }
+    
+    private var isYesterday: Bool {
+        Calendar.current.isDateInYesterday(currentDate)
+    }
+    
     private var timeOfDay: Constants.TimesOfDay {
-        if let time = subgoal.time {
-            return Constants.TimesOfDay.getTimeOfDay(from: time)
-        } else if let timeOfDay = subgoal.timeOfDay {
-            return Constants.TimesOfDay(rawValue: timeOfDay) ?? .unknown
+        return if let timeOfDay = Constants.TimesOfDay.getComparableTimeOfDay(
+            for: subgoal,
+            on: currentDate
+        ) {
+            timeOfDay
+        } else if let time = subgoal.time {
+            Constants.TimesOfDay.getTimeOfDay(from: time)
         } else {
-            return .unknown
+            .unknown
         }
     }
     
     private var isMissed: Bool {
-        guard !subgoal.isCompleted, isToday else { return false }
-        return timeOfDay.order < Constants.TimesOfDay.getTimeOfDay(
-            from: .now).order
+        guard subgoal.deadline != nil else { return false }
+        return if isYesterday {
+            subgoal.wasCompleted ? false : true
+        } else if isToday {
+            subgoal.isCompleted
+            ? false
+            : timeOfDay.order < Constants.TimesOfDay.getTimeOfDay(
+                from: .now).order
+        } else {
+            false
+        }
+    }
+    
+    private var isCompleted: Bool {
+        return if currentDate.isInRecentDates {
+            if isYesterday,
+               subgoal.type == Constants.SubgoalTypes.habit.rawValue {
+                subgoal.wasCompleted
+            } else {
+                subgoal.isCompleted
+            }
+        } else {
+            false
+        }
     }
 
     // MARK: - Public Properties
     @ObservedObject var subgoal: Subgoal
-    let isToday: Bool
+    let currentDate: Date
     
     // MARK: - Body
     var body: some View {
@@ -53,7 +85,9 @@ struct SubgoalView: View {
                         title: subgoal.goal?.lifeArea)
                 }
                 CapsuleView(color: .clear, title: subgoal.type)
-                if let time = subgoal.time {
+                if let time = subgoal.time,
+                   !(isToday && subgoal.todayMoved != nil) &&
+                    !(isYesterday && subgoal.yesterdayMoved != nil) {
                     ExactTimeView(time)
                 }
             }
@@ -61,12 +95,9 @@ struct SubgoalView: View {
                 if let subgoalType = Constants.SubgoalTypes(
                     rawValue: subgoal.type ?? ""),
                    subgoalType != Constants.SubgoalTypes.focus {
-                    CheckmarkImageView(
-                        isCompleted: isToday
-                        ? subgoal.isCompleted
-                        : false)
+                    CheckmarkImageView(isCompleted: isCompleted)
                     .onTapGesture {
-                        if isToday {
+                        if currentDate.isInRecentDates {
                             withAnimation(.snappy) {
                                 toggleCompletion()
                             }
@@ -83,17 +114,23 @@ struct SubgoalView: View {
                     primaryText: subgoal.title,
                     secondaryText: subgoal.goal?.title,
                     isActive: isMissed,
-                    isCompleted: isToday ? subgoal.isCompleted : false)
+                    isCompleted: isCompleted)
             }
         }
         .listRowInsets(EdgeInsets())
         .padding(12)
+        .contentShape(.rect)
         .onTapGesture {
             isModalViewPresented = true
         }
-        .swipeActions {
-            SwipeActionButtonView(type: .reschedule) {
-                isConfirmationDialogPresented = true
+        .swipeActions(allowsFullSwipe: currentDate.isInRecentDates) {
+            if subgoal.type != Constants.SubgoalTypes.focus.rawValue,
+               currentDate.isInRecentDates &&
+                !(subgoal.type == Constants.SubgoalTypes.inbox.rawValue &&
+                subgoal.deadline == nil) {
+                SwipeActionButtonView(type: .reschedule) {
+                    isConfirmationDialogPresented = true
+                }
             }
             SwipeActionButtonView(type: .delete) {
                 do {
@@ -112,17 +149,21 @@ struct SubgoalView: View {
                 isModalPresentation: true)
         }
         .confirmationDialog(
-            "Перенести на...",
+            "Перенести \(isToday ? "сегодняшнюю" : "вчерашнюю") подцель на...",
             isPresented: $isConfirmationDialogPresented,
             titleVisibility: .visible
         ) {
             ForEach(Constants.TimesOfDay.allCases.dropLast()) { value in
                 Button(value.rawValue) {
+                    // TODO: потом убрать эту логику для входящих на очереди
                     if subgoal.deadline == nil {
                         subgoal.deadline = .now
                     }
                     do {
-                        try subgoalService.reschedule(subgoal, to: value)
+                        try subgoalService.reschedule(
+                            subgoal,
+                            to: value,
+                            isToday: isToday)
                     } catch {
                         print(error)
                     }
@@ -153,7 +194,7 @@ struct SubgoalView: View {
             "Внимание",
             isPresented: $isErrorAlertPresented, actions: {}
         ) {
-            Text("Выполнение привычек доступно только сегодня.")
+            Text("Выполнение привычек доступно только для сегодняшних или вчерашних.")
         }
     }
     
@@ -165,7 +206,9 @@ struct SubgoalView: View {
                subgoal.deadline == nil {
                 try subgoalService.completeNow(subgoal)
             } else {
-                try subgoalService.toggleComplete(of: subgoal)
+                try subgoalService.toggleComplete(
+                    of: subgoal,
+                    isYesterday: isYesterday)
             }
         } catch {
             print(error)
@@ -181,7 +224,7 @@ private extension SubgoalView {
             .font(Constants.Fonts.juraFootnote)
             .frame(width: 90, height: 24)
             .background(color.verticalGradient().clipShape(Capsule()))
-            .overlay(Capsule().stroke(.primary, lineWidth: 0.4))
+            .overlay(Capsule().stroke(.primary, lineWidth: 0.3))
     }
     
     func ExactTimeView(_ time: Date) -> some View {
