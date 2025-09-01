@@ -16,8 +16,9 @@ struct LabeledDateView: View {
         LabeledContent(title) {
             Text(value)
                 .foregroundStyle(.accent)
+                .fontWeight(.medium)
         }
-        .font(Constants.Fonts.juraMediumBody)
+        .font(Constants.Fonts.juraBody)
         .contentShape(.rect)
     }
 }

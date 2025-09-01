@@ -25,7 +25,8 @@ struct ContentView: View {
             ForEach(Constants.Tabs.allCases) { tab in
                 NavigationStack {
                     tab.view
-                        .navigationTitle(tab != .main ? tab.rawValue : "")
+                        .navigationTitle(tab.rawValue)
+                        .toolbar(tab == .main ? .hidden : .visible)
                         .background(
                             colorScheme == .dark
                             ? Constants.Colors.darkBackground

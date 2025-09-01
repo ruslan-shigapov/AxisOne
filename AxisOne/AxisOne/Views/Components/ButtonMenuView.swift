@@ -26,12 +26,14 @@ struct ButtonMenuView<Item: Identifiable>: View {
             }
         } label: {
             LabeledContent {
-                Text(itemText(selectedItem))
-                    .foregroundStyle(itemColor(selectedItem) ?? .secondary)
-                    .fontWeight(.medium)
-                Image(systemName: "arrow.up.and.down")
-                    .foregroundStyle(.secondary)
-                    .imageScale(.small)
+                HStack {
+                    Text(itemText(selectedItem))
+                        .foregroundStyle(itemColor(selectedItem) ?? .secondary)
+                        .fontWeight(.medium)
+                    Image(systemName: "arrow.up.and.down")
+                        .foregroundStyle(.secondary)
+                        .imageScale(.small)
+                }
             } label: {
                 Text(title)
                     .foregroundColor(.primary)

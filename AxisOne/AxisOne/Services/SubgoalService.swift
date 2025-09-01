@@ -13,6 +13,7 @@ enum SubgoalError: Error {
     case deletingFailed(Error)
     case goalOrderFetchingFailed(Error)
     case transformingToGoalFailed(Error)
+    case transformingToTaskFailed(Error)
     case rescheduleFailed(Error)
     case subgoalOrderFetchingFailed(Error)
     case completionTogglingFailed(Error)
@@ -176,12 +177,11 @@ final class SubgoalService {
     }
     
     func transformToGoal(
-        _ subgoal: Subgoal?,
+        _ subgoal: Subgoal,
         lifeArea: Constants.LifeAreas,
         title: String,
         notes: String
     ) throws {
-        guard let subgoal else { return }
         let goal = Goal(context: context)
         goal.lifeArea = lifeArea.rawValue
         goal.title = title.trimmingCharacters(
@@ -192,6 +192,15 @@ final class SubgoalService {
         context.delete(subgoal)
         try saveContext {
             .transformingToGoalFailed($0)
+        }
+    }
+    
+    func transformToTask(_ subgoal: Subgoal, for goal: Goal?) throws {
+        guard let goal else { return }
+        subgoal.type = Constants.SubgoalTypes.task.rawValue
+        subgoal.goal = goal
+        try saveContext {
+            .transformingToTaskFailed($0)
         }
     }
     

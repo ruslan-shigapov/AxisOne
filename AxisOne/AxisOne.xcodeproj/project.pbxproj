@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E40E86CE2E10035800ED6DCA /* DetailSubgoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40E86CD2E10035800ED6DCA /* DetailSubgoalView.swift */; };
 		E40E86D02E1025A900ED6DCA /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40E86CF2E1025A900ED6DCA /* GoalView.swift */; };
+		E42BDFF42E606573002E15C9 /* TransformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BDFF32E606573002E15C9 /* TransformationView.swift */; };
 		E4563B1A2E0FE4CA0075B178 /* GoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B192E0FE4CA0075B178 /* GoalsView.swift */; };
 		E4563B1C2E0FE4D30075B178 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B1B2E0FE4D30075B178 /* MainView.swift */; };
 		E4563B1E2E0FE4DE0075B178 /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B1D2E0FE4DE0075B178 /* JournalView.swift */; };
@@ -32,7 +33,6 @@
 		E4B676992E54E59800B4940A /* DateGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B676982E54E59800B4940A /* DateGroupView.swift */; };
 		E4B6769B2E54E76700B4940A /* CompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B6769A2E54E76700B4940A /* CompletionView.swift */; };
 		E4B6769D2E54E82900B4940A /* SaveButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B6769C2E54E82900B4940A /* SaveButtonView.swift */; };
-		E4B6769F2E54E8F400B4940A /* ActionSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B6769E2E54E8F400B4940A /* ActionSectionView.swift */; };
 		E4C06C992E44A34100EB0A76 /* CheckmarkImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06C982E44A34100EB0A76 /* CheckmarkImageView.swift */; };
 		E4C06C9D2E44A4CA00EB0A76 /* SwipeActionButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06C9C2E44A4CA00EB0A76 /* SwipeActionButtonView.swift */; };
 		E4C06C9F2E44B46900EB0A76 /* ListRowTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06C9E2E44B46900EB0A76 /* ListRowTextView.swift */; };
@@ -65,6 +65,7 @@
 /* Begin PBXFileReference section */
 		E40E86CD2E10035800ED6DCA /* DetailSubgoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSubgoalView.swift; sourceTree = "<group>"; };
 		E40E86CF2E1025A900ED6DCA /* GoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalView.swift; sourceTree = "<group>"; };
+		E42BDFF32E606573002E15C9 /* TransformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformationView.swift; sourceTree = "<group>"; };
 		E4563B192E0FE4CA0075B178 /* GoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsView.swift; sourceTree = "<group>"; };
 		E4563B1B2E0FE4D30075B178 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		E4563B1D2E0FE4DE0075B178 /* JournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalView.swift; sourceTree = "<group>"; };
@@ -88,7 +89,6 @@
 		E4B676982E54E59800B4940A /* DateGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateGroupView.swift; sourceTree = "<group>"; };
 		E4B6769A2E54E76700B4940A /* CompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionView.swift; sourceTree = "<group>"; };
 		E4B6769C2E54E82900B4940A /* SaveButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveButtonView.swift; sourceTree = "<group>"; };
-		E4B6769E2E54E8F400B4940A /* ActionSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSectionView.swift; sourceTree = "<group>"; };
 		E4C06C982E44A34100EB0A76 /* CheckmarkImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckmarkImageView.swift; sourceTree = "<group>"; };
 		E4C06C9C2E44A4CA00EB0A76 /* SwipeActionButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeActionButtonView.swift; sourceTree = "<group>"; };
 		E4C06C9E2E44B46900EB0A76 /* ListRowTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRowTextView.swift; sourceTree = "<group>"; };
@@ -138,6 +138,7 @@
 				E4B676A02E54EE2000B4940A /* Subviews */,
 				E4563B1B2E0FE4D30075B178 /* MainView.swift */,
 				E4FA157E2E24053800AF7873 /* SubgoalTypeView.swift */,
+				E42BDFF32E606573002E15C9 /* TransformationView.swift */,
 				E4563B232E0FE96A0075B178 /* SettingsView.swift */,
 			);
 			path = MainModule;
@@ -176,7 +177,6 @@
 				E4B676962E54DE3A00B4940A /* TimeGroupView.swift */,
 				E4B6769A2E54E76700B4940A /* CompletionView.swift */,
 				E4B6769C2E54E82900B4940A /* SaveButtonView.swift */,
-				E4B6769E2E54E8F400B4940A /* ActionSectionView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -414,7 +414,6 @@
 				E4563B242E0FE96A0075B178 /* SettingsView.swift in Sources */,
 				E4B6769B2E54E76700B4940A /* CompletionView.swift in Sources */,
 				E4C06CA52E44D28600EB0A76 /* TextFieldView.swift in Sources */,
-				E4B6769F2E54E8F400B4940A /* ActionSectionView.swift in Sources */,
 				E4563B222E0FE5450075B178 /* Constants.swift in Sources */,
 				E493E6A12E1928DC009CDDDE /* AnalysisView.swift in Sources */,
 				E493E69F2E19270F009CDDDE /* HistoryView.swift in Sources */,
@@ -440,6 +439,7 @@
 				E4EF52442E0FCFB400D5B7FE /* ContentView.swift in Sources */,
 				E4AF462F2E549FF800E43833 /* SubgoalSectionView.swift in Sources */,
 				E4C06CA32E44C19600EB0A76 /* NavBarButtonImageView.swift in Sources */,
+				E42BDFF42E606573002E15C9 /* TransformationView.swift in Sources */,
 				E4B676972E54DE3A00B4940A /* TimeGroupView.swift in Sources */,
 				E45F9C5A2E3AA0CE00B1B9D7 /* SummaryView.swift in Sources */,
 				E4C06CA72E44D64E00EB0A76 /* ButtonMenuView.swift in Sources */,

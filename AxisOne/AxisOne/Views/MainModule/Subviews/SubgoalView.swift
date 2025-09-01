@@ -146,7 +146,7 @@ struct SubgoalView: View {
                 subgoal: subgoal,
                 subgoals: .constant([]),
                 isModified: .constant(false),
-                isModalPresentation: true)
+                isModalPresentation: $isModalViewPresented)
         }
         .confirmationDialog(
             "Перенести \(isToday ? "сегодняшнюю" : "вчерашнюю") подцель на...",
@@ -155,10 +155,6 @@ struct SubgoalView: View {
         ) {
             ForEach(Constants.TimesOfDay.allCases.dropLast()) { value in
                 Button(value.rawValue) {
-                    // TODO: потом убрать эту логику для входящих на очереди
-                    if subgoal.deadline == nil {
-                        subgoal.deadline = .now
-                    }
                     do {
                         try subgoalService.reschedule(
                             subgoal,

@@ -24,9 +24,7 @@ struct DetailSubgoalView: View {
     @State private var selectedTimeOfDay: Constants.TimesOfDay
     @State private var partCompletion: Double
     @State private var selectedHabitFrequency: Constants.Frequencies
-    @State private var isModalPresentation: Bool
-    @State private var isConfirmationDialogPresented = false
-            
+    
     private let currentTimeOfDay = Constants.TimesOfDay.getTimeOfDay(from: .now)
     
     private var isFormValid: Bool {
@@ -38,6 +36,7 @@ struct DetailSubgoalView: View {
     let subgoal: Subgoal?
     @Binding var subgoals: [Subgoal]
     @Binding var isModified: Bool
+    @Binding var isModalPresentation: Bool
         
     // MARK: - Body
     var body: some View {
@@ -119,9 +118,15 @@ struct DetailSubgoalView: View {
                     .disabled(!isFormValid)
                 }
                 .disabled(subgoal?.isCompleted ?? false)
-                if let _ = subgoal, lifeArea == nil {
-                    ActionSectionView {
-                        isConfirmationDialogPresented = true
+                if let subgoal, lifeArea == nil {
+                    NavigationLink(
+                        destination: TransformationView(
+                            subgoal: subgoal,
+                            isModalViewPresented: $isModalPresentation)
+                    ) {
+                        RowLabelView(
+                            type: .addLink,
+                            text: "Преобразовать")
                     }
                 }
                 if let subgoal {
@@ -164,31 +169,6 @@ struct DetailSubgoalView: View {
                     }
                 }
             }
-            .confirmationDialog(
-                "Выберите сферу жизни",
-                isPresented: $isConfirmationDialogPresented,
-                titleVisibility: .visible
-            ) {
-                ForEach(Constants.LifeAreas.allCases) { lifeArea in
-                    Button(lifeArea.rawValue) {
-                        do {
-                            try subgoalService.transformToGoal(
-                                subgoal,
-                                lifeArea: lifeArea,
-                                title: title,
-                                notes: notes
-                            )
-                        } catch {
-                            print(error)
-                        }
-                        DispatchQueue.main.async {
-                            dismiss()
-                        }
-                    }
-                    .foregroundStyle(.white)
-                }
-                Button("Отмена", role: .cancel) {}
-            }
         }
     }
     
@@ -198,13 +178,13 @@ struct DetailSubgoalView: View {
         subgoal: Subgoal? = nil,
         subgoals: Binding<[Subgoal]>,
         isModified: Binding<Bool>,
-        isModalPresentation: Bool = false
+        isModalPresentation: Binding<Bool> = .constant(false)
     ) {
         self.lifeArea = lifeArea
         self.subgoal = subgoal
         self._subgoals = subgoals
         self._isModified = isModified
-        self.isModalPresentation = isModalPresentation
+        self._isModalPresentation = isModalPresentation
         let subgoalType = Constants.SubgoalTypes(rawValue: subgoal?.type ?? "")
         _selectedSubgoalType = State(initialValue: subgoalType ?? .task)
         if lifeArea == nil {

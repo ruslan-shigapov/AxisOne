@@ -22,7 +22,6 @@ struct MainNavigationBarView: View {
     @Binding var selectedDate: Date
     @Binding var isCompletedSubgoalsHidden: Bool
     @Binding var selectedTimeOfDay: Constants.TimesOfDay
-    @Binding var selectedSubgoalType: Constants.SubgoalTypes?
     let subgoals: FetchedResults<Subgoal>
     
     // MARK: - Body
@@ -40,9 +39,7 @@ struct MainNavigationBarView: View {
                     }
             }
             VStack(spacing: 24) {
-                SubgoalTypesView(
-                    selectedType: $selectedSubgoalType,
-                    date: selectedDate)
+                SubgoalTypesView(date: selectedDate)
                 TimeOfDayPickerView(selectedTimeOfDay: $selectedTimeOfDay)
                     .onChange(of: selectedTimeOfDay) {
                         subgoals.nsPredicate = SubgoalFilter.predicate(

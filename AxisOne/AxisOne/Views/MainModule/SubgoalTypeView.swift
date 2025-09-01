@@ -10,8 +10,6 @@ import SwiftUI
 struct SubgoalTypeView: View {
     
     // MARK: - Private Properties
-    @Environment(\.dismiss) private var dismiss
-
     @FetchRequest
     private var subgoals: FetchedResults<Subgoal>
     
@@ -63,15 +61,6 @@ struct SubgoalTypeView: View {
             }
             .navigationTitle(type.plural)
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem {
-                    Button {
-                        dismiss()
-                    } label: {
-                        NavBarButtonImageView(type: .cancel)
-                    }
-                }
-            }
         }
     }
     

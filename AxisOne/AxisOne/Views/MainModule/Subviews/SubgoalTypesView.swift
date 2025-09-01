@@ -14,24 +14,26 @@ struct SubgoalTypesView: View {
     private var subgoals: FetchedResults<Subgoal>
     
     // MARK: - Public Properties
-    @Binding var selectedType: Constants.SubgoalTypes?
     let date: Date
     
     // MARK: - Body
     var body: some View {
         HStack {
             ForEach(Constants.SubgoalTypes.allCases) { type in
-                SubgoalTypeCircleView(type: type, count: getSubgoalCount(type))
-                    .onTapGesture {
-                        selectedType = type
-                    }
+                NavigationLink(
+                    destination: SubgoalTypeView(type: type, date: date)
+                ) {
+                    SubgoalTypeCircleView(
+                        type: type,
+                        count: getSubgoalCount(type))
+                }
+                .buttonStyle(.plain)
             }
         }
     }
     
     // MARK: - Initialize
-    init(selectedType: Binding<Constants.SubgoalTypes?>, date: Date) {
-        self._selectedType = selectedType
+    init(date: Date) {
         self.date = date
         _subgoals = FetchRequest(
             entity: Subgoal.entity(),
@@ -88,7 +90,7 @@ private extension SubgoalTypesView {
                             .stroke(.primary, lineWidth: 0.3)
                             .frame(width: 22, height: 22)
                     }
-                    .offset(x: 20, y: -20)
+                    .offset(x: 20, y: -18)
             }
             Text(type.plural)
         }

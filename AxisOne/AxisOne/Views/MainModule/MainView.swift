@@ -25,7 +25,6 @@ struct MainView: View {
     @State private var selectedDate = Date()
     @State private var selectedTimeOfDay = Constants.TimesOfDay.getTimeOfDay(
         from: .now)
-    @State private var selectedSubgoalType: Constants.SubgoalTypes?
     
     // MARK: - Body
     var body: some View {
@@ -34,7 +33,6 @@ struct MainView: View {
                 selectedDate: $selectedDate,
                 isCompletedSubgoalsHidden: $isCompletedSubgoalsHidden,
                 selectedTimeOfDay: $selectedTimeOfDay,
-                selectedSubgoalType: $selectedSubgoalType,
                 subgoals: subgoals)
             List {
                 SubgoalSectionsView(
@@ -44,9 +42,6 @@ struct MainView: View {
                     emptyRowText: "Время дня свободно",
                     isCompletedHidden: isCompletedSubgoalsHidden)
             }
-        }
-        .sheet(item: $selectedSubgoalType) {
-            SubgoalTypeView(type: $0, date: selectedDate)
         }
     }
 }
