@@ -18,12 +18,14 @@ struct TimeGroupView: View {
     var body: some View {
         ToggleView(title: "Точное время", isOn: $isExactly)
         if isExactly {
-            LabeledDateView(title: "Напомнить",  value: format(selectedTime))
-                .onTapGesture {
-                    withAnimation(.snappy) {
-                        isPickerPresented.toggle()
-                    }
+            LabeledDateView(
+                title: "Напомнить",
+                value: selectedTime.getFormattedTime())
+            .onTapGesture {
+                withAnimation(.snappy) {
+                    isPickerPresented.toggle()
                 }
+            }
             if isPickerPresented {
                 DatePicker(
                     "",
@@ -38,11 +40,5 @@ struct TimeGroupView: View {
                 selectedItem: $selectedTimeOfDay,
                 itemText: { $0.rawValue })
         }
-    }
-    
-    private func format(_ time: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: time)
     }
 }

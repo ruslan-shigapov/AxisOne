@@ -10,6 +10,7 @@
 		E40E86CE2E10035800ED6DCA /* DetailSubgoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40E86CD2E10035800ED6DCA /* DetailSubgoalView.swift */; };
 		E40E86D02E1025A900ED6DCA /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40E86CF2E1025A900ED6DCA /* GoalView.swift */; };
 		E42BDFF42E606573002E15C9 /* TransformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BDFF32E606573002E15C9 /* TransformationView.swift */; };
+		E43B6FEB2E66F11600BCF40F /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43B6FEA2E66F11600BCF40F /* TabBarView.swift */; };
 		E4563B1A2E0FE4CA0075B178 /* GoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B192E0FE4CA0075B178 /* GoalsView.swift */; };
 		E4563B1C2E0FE4D30075B178 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B1B2E0FE4D30075B178 /* MainView.swift */; };
 		E4563B1E2E0FE4DE0075B178 /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B1D2E0FE4DE0075B178 /* JournalView.swift */; };
@@ -66,6 +67,7 @@
 		E40E86CD2E10035800ED6DCA /* DetailSubgoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSubgoalView.swift; sourceTree = "<group>"; };
 		E40E86CF2E1025A900ED6DCA /* GoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalView.swift; sourceTree = "<group>"; };
 		E42BDFF32E606573002E15C9 /* TransformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformationView.swift; sourceTree = "<group>"; };
+		E43B6FEA2E66F11600BCF40F /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		E4563B192E0FE4CA0075B178 /* GoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsView.swift; sourceTree = "<group>"; };
 		E4563B1B2E0FE4D30075B178 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		E4563B1D2E0FE4DE0075B178 /* JournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalView.swift; sourceTree = "<group>"; };
@@ -174,7 +176,6 @@
 				E40E86CF2E1025A900ED6DCA /* GoalView.swift */,
 				E4AF462E2E549FF800E43833 /* SubgoalSectionView.swift */,
 				E4B6768C2E54CFA400B4940A /* SubgoalTypeSectionView.swift */,
-				E4B676962E54DE3A00B4940A /* TimeGroupView.swift */,
 				E4B6769A2E54E76700B4940A /* CompletionView.swift */,
 				E4B6769C2E54E82900B4940A /* SaveButtonView.swift */,
 			);
@@ -222,6 +223,7 @@
 				E4C06CAE2E44E98B00EB0A76 /* DeleteButtonView.swift */,
 				E4B676942E54DD8400B4940A /* LabeledDateView.swift */,
 				E4B676982E54E59800B4940A /* DateGroupView.swift */,
+				E4B676962E54DE3A00B4940A /* TimeGroupView.swift */,
 				E4AF46212E51B79500E43833 /* SubgoalSectionsView.swift */,
 			);
 			path = Components;
@@ -287,6 +289,7 @@
 				E4563B272E0FE9B10075B178 /* MainModule */,
 				E4563B292E0FEA050075B178 /* JournalModule */,
 				E4EF523D2E0FCFB400D5B7FE /* ContentView.swift */,
+				E43B6FEA2E66F11600BCF40F /* TabBarView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -432,6 +435,7 @@
 				E4CE0EEF2E55B97000AA8709 /* MainNavigationBarView.swift in Sources */,
 				E40E86D02E1025A900ED6DCA /* GoalView.swift in Sources */,
 				E4FA157F2E24053800AF7873 /* SubgoalTypeView.swift in Sources */,
+				E43B6FEB2E66F11600BCF40F /* TabBarView.swift in Sources */,
 				E4CCAE3C2E47395D001703C9 /* NavBarTextButtonView.swift in Sources */,
 				E4B6769D2E54E82900B4940A /* SaveButtonView.swift in Sources */,
 				E4563B1E2E0FE4DE0075B178 /* JournalView.swift in Sources */,

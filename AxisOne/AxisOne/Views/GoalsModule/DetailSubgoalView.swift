@@ -65,7 +65,7 @@ struct DetailSubgoalView: View {
                     TextFieldView(
                         placeholder: "Можете добавить уточнение",
                         text: $notes)
-                    if selectedSubgoalType == .habit {
+                    if selectedSubgoalType == .habit, lifeArea != nil {
                         DateGroupView(
                             title: "Приступить",
                             selectedDate: $selectedStartDate)
@@ -187,7 +187,7 @@ struct DetailSubgoalView: View {
         self._isModalPresentation = isModalPresentation
         let subgoalType = Constants.SubgoalTypes(rawValue: subgoal?.type ?? "")
         _selectedSubgoalType = State(initialValue: subgoalType ?? .task)
-        if lifeArea == nil {
+        if lifeArea == nil, subgoal == nil {
             _selectedSubgoalType = State(initialValue: .inbox)
         }
         _title = State(initialValue: subgoal?.title ?? "")

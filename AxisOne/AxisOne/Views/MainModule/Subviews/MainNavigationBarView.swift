@@ -53,9 +53,10 @@ struct MainNavigationBarView: View {
         }
         .background {
             RoundedRectangle(cornerRadius: 20)
-                .fill(.thickMaterial)
-                .ignoresSafeArea()
-                .offset(y: -100) 
+                .fill(
+                    .thickMaterial
+                        .shadow(.drop(color: .primary.opacity(0.2), radius: 5)))
+                .offset(y: -100)
         }
     }
     

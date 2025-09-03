@@ -77,11 +77,9 @@ struct SubgoalView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                if subgoal.type != Constants.SubgoalTypes.inbox.rawValue {
+                if let lifeArea {
                     CapsuleView(
-                        color: subgoal.isActive
-                        ? lifeArea?.color ?? .clear
-                        : .clear,
+                        color: subgoal.isActive ? lifeArea.color : .clear,
                         title: subgoal.goal?.lifeArea)
                 }
                 CapsuleView(color: .clear, title: subgoal.type)

@@ -13,4 +13,10 @@ extension Date {
         Calendar.current.isDateInToday(self) ||
         Calendar.current.isDateInYesterday(self)
     }
+    
+    func getFormattedTime() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: self)
+    }
 }

@@ -24,25 +24,29 @@ struct ContentView: View {
         TabView(selection: $selectedTab) {
             ForEach(Constants.Tabs.allCases) { tab in
                 NavigationStack {
-                    tab.view
-                        .navigationTitle(tab.rawValue)
-                        .toolbar(tab == .main ? .hidden : .visible)
-                        .background(
-                            colorScheme == .dark
-                            ? Constants.Colors.darkBackground
-                            : Constants.Colors.lightBackground)
-                        .scrollContentBackground(.hidden)
+                    ZStack(alignment: .bottom) {
+                        tab.view
+                            .navigationTitle(tab.rawValue)
+                            .toolbar(tab == .main ? .hidden : .visible)
+                            .toolbar(.hidden, for: .tabBar)
+                            .background(
+                                colorScheme == .dark
+                                ? Constants.Colors.darkBackground
+                                : Constants.Colors.lightBackground)
+                            .scrollContentBackground(.hidden)
+                        Rectangle()
+                            .fill(.ultraThinMaterial)
+                            .mask(
+                                LinearGradient(
+                                    gradient: Gradient(
+                                        colors: [.clear, .black]),
+                                    startPoint: .top,
+                                    endPoint: .bottom))
+                            .frame(height: 140)
+                        TabBarView(activeTab: $selectedTab)
+                    }
+                    .ignoresSafeArea(edges: .bottom)
                 }
-                .tabItem {
-                    Label(tab.rawValue, systemImage: tab.iconName)
-                }
-            }
-        }
-        .onAppear {
-            do {
-                try subgoalService.resetDailyValues()
-            } catch {
-                print(error)
             }
         }
     }
@@ -50,7 +54,6 @@ struct ContentView: View {
     // MARK: - Initialize
     init() {
         setupNavBarAppearance()
-        setupTabBarAppearance()
         setupSegmentedControlAppearance()
     }
     
@@ -81,19 +84,6 @@ struct ContentView: View {
         ]
         UINavigationBar.appearance().standardAppearance = navBarAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
-    }
-    
-    private func setupTabBarAppearance() {
-        guard let titleFont = UIFont(name: "Jura-Medium", size: 12) else {
-            return
-        }
-        let tabBarAppearance = UITabBarAppearance()
-        tabBarAppearance.backgroundEffect = UIBlurEffect(
-            style: .systemThickMaterial)
-        let itemAppearance = tabBarAppearance.stackedLayoutAppearance
-        itemAppearance.normal.titleTextAttributes = [.font: titleFont]
-        UITabBar.appearance().standardAppearance = tabBarAppearance
-        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
     }
     
     private func setupSegmentedControlAppearance() {

@@ -20,6 +20,8 @@ enum SubgoalError: Error {
     case completingNowFailed(Error)
     case fetchingFailed(Error)
     case dailyResetingFailed(Error)
+    case inboxTriageFetchingFailed(Error)
+    case inboxTriageSavingFailed(Error)
 }
 
 final class SubgoalService {
@@ -266,6 +268,41 @@ final class SubgoalService {
         }
         try saveContext {
             .dailyResetingFailed($0)
+        }
+    }
+    
+    func getInboxTriage() throws -> Subgoal? {
+        let fetchRequest = Subgoal.fetchRequest()
+        fetchRequest.predicate = .init(
+            format: "title == %@",
+            "Сортировка Входящих")
+        fetchRequest.fetchLimit = 1
+        do {
+            let inboxTriage = try context.fetch(fetchRequest).first
+            return inboxTriage
+        } catch {
+            throw SubgoalError.inboxTriageFetchingFailed(error)
+        }
+    }
+    
+    func saveInboxTriage(
+        _ subgoal: Subgoal?,
+        timeOfDay: Constants.TimesOfDay,
+        time: Date?
+    ) throws {
+        guard subgoal == nil else { return }
+        let inboxTriage = Subgoal(context: context)
+        inboxTriage.type = Constants.SubgoalTypes.habit.rawValue
+        inboxTriage.title = "Сортировка Входящих"
+        inboxTriage.startDate = Date()
+        if let time {
+            inboxTriage.time = time
+        } else {
+            inboxTriage.timeOfDay = timeOfDay.rawValue
+        }
+        inboxTriage.frequency = Constants.Frequencies.daily.rawValue
+        try saveContext {
+            .inboxTriageSavingFailed($0)
         }
     }
 }
