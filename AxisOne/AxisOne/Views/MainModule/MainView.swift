@@ -15,7 +15,7 @@ struct MainView: View {
         sortDescriptors: [],
         predicate: SubgoalFilter.predicate(
             for: .now,
-            timeOfDay: Constants.TimesOfDay.getTimeOfDay(from: .now),
+            timeOfDay: TimesOfDay.getValue(from: .now),
             types: [.task, .habit, .milestone, .inbox]))
     private var subgoals: FetchedResults<Subgoal>
     
@@ -23,8 +23,7 @@ struct MainView: View {
     private var isCompletedSubgoalsHidden: Bool = false
     
     @State private var selectedDate = Date()
-    @State private var selectedTimeOfDay = Constants.TimesOfDay.getTimeOfDay(
-        from: .now)
+    @State private var selectedTimeOfDay = TimesOfDay.getValue(from: .now)
     
     // MARK: - Body
     var body: some View {

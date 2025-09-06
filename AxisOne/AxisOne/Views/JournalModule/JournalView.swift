@@ -26,12 +26,12 @@ struct JournalView: View {
     
     @State private var isModalViewPresented = false
     
-    private var groupedSubgoals: [Constants.TimesOfDay: [Subgoal]] {
+    private var groupedSubgoals: [TimesOfDay: [Subgoal]] {
         Dictionary(grouping: subgoals) {
             if let exactTime = $0.time {
-                return Constants.TimesOfDay.getTimeOfDay(from: exactTime)
+                return TimesOfDay.getValue(from: exactTime)
             } else if let timeOfDay = $0.timeOfDay {
-                return Constants.TimesOfDay(rawValue: timeOfDay) ?? .unknown
+                return TimesOfDay(rawValue: timeOfDay) ?? .unknown
             }
             return .unknown
         }
@@ -53,7 +53,7 @@ struct JournalView: View {
         .toolbar {
             ToolbarItem {
                 NavigationLink(destination: HistoryView()) {
-                    NavBarButtonImageView(type: .history)
+                    ToolbarButtonImageView(type: .history)
                 }
             }
         }
@@ -63,14 +63,14 @@ struct JournalView: View {
     }
     
     // MARK: - Private Methods
-    private func getGroupedValues() -> [(Constants.LifeAreas, String, Double)] {
+    private func getGroupedValues() -> [(LifeAreas, String, Double)] {
         let reflectedSubgoals = reflections
             .compactMap { $0.reactions as? Set<Reaction> }
             .flatMap { $0 }
             .compactMap { $0.subgoal }
-        return Constants.LifeAreas.allCases.map { lifeArea in
+        return LifeAreas.allCases.map { lifeArea in
             let matching = reflectedSubgoals.filter {
-                let subgoalLifeArea = Constants.LifeAreas(
+                let subgoalLifeArea = LifeAreas(
                     rawValue: $0.goal?.lifeArea ?? "")
                 return subgoalLifeArea == lifeArea
             }
@@ -93,8 +93,8 @@ private extension JournalView {
     func TimeOfDaySectionView() -> some View {
         Section {
             ForEach(
-                Constants.TimesOfDay.allCases.filter { groupedSubgoals.keys.contains($0)
-                }) { timeOfDay in
+                TimesOfDay.allCases.filter { groupedSubgoals.keys.contains($0) }
+            ) { timeOfDay in
                     NavigationLink(
                         destination: AnalysisView(
                             timeOfDay: timeOfDay,
@@ -110,7 +110,7 @@ private extension JournalView {
         }
     }
     
-    func TimeOfDayRowView(_ timeOfDay: Constants.TimesOfDay) -> some View {
+    func TimeOfDayRowView(_ timeOfDay: TimesOfDay) -> some View {
         LabeledContent(timeOfDay.rawValue) {
             HStack {
                 CheckmarkImageView(for: timeOfDay)
@@ -120,7 +120,7 @@ private extension JournalView {
         }
     }
     
-    func CheckmarkImageView(for timeOfDay: Constants.TimesOfDay) -> some View {
+    func CheckmarkImageView(for timeOfDay: TimesOfDay) -> some View {
         groupedSubgoals.keys.contains(timeOfDay) &&
         reflections.contains(
             where: { $0.timeOfDay ?? "" == timeOfDay.rawValue })

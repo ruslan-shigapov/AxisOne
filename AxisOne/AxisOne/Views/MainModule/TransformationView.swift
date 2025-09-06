@@ -18,7 +18,7 @@ struct TransformationView: View {
         predicate: NSPredicate(format: "isCompleted == false"))
     private var goals: FetchedResults<Goal>
     
-    @State private var selectedLifeArea: Constants.LifeAreas = .health
+    @State private var selectedLifeArea: LifeAreas = .health
     @State private var selectedGoal: Goal?
     @State private var isGoalsPresented: Bool = false
     
@@ -32,7 +32,7 @@ struct TransformationView: View {
             Section("Цель") {
                 ButtonMenuView(
                     title: "Сфера жизни",
-                    items: Constants.LifeAreas.allCases,
+                    items: LifeAreas.allCases,
                     selectedItem: $selectedLifeArea,
                     itemText: { $0.rawValue },
                     itemColor: { $0.color })
@@ -117,8 +117,8 @@ private extension TransformationView {
     func UncompletedGoalsView() -> some View {
         ForEach(goals) { goal in
             HStack {
-                ListRowTextView(
-                    primaryText: goal.title,
+                RowTextView(
+                    primaryText: goal.title ?? "",
                     secondaryText: goal.notes,
                     isActive: goal.isActive,
                     isCompleted: goal.isCompleted,

@@ -18,15 +18,13 @@ struct SubgoalTypeView: View {
         sortDescriptors: [],
         predicate: NSCompoundPredicate(
             andPredicateWithSubpredicates: [
-                NSPredicate(
-                    format: "type == %@",
-                    Constants.SubgoalTypes.inbox.rawValue),
+                NSPredicate(format: "type == %@", SubgoalTypes.inbox.rawValue),
                 NSPredicate(format: "deadline == nil")
             ]))
     private var inLineSubgoals: FetchedResults<Subgoal>
     
     // MARK: - Public Properties
-    let type: Constants.SubgoalTypes
+    let type: SubgoalTypes
     let date: Date
     
     // MARK: - Body
@@ -39,7 +37,7 @@ struct SubgoalTypeView: View {
                             subgoals: .constant([]),
                             isModified: .constant(false))
                     ) {
-                        RowLabelView(type: .addLink)
+                        RowLabelView(type: .link)
                     }
                     if !inLineSubgoals.isEmpty {
                         Section {
@@ -59,13 +57,13 @@ struct SubgoalTypeView: View {
                     emptyRowText: "Подцелей данного типа не имеется",
                     isCompletedHidden: false)
             }
-            .navigationTitle(type.plural)
+            .navigationTitle(type.pluralValue)
             .navigationBarTitleDisplayMode(.inline)
         }
     }
     
     // MARK: - Initialize
-    init(type: Constants.SubgoalTypes, date: Date) {
+    init(type: SubgoalTypes, date: Date) {
         self.type = type
         self.date = date
         _subgoals = FetchRequest(

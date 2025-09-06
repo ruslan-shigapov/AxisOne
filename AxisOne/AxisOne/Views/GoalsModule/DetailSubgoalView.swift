@@ -13,7 +13,7 @@ struct DetailSubgoalView: View {
     @Environment(\.subgoalService) private var subgoalService
     @Environment(\.dismiss) private var dismiss
         
-    @State private var selectedSubgoalType: Constants.SubgoalTypes
+    @State private var selectedSubgoalType: SubgoalTypes
     @State private var title: String
     @State private var notes: String
     @State private var isUrgent = false
@@ -21,18 +21,16 @@ struct DetailSubgoalView: View {
     @State private var selectedStartDate: Date
     @State private var selectedDeadline: Date
     @State private var selectedTime: Date
-    @State private var selectedTimeOfDay: Constants.TimesOfDay
+    @State private var selectedTimeOfDay: TimesOfDay
     @State private var partCompletion: Double
-    @State private var selectedHabitFrequency: Constants.Frequencies
-    
-    private let currentTimeOfDay = Constants.TimesOfDay.getTimeOfDay(from: .now)
+    @State private var selectedHabitFrequency: Frequencies
     
     private var isFormValid: Bool {
         !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
     // MARK: - Public Properties
-    let lifeArea: Constants.LifeAreas?
+    let lifeArea: LifeAreas?
     let subgoal: Subgoal?
     @Binding var subgoals: [Subgoal]
     @Binding var isModified: Bool
@@ -53,98 +51,13 @@ struct DetailSubgoalView: View {
                         selectedDeadline = Date()
                     }
                 }
-                Section {
-                    HStack {
-                        Image(systemName: selectedSubgoalType.imageName)
-                            .imageScale(.large)
-                            .foregroundStyle(.secondary)
-                        TextFieldView(
-                            placeholder: selectedSubgoalType.placeholder,
-                            text: $title)
-                    }
-                    TextFieldView(
-                        placeholder: "Можете добавить уточнение",
-                        text: $notes)
-                    if selectedSubgoalType == .habit, lifeArea != nil {
-                        DateGroupView(
-                            title: "Приступить",
-                            selectedDate: $selectedStartDate)
-                        ButtonMenuView(
-                            title: "Повторять",
-                            items: Constants.Frequencies.allCases,
-                            selectedItem: $selectedHabitFrequency,
-                            itemText: { $0.rawValue })
-                    }
-                    if selectedSubgoalType != .habit,
-                       selectedSubgoalType != .focus {
-                        ToggleView(title: "Срок", isOn: $isUrgent)
-                        if isUrgent {
-                            DateGroupView(
-                                title: "Дата",
-                                selectedDate: $selectedDeadline)
-                        }
-                    }
-                    if isUrgent || selectedSubgoalType == .habit {
-                        TimeGroupView(
-                            isExactly: $isExactly,
-                            selectedTime: $selectedTime,
-                            selectedTimeOfDay: $selectedTimeOfDay)
-                    }
-                    if selectedSubgoalType == .milestone {
-                        CompletionView(value: $partCompletion)
-                    }
-                    SaveButtonView(
-                        isModalPresentation: isModalPresentation,
-                        lifeArea: lifeArea,
-                        subgoal: subgoal,
-                        selectedSubgoalType: selectedSubgoalType,
-                        title: title,
-                        notes: notes,
-                        isUrgent: isUrgent,
-                        selectedDeadline: selectedDeadline,
-                        isExactly: isExactly,
-                        selectedTime: selectedTime,
-                        selectedTimeOfDay: selectedTimeOfDay,
-                        partCompletion: partCompletion,
-                        selectedStartDate: selectedStartDate,
-                        selectedHabitFrequency: selectedHabitFrequency,
-                        subgoals: $subgoals
-                    ) {
-                        isModified.toggle()
-                        DispatchQueue.main.async {
-                            dismiss()
-                        }
-                    }
-                    .disabled(!isFormValid)
-                }
-                .disabled(subgoal?.isCompleted ?? false)
+                MainSection()
+                    .disabled(subgoal?.isCompleted ?? false)
                 if let subgoal, lifeArea == nil {
-                    NavigationLink(
-                        destination: TransformationView(
-                            subgoal: subgoal,
-                            isModalViewPresented: $isModalPresentation)
-                    ) {
-                        RowLabelView(
-                            type: .addLink,
-                            text: "Преобразовать")
-                    }
+                    TransformationLink(for: subgoal)
                 }
                 if let subgoal {
-                    DeleteButtonView(title: "Удалить подцель") {
-                        if isModalPresentation {
-                            do {
-                                try subgoalService.delete(subgoal)
-                            } catch {
-                                print(error)
-                            }
-                        } else {
-                            subgoals.removeAll { $0 == subgoal }
-                            isModified.toggle()
-                        }
-                        DispatchQueue.main.async {
-                            dismiss()
-                        }
-                    }
+                    DeleteButton(for: subgoal)
                 }
             }
             .onChange(of: isUrgent) {
@@ -161,11 +74,7 @@ struct DetailSubgoalView: View {
                 }
                 if isModalPresentation {
                     ToolbarItem {
-                        Button {
-                            dismiss()
-                        } label: {
-                            NavBarButtonImageView(type: .cancel)
-                        }
+                        CancelToolbarButton()
                     }
                 }
             }
@@ -174,7 +83,7 @@ struct DetailSubgoalView: View {
     
     // MARK: - Initialize
     init(
-        lifeArea: Constants.LifeAreas? = nil,
+        lifeArea: LifeAreas? = nil,
         subgoal: Subgoal? = nil,
         subgoals: Binding<[Subgoal]>,
         isModified: Binding<Bool>,
@@ -185,7 +94,7 @@ struct DetailSubgoalView: View {
         self._subgoals = subgoals
         self._isModified = isModified
         self._isModalPresentation = isModalPresentation
-        let subgoalType = Constants.SubgoalTypes(rawValue: subgoal?.type ?? "")
+        let subgoalType = SubgoalTypes(rawValue: subgoal?.type ?? "")
         _selectedSubgoalType = State(initialValue: subgoalType ?? .task)
         if lifeArea == nil, subgoal == nil {
             _selectedSubgoalType = State(initialValue: .inbox)
@@ -199,16 +108,124 @@ struct DetailSubgoalView: View {
         } else {
             _selectedDeadline = State(initialValue: Date())
         }
-        let timeOfDay = Constants.TimesOfDay(rawValue: subgoal?.timeOfDay ?? "")
+        let timeOfDay = TimesOfDay(rawValue: subgoal?.timeOfDay ?? "")
+        let currentTimeOfDay = TimesOfDay.getValue(from: .now)
         _selectedTimeOfDay = State(initialValue: timeOfDay ?? currentTimeOfDay)
         if let _ = subgoal?.time {
             isExactly = true
         }
         _selectedTime = State(initialValue: subgoal?.time ?? Date())
         _partCompletion = State(initialValue: subgoal?.completion ?? 25)
-        let frequency = Constants.Frequencies(
-            rawValue: subgoal?.frequency ?? "")
+        let frequency = Frequencies(rawValue: subgoal?.frequency ?? "")
         _selectedHabitFrequency = State(initialValue: frequency ?? .daily)
+    }
+}
+
+// MARK: - Views
+private extension DetailSubgoalView {
+    
+    // TODO: сделать потом для каждого типа универсальную секцию и вынести 
+    func MainSection() -> some View {
+        Section {
+            HStack {
+                Image(systemName: selectedSubgoalType.imageName)
+                    .imageScale(.large)
+                    .foregroundStyle(.secondary)
+                TextFieldView(
+                    placeholder: selectedSubgoalType.placeholder,
+                    text: $title)
+            }
+            TextFieldView(
+                placeholder: "Можете добавить уточнение",
+                text: $notes)
+            if selectedSubgoalType == .habit, lifeArea != nil {
+                DateGroupView(
+                    title: "Приступить",
+                    selectedDate: $selectedStartDate)
+                ButtonMenuView(
+                    title: "Повторять",
+                    items: Frequencies.allCases,
+                    selectedItem: $selectedHabitFrequency,
+                    itemText: { $0.rawValue })
+            }
+            if selectedSubgoalType != .habit,
+               selectedSubgoalType != .focus {
+                ToggleView(title: "Срок", isOn: $isUrgent)
+                if isUrgent {
+                    DateGroupView(
+                        title: "Дата",
+                        selectedDate: $selectedDeadline)
+                }
+            }
+            if isUrgent || selectedSubgoalType == .habit {
+                TimeGroupView(
+                    isExactly: $isExactly,
+                    selectedTime: $selectedTime,
+                    selectedTimeOfDay: $selectedTimeOfDay)
+            }
+            if selectedSubgoalType == .milestone {
+                CompletionView(value: $partCompletion)
+            }
+            SaveSubgoalButtonView(
+                isModalPresentation: isModalPresentation,
+                lifeArea: lifeArea,
+                subgoal: subgoal,
+                selectedSubgoalType: selectedSubgoalType,
+                title: title,
+                notes: notes,
+                isUrgent: isUrgent,
+                selectedDeadline: selectedDeadline,
+                isExactly: isExactly,
+                selectedTime: selectedTime,
+                selectedTimeOfDay: selectedTimeOfDay,
+                partCompletion: partCompletion,
+                selectedStartDate: selectedStartDate,
+                selectedHabitFrequency: selectedHabitFrequency,
+                subgoals: $subgoals
+            ) {
+                isModified.toggle()
+                DispatchQueue.main.async {
+                    dismiss()
+                }
+            }
+            .disabled(!isFormValid)
+        }
+    }
+    
+    func TransformationLink(for subgoal: Subgoal) -> some View {
+        NavigationLink(
+            destination: TransformationView(
+                subgoal: subgoal,
+                isModalViewPresented: $isModalPresentation)
+        ) {
+            RowLabelView(type: .link, text: "Преобразовать")
+        }
+    }
+    
+    func DeleteButton(for subgoal: Subgoal) -> some View {
+        DeleteButtonView(title: "Удалить подцель") {
+            if isModalPresentation {
+                do {
+                    try subgoalService.delete(subgoal)
+                } catch {
+                    print(error)
+                }
+            } else {
+                subgoals.removeAll { $0 == subgoal }
+                isModified.toggle()
+            }
+            DispatchQueue.main.async {
+                dismiss()
+            }
+        }
+    }
+    
+    func CancelToolbarButton() -> some View {
+        Button {
+            dismiss()
+        } label: {
+            ToolbarButtonImageView(type: .cancel)
+        }
     }
 }
 

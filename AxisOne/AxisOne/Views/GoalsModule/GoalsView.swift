@@ -27,34 +27,20 @@ struct GoalsView: View {
             } else {
                 GoalListView(
                     goals: goals,
-                    isEditMode: editMode == .active,
+                    isEditing: editMode == .active,
                     isCompletedHidden: isCompletedGoalsHidden)
             }
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 if !goals.isEmpty {
-                    NavBarTextButtonView(
-                        type: .edit(isActive: editMode == .active),
-                        action: toggleEditMode)
+                    EditToolbarButton()
                 }
             }
             ToolbarItem {
                 HStack(spacing: 16) {
-                    Button {
-                        withAnimation(.snappy) {
-                            isCompletedGoalsHidden.toggle()
-                        }
-                    } label: {
-                        NavBarButtonImageView(
-                            type: .toggleVisibility(
-                                isActive: isCompletedGoalsHidden))
-                    }
-                    Button {
-                        isModalViewPresented = true
-                    } label: {
-                        NavBarButtonImageView(type: .add)
-                    }
+                    ToggleVisibilityToolbarButton()
+                    AddToolbarButton()
                 }
             }
         }
@@ -63,12 +49,35 @@ struct GoalsView: View {
         }
         .environment(\.editMode, $editMode)
     }
+}
+
+private extension GoalsView {
     
-    private func toggleEditMode() {
-        DispatchQueue.main.async {
+    func EditToolbarButton() -> some View {
+        ToolbarTextButtonView(type: .edit(isActive: editMode == .active)) {
             withAnimation(.snappy) {
                 editMode = editMode == .inactive ? .active : .inactive
             }
+        }
+    }
+    
+    func ToggleVisibilityToolbarButton() -> some View {
+        Button {
+            withAnimation(.snappy) {
+                isCompletedGoalsHidden.toggle()
+            }
+        } label: {
+            ToolbarButtonImageView(
+                type: .toggleVisibility(
+                    isActive: isCompletedGoalsHidden))
+        }
+    }
+    
+    func AddToolbarButton() -> some View {
+        Button {
+            isModalViewPresented = true
+        } label: {
+            ToolbarButtonImageView(type: .add)
         }
     }
 }

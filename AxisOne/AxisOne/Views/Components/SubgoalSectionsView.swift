@@ -59,13 +59,11 @@ struct SubgoalSectionsView: View {
     }
     
     private func shouldInclude(_ subgoal: Subgoal) -> Bool {
-        if subgoal.type == Constants.SubgoalTypes.habit.rawValue,
+        if subgoal.type == SubgoalTypes.habit.rawValue,
            let startDate = subgoal.startDate,
-           let frequency = Constants.Frequencies(
-            rawValue: subgoal.frequency ?? ""
-           ) {
-            return frequency.getNecessity(
-                on: date,
+           let frequency = Frequencies(rawValue: subgoal.frequency ?? "") {
+            return frequency.isNecessary(
+                for: date,
                 startDate: startDate)
         }
         return true

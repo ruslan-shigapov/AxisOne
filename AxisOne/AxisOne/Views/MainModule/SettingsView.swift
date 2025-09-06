@@ -14,8 +14,7 @@ struct SettingsView: View {
     
     @State private var inboxTriage: Subgoal?
     @State private var isInboxTriageEnabled = false
-    @State private var selectedTimeOfDay = Constants.TimesOfDay.getTimeOfDay(
-        from: .now)
+    @State private var selectedTimeOfDay = TimesOfDay.getValue(from: .now)
     @State private var isExactly = false
     @State private var selectedTime = Date()
     @State private var isPickerPresented = false
@@ -52,9 +51,9 @@ struct SettingsView: View {
         do {
             inboxTriage = try subgoalService.getInboxTriage()
             isInboxTriageEnabled = inboxTriage != nil
-            selectedTimeOfDay = Constants.TimesOfDay(
+            selectedTimeOfDay = TimesOfDay(
                 rawValue: inboxTriage?.timeOfDay ?? "")
-            ?? .getTimeOfDay(from: .now)
+            ?? .getValue(from: .now)
             isExactly = inboxTriage?.time != nil
             selectedTime = inboxTriage?.time ?? Date()
         } catch {

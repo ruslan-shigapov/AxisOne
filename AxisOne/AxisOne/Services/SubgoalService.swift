@@ -78,18 +78,18 @@ final class SubgoalService {
     
     func save(
         _ subgoal: Subgoal?,
-        type: Constants.SubgoalTypes,
+        type: SubgoalTypes,
         title: String,
         notes: String,
         isUrgent: Bool,
         deadline: Date,
         isExactly: Bool,
         time: Date,
-        timeOfDay: Constants.TimesOfDay,
+        timeOfDay: TimesOfDay,
         partCompletion: Double,
         startDate: Date,
-        habitFrequency: Constants.Frequencies,
-        lifeArea: Constants.LifeAreas?,
+        habitFrequency: Frequencies,
+        lifeArea: LifeAreas?,
         completion: (Subgoal) -> Void
     ) throws {
         let subgoalToSave = subgoal ?? Subgoal(context: context)
@@ -102,7 +102,7 @@ final class SubgoalService {
         }
         if type != .focus {
             subgoalToSave.time = isExactly ? time : nil
-            let convertedTimeOfDay = Constants.TimesOfDay.getTimeOfDay(
+            let convertedTimeOfDay = TimesOfDay.getValue(
                 from: subgoalToSave.time)
             subgoalToSave.timeOfDay = isExactly
             ? convertedTimeOfDay.rawValue
@@ -129,17 +129,17 @@ final class SubgoalService {
     
     func update(
         _ subgoal: Subgoal?,
-        type: Constants.SubgoalTypes,
+        type: SubgoalTypes,
         title: String,
         notes: String,
         isUrgent: Bool,
         deadline: Date,
         isExactly: Bool,
         time: Date,
-        timeOfDay: Constants.TimesOfDay,
+        timeOfDay: TimesOfDay,
         partCompletion: Double,
         startDate: Date,
-        habitFrequency: Constants.Frequencies,
+        habitFrequency: Frequencies,
     ) throws {
         guard let subgoal else { return }
         subgoal.title = title
@@ -153,7 +153,7 @@ final class SubgoalService {
         if type != .focus {
             subgoal.time = isExactly ? time : nil
             subgoal.timeOfDay = isExactly
-            ? Constants.TimesOfDay.getTimeOfDay(from: subgoal.time).rawValue
+            ? TimesOfDay.getValue(from: subgoal.time).rawValue
             : timeOfDay.rawValue
             if !isUrgent, type != .habit {
                 subgoal.timeOfDay = nil
@@ -180,7 +180,7 @@ final class SubgoalService {
     
     func transformToGoal(
         _ subgoal: Subgoal,
-        lifeArea: Constants.LifeAreas,
+        lifeArea: LifeAreas,
         title: String,
         notes: String
     ) throws {
@@ -199,7 +199,7 @@ final class SubgoalService {
     
     func transformToTask(_ subgoal: Subgoal, for goal: Goal?) throws {
         guard let goal else { return }
-        subgoal.type = Constants.SubgoalTypes.task.rawValue
+        subgoal.type = SubgoalTypes.task.rawValue
         subgoal.goal = goal
         try saveContext {
             .transformingToTaskFailed($0)
@@ -208,10 +208,10 @@ final class SubgoalService {
     
     func reschedule(
         _ subgoal: Subgoal,
-        to timeOfDay: Constants.TimesOfDay,
+        to timeOfDay: TimesOfDay,
         isToday: Bool
     ) throws {
-        if subgoal.type == Constants.SubgoalTypes.habit.rawValue {
+        if subgoal.type == SubgoalTypes.habit.rawValue {
             if isToday {
                 subgoal.todayMoved = timeOfDay.rawValue
             } else {
@@ -238,7 +238,7 @@ final class SubgoalService {
     
     func completeNow(_ subgoal: Subgoal) throws {
         subgoal.deadline = .now
-        subgoal.timeOfDay = Constants.TimesOfDay.getTimeOfDay(
+        subgoal.timeOfDay = TimesOfDay.getValue(
             from: .now).rawValue
         subgoal.time = nil
         subgoal.isCompleted = true
@@ -257,7 +257,7 @@ final class SubgoalService {
                 return
             }
             if !Calendar.current.isDate(lastReset, inSameDayAs: today) {
-                if $0.type == Constants.SubgoalTypes.habit.rawValue {
+                if $0.type == SubgoalTypes.habit.rawValue {
                     $0.wasCompleted = $0.isCompleted
                     $0.isCompleted = false
                 }
@@ -287,12 +287,12 @@ final class SubgoalService {
     
     func saveInboxTriage(
         _ subgoal: Subgoal?,
-        timeOfDay: Constants.TimesOfDay,
+        timeOfDay: TimesOfDay,
         time: Date?
     ) throws {
         guard subgoal == nil else { return }
         let inboxTriage = Subgoal(context: context)
-        inboxTriage.type = Constants.SubgoalTypes.habit.rawValue
+        inboxTriage.type = SubgoalTypes.habit.rawValue
         inboxTriage.title = "Сортировка Входящих"
         inboxTriage.startDate = Date()
         if let time {
@@ -300,7 +300,7 @@ final class SubgoalService {
         } else {
             inboxTriage.timeOfDay = timeOfDay.rawValue
         }
-        inboxTriage.frequency = Constants.Frequencies.daily.rawValue
+        inboxTriage.frequency = Frequencies.daily.rawValue
         try saveContext {
             .inboxTriageSavingFailed($0)
         }

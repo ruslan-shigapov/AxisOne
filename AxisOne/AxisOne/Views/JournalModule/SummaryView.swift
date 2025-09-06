@@ -23,7 +23,7 @@ struct SummaryView: View {
                         Button {
                             dismiss()
                         } label: {
-                            NavBarButtonImageView(type: .cancel)
+                            ToolbarButtonImageView(type: .cancel)
                         }
                     }
                 }

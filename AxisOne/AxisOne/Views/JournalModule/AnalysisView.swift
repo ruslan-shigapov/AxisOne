@@ -19,7 +19,7 @@ struct AnalysisView: View {
     
     @State private var selectedSubgoal: Subgoal?
     
-    @State private var selectedFeeling: Constants.Feelings = .joy
+    @State private var selectedFeeling: Feelings = .joy
     @State private var selectedGroupedEmotions: [Subgoal: [String]] = [:]
     
     @State private var isExpanded = false
@@ -39,7 +39,7 @@ struct AnalysisView: View {
     }
     
     // MARK: - Public Properties
-    let timeOfDay: Constants.TimesOfDay
+    let timeOfDay: TimesOfDay
     let subgoals: [Subgoal]
     
     // MARK: - Body
@@ -48,9 +48,9 @@ struct AnalysisView: View {
             Section {
                 ForEach(
                     Array(selectedGroupedEmotions.keys).sorted {
-                        guard let firstLifeArea = Constants.LifeAreas(
+                        guard let firstLifeArea = LifeAreas(
                             rawValue: $0.goal?.lifeArea ?? ""),
-                              let secondLifeArea = Constants.LifeAreas(
+                              let secondLifeArea = LifeAreas(
                                 rawValue: $1.goal?.lifeArea ?? "")
                         else {
                             return false
@@ -104,7 +104,7 @@ struct AnalysisView: View {
         .scrollContentBackground(.hidden)
         .toolbar {
             ToolbarItem {
-                NavBarTextButtonView(type: .done) {
+                ToolbarTextButtonView(type: .done) {
                     save()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         dismiss()
@@ -118,7 +118,7 @@ struct AnalysisView: View {
     
     // MARK: - Initialize
     init(
-        timeOfDay: Constants.TimesOfDay,
+        timeOfDay: TimesOfDay,
         subgoals: [Subgoal],
     ) {
         self.timeOfDay = timeOfDay
@@ -169,9 +169,9 @@ struct AnalysisView: View {
             }
         }
         selectedSubgoal = selectedGroupedEmotions.keys.sorted {
-            guard let firstLifeArea = Constants.LifeAreas(
+            guard let firstLifeArea = LifeAreas(
                 rawValue: $0.goal?.lifeArea ?? ""),
-                  let secondLifeArea = Constants.LifeAreas(
+                  let secondLifeArea = LifeAreas(
                     rawValue: $1.goal?.lifeArea ?? "")
             else {
                 return false
@@ -235,7 +235,7 @@ private extension AnalysisView {
     
     func FeelingPickerView() -> some View {
         Picker("", selection: $selectedFeeling) {
-            ForEach(Constants.Feelings.allCases) {
+            ForEach(Feelings.allCases) {
                 Text($0.rawValue)
             }
         }

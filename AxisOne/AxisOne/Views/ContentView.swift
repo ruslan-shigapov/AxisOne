@@ -9,20 +9,14 @@ import SwiftUI
 
 struct ContentView: View {
     
-    // MARK: - Private Properties
     @Environment(\.subgoalService) private var subgoalService
     @Environment(\.colorScheme) private var colorScheme
     
-    @State private var selectedTab: Constants.Tabs = .main
+    @State private var selectedTab: Tabs = .main
     
-    private var today: Date {
-        Calendar.current.startOfDay(for: Date())
-    }
-    
-    // MARK: - Body
     var body: some View {
         TabView(selection: $selectedTab) {
-            ForEach(Constants.Tabs.allCases) { tab in
+            ForEach(Tabs.allCases) { tab in
                 NavigationStack {
                     ZStack(alignment: .bottom) {
                         tab.view
@@ -42,62 +36,21 @@ struct ContentView: View {
                                         colors: [.clear, .black]),
                                     startPoint: .top,
                                     endPoint: .bottom))
-                            .frame(height: 140)
+                            .frame(height: 130)
                         TabBarView(activeTab: $selectedTab)
                     }
                     .ignoresSafeArea(edges: .bottom)
                 }
             }
         }
-    }
-    
-    // MARK: - Initialize
-    init() {
-        setupNavBarAppearance()
-        setupSegmentedControlAppearance()
-    }
-    
-    // MARK: - Private Methods     
-    private func setupNavBarAppearance() {
-        guard let largeTitleFont = UIFont(name: "Jura-Bold", size: 34) else {
-            return
+        .onAppear {
+            do {
+                try subgoalService.resetDailyValues()
+                // TODO: добавить типа таймер 
+            } catch {
+                print(error)
+            }
         }
-        guard let titleFont = UIFont(name: "Jura-Bold", size: 17) else {
-            return
-        }
-        guard let backButtonFont = UIFont(name: "Jura-Medium", size: 17) else {
-            return
-        }
-        let navBarAppearance = UINavigationBarAppearance()
-        navBarAppearance.backgroundEffect = UIBlurEffect(
-            style: .systemThickMaterial)
-        navBarAppearance.largeTitleTextAttributes = [
-            .font: largeTitleFont,
-            .foregroundColor: UIColor.label
-        ]
-        navBarAppearance.titleTextAttributes = [
-            .font: titleFont,
-            .foregroundColor: UIColor.label
-        ]
-        navBarAppearance.backButtonAppearance.normal.titleTextAttributes = [
-            .font: backButtonFont
-        ]
-        UINavigationBar.appearance().standardAppearance = navBarAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
-    }
-    
-    private func setupSegmentedControlAppearance() {
-        guard let titleFont = UIFont(name: "Jura-Medium", size: 14) else {
-            return
-        }
-        UISegmentedControl.appearance().setTitleTextAttributes(
-            [.font: titleFont],
-            for: .normal
-        )
-        UISegmentedControl.appearance().setTitleTextAttributes(
-            [.font: titleFont],
-            for: .selected
-        )
     }
 }
 

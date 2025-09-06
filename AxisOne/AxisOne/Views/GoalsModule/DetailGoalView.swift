@@ -13,10 +13,9 @@ struct DetailGoalView: View {
     @Environment(\.goalService) private var goalService
     @Environment(\.dismiss) private var dismiss
     
-    @AppStorage("isCompletedSubgoalsHidden")
-    private var isCompletedSubgoalsHidden = false
+    @AppStorage("isCompletedHidden") private var isCompletedHidden = false
     
-    @State private var selectedLifeArea: Constants.LifeAreas
+    @State private var selectedLifeArea: LifeAreas
     @State private var title: String
     @State private var notes: String
     @State private var isActive: Bool
@@ -39,27 +38,14 @@ struct DetailGoalView: View {
             Form {
                 ButtonMenuView(
                     title: "Сфера жизни",
-                    items: Constants.LifeAreas.allCases,
+                    items: LifeAreas.allCases,
                     selectedItem: $selectedLifeArea,
                     itemText: { $0.rawValue },
                     itemColor: { $0.color })
                 .onChange(of: selectedLifeArea) {
                     isModified = true
                 }
-                Section {
-                    TextFieldView(
-                        placeholder: "Сформулируйте цель",
-                        text: $title)
-                    .onChange(of: title) {
-                        isModified = true
-                    }
-                    TextFieldView(
-                        placeholder: "Можете добавить уточнение",
-                        text: $notes)
-                    .onChange(of: notes) {
-                        isModified = true
-                    }
-                }
+                TextFieldSection()
                 ToggleView(title: "Приоритет", isOn: $isActive)
                     .onChange(of: isActive) {
                         isModified = true
@@ -68,18 +54,9 @@ struct DetailGoalView: View {
                     selectedLifeArea: selectedLifeArea,
                     subgoals: $subgoals,
                     isModified: $isSubgoalsModified,
-                    isCompletedHidden: $isCompletedSubgoalsHidden)
+                    isCompletedHidden: $isCompletedHidden)
                 if let goal {
-                    DeleteButtonView(title: "Удалить цель") {
-                        do {
-                            try goalService.delete(goal)
-                        } catch {
-                            print(error)
-                        }
-                        DispatchQueue.main.async {
-                            dismiss()
-                        }
-                    }
+                    DeleteButton(for: goal)
                 }
             }
             .onChange(of: isSubgoalsModified) {
@@ -95,40 +72,11 @@ struct DetailGoalView: View {
                         .font(Constants.Fonts.juraHeadline)
                 }
                 ToolbarItem(placement: .topBarLeading) {
-                    NavBarTextButtonView(type: .cancel) {
-                        goalService.rollback()
-                        DispatchQueue.main.async {
-                            dismiss()
-                        }
-                    }
+                    CancelToolbarButton()
                 }
                 ToolbarItem {
-                    NavBarTextButtonView(type: .done) {
-                        do {
-                            if try goalService.hasDuplicate(
-                                by: title,
-                                excludingGoal: goal
-                            ) {
-                                isAlertPresented = true
-                                return
-                            }
-                            try goalService.save(
-                                goal,
-                                lifeArea: selectedLifeArea.rawValue,
-                                title: title.trimmingCharacters(
-                                    in: .whitespacesAndNewlines),
-                                notes: notes.trimmingCharacters(
-                                    in: .whitespacesAndNewlines),
-                                isActive: isActive,
-                                subgoals: subgoals)
-                        } catch {
-                            print(error)
-                        }
-                        DispatchQueue.main.async {
-                            dismiss()
-                        }
-                    }
-                    .disabled(!isFormValid)
+                    DoneToolbarButton()
+                        .disabled(!isFormValid)
                 }
             }
             .alert(
@@ -144,19 +92,91 @@ struct DetailGoalView: View {
     // MARK: - Initialize
     init(goal: Goal? = nil) {
         self.goal = goal
-        let lifeArea = Constants.LifeAreas(rawValue: goal?.lifeArea ?? "")
+        let lifeArea = LifeAreas(rawValue: goal?.lifeArea ?? "")
         _selectedLifeArea = State(initialValue: lifeArea ?? .health)
         _isActive = State(initialValue: goal?.isActive ?? false)
         _title = State(initialValue: goal?.title ?? "")
         _notes = State(initialValue: goal?.notes ?? "")
         let subgoals = goal?.subgoals as? Set<Subgoal> ?? []
-        _subgoals = State(initialValue: subgoals.sorted {
-            if $0.isCompleted != $1.isCompleted {
-                !$0.isCompleted
-            } else {
-                $0.order < $1.order
+        _subgoals = State(
+            initialValue: subgoals.sorted {
+                if $0.isCompleted != $1.isCompleted {
+                    !$0.isCompleted
+                } else {
+                    $0.order < $1.order
+                }
+            })
+    }
+}
+
+// MARK: - Views
+private extension DetailGoalView {
+    
+    func TextFieldSection() -> some View {
+        Section {
+            TextFieldView(
+                placeholder: "Сформулируйте цель",
+                text: $title)
+            .onChange(of: title) {
+                isModified = true
             }
-        })
+            TextFieldView(
+                placeholder: "Можете добавить уточнение",
+                text: $notes)
+            .onChange(of: notes) {
+                isModified = true
+            }
+        }
+    }
+    
+    func DeleteButton(for goal: Goal) -> some View {
+        DeleteButtonView(title: "Удалить цель") {
+            do {
+                try goalService.delete(goal)
+            } catch {
+                print(error)
+            }
+            DispatchQueue.main.async {
+                dismiss()
+            }
+        }
+    }
+    
+    func CancelToolbarButton() -> some View {
+        ToolbarTextButtonView(type: .cancel) {
+            goalService.rollback()
+            DispatchQueue.main.async {
+                dismiss()
+            }
+        }
+    }
+    
+    func DoneToolbarButton() -> some View {
+        ToolbarTextButtonView(type: .done) {
+            do {
+                if try goalService.hasDuplicate(
+                    by: title,
+                    excludingGoal: goal
+                ) {
+                    isAlertPresented = true
+                    return
+                }
+                try goalService.save(
+                    goal,
+                    lifeArea: selectedLifeArea.rawValue,
+                    title: title.trimmingCharacters(
+                        in: .whitespacesAndNewlines),
+                    notes: notes.trimmingCharacters(
+                        in: .whitespacesAndNewlines),
+                    isActive: isActive,
+                    subgoals: subgoals)
+            } catch {
+                print(error)
+            }
+            DispatchQueue.main.async {
+                dismiss()
+            }
+        }
     }
 }
 

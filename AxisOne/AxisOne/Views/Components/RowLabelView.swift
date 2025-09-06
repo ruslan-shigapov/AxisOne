@@ -10,13 +10,12 @@ import SwiftUI
 struct RowLabelView: View {
     
     enum RowLabelType: String {
-        case addLink = "Добавить"
-        case empty = ""
+        case link, empty
         
         var color: Color {
-            return switch self {
+            switch self {
+            case .link: .accent
             case .empty: .secondary
-            default: .accent
             }
         }
     }
@@ -25,7 +24,7 @@ struct RowLabelView: View {
     var text: String? = nil
     
     var body: some View {
-        Text(text ?? type.rawValue)
+        Text(text ?? "Добавить")
             .font(Constants.Fonts.juraBody)
             .fontWeight(type != .empty ? .medium : .regular)
             .foregroundStyle(type.color)
