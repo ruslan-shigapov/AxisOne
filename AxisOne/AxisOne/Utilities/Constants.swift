@@ -22,14 +22,11 @@ enum Constants {
     // MARK: - Fonts
     enum Fonts {
         static let juraLargeTitle = Font.custom("Jura-Bold", size: 34)
-        static let juraBoldTitle = Font.custom("Jura-Bold", size: 20)
         static let juraHeadline = Font.custom("Jura-Bold", size: 17)
         static let juraMediumBody = Font.custom("Jura-Medium", size: 17)
         static let juraBody = Font.custom("Jura", size: 17)
-        static let juraLightCallout = Font.custom("Jura-Light", size: 16) 
-        static let juraSemiboldSubheadline = Font.custom(
-            "Jura-SemiBold",
-            size: 15)
+        static let juraLightCallout = Font.custom("Jura-Light", size: 16)
+        static let juraBoldSubheadline = Font.custom("Jura-Bold", size: 15)
         static let juraMediumSubheadline = Font.custom("Jura-Medium", size: 15)
         static let juraMediumFootnote = Font.custom("Jura-Medium", size: 13)
         static let juraFootnote = Font.custom("Jura", size: 13)

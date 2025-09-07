@@ -13,7 +13,8 @@ struct DetailGoalView: View {
     @Environment(\.goalService) private var goalService
     @Environment(\.dismiss) private var dismiss
     
-    @AppStorage("isCompletedHidden") private var isCompletedHidden = false
+    @AppStorage("isCompletedHidden")
+    private var isCompletedHidden = false
     
     @State private var selectedLifeArea: LifeAreas
     @State private var title: String

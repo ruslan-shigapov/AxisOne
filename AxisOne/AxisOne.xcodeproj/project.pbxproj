@@ -16,6 +16,7 @@
 		E41E9D312E698A750095CE13 /* TimesOfDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E9D302E698A750095CE13 /* TimesOfDay.swift */; };
 		E41E9D352E698AA00095CE13 /* Feelings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E9D342E698AA00095CE13 /* Feelings.swift */; };
 		E42BDFF42E606573002E15C9 /* TransformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BDFF32E606573002E15C9 /* TransformationView.swift */; };
+		E43AA6A42E6D7AC4003E8E60 /* Shape+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43AA6A32E6D7AC4003E8E60 /* Shape+extension.swift */; };
 		E43B6FEB2E66F11600BCF40F /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43B6FEA2E66F11600BCF40F /* TabBarView.swift */; };
 		E4563B1A2E0FE4CA0075B178 /* GoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B192E0FE4CA0075B178 /* GoalsView.swift */; };
 		E4563B1C2E0FE4D30075B178 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B1B2E0FE4D30075B178 /* MainView.swift */; };
@@ -78,6 +79,7 @@
 		E41E9D302E698A750095CE13 /* TimesOfDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesOfDay.swift; sourceTree = "<group>"; };
 		E41E9D342E698AA00095CE13 /* Feelings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feelings.swift; sourceTree = "<group>"; };
 		E42BDFF32E606573002E15C9 /* TransformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformationView.swift; sourceTree = "<group>"; };
+		E43AA6A32E6D7AC4003E8E60 /* Shape+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shape+extension.swift"; sourceTree = "<group>"; };
 		E43B6FEA2E66F11600BCF40F /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		E4563B192E0FE4CA0075B178 /* GoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsView.swift; sourceTree = "<group>"; };
 		E4563B1B2E0FE4D30075B178 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
@@ -118,7 +120,6 @@
 		E4CF3D512E54FF36007D27A7 /* Environment+DataServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Environment+DataServices.swift"; sourceTree = "<group>"; };
 		E4CF3D532E54FFDB007D27A7 /* GoalService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalService.swift; sourceTree = "<group>"; };
 		E4CF3D572E5516BB007D27A7 /* SubgoalService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalService.swift; sourceTree = "<group>"; };
-		E4EF52232E0EF53A00D5B7FE /* AxisOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = AxisOne.app; path = "/Users/shigapov/Documents/AxisOne/AxisOne/build/Debug-iphoneos/AxisOne.app"; sourceTree = "<absolute>"; };
 		E4EF52392E0FCFB400D5B7FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E4EF523A2E0FCFB400D5B7FE /* AxisOne.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AxisOne.entitlements; sourceTree = "<group>"; };
 		E4EF523C2E0FCFB400D5B7FE /* AxisOneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AxisOneApp.swift; sourceTree = "<group>"; };
@@ -147,9 +148,9 @@
 		E41E9D232E6980170095CE13 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				E4563B212E0FE5450075B178 /* Constants.swift */,
 				E41E9D252E6982780095CE13 /* Extensions */,
 				E41E9D262E6982880095CE13 /* Helpers */,
+				E4563B212E0FE5450075B178 /* Constants.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -159,6 +160,7 @@
 			children = (
 				E4CF3D512E54FF36007D27A7 /* Environment+DataServices.swift */,
 				E472EDE72E5C7CD2004E2364 /* Date+extension.swift */,
+				E43AA6A32E6D7AC4003E8E60 /* Shape+extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -398,7 +400,6 @@
 			packageProductDependencies = (
 			);
 			productName = AxisOne;
-			productReference = E4EF52232E0EF53A00D5B7FE /* AxisOne.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -490,6 +491,7 @@
 				E41E9D2D2E698A320095CE13 /* SubgoalTypes.swift in Sources */,
 				E40E86D02E1025A900ED6DCA /* GoalView.swift in Sources */,
 				E4FA157F2E24053800AF7873 /* SubgoalTypeView.swift in Sources */,
+				E43AA6A42E6D7AC4003E8E60 /* Shape+extension.swift in Sources */,
 				E41E9D352E698AA00095CE13 /* Feelings.swift in Sources */,
 				E43B6FEB2E66F11600BCF40F /* TabBarView.swift in Sources */,
 				E4CCAE3C2E47395D001703C9 /* ToolbarTextButtonView.swift in Sources */,

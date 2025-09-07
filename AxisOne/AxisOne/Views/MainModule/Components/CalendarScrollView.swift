@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CalendarScrollView: View {
     
+    // MARK: - Private Properties
     @FetchRequest(entity: Subgoal.entity(), sortDescriptors: [])
     private var subgoals: FetchedResults<Subgoal>
     
@@ -48,42 +49,25 @@ struct CalendarScrollView: View {
         return formatter
     }
     
+    // MARK: - Public Properties
     @Binding var selectedDate: Date
     
+    // MARK: - Body
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHGrid(rows: [GridItem()], spacing: 12) {
                 ForEach(dates, id: \.self) { date in
-                    VStack(spacing: 4) {
-                        Text(weekdayFormatter.string(from: date))
-                            .foregroundStyle(.secondary)
-                            .fontWeight(.medium)
-                        Text(dateFormatter.string(from: date))
-                        Text(getDaysFromToday(for: date))
-                            .font(Constants.Fonts.juraFootnote)
-                    }
-                    .font(Constants.Fonts.juraBody)
-                    .frame(width: 55, height: 60)
-                    .padding(8)
-                    .background {
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(
-                                Calendar.current.isDate(
-                                    date,
-                                    inSameDayAs: selectedDate)
-                                ? .accent
-                                : .clear)
-                            .stroke(.primary, lineWidth: 0.3)
-                    }
-                    .onTapGesture {
-                        selectedDate = date
-                    }
+                    DateView(date)
+                        .onTapGesture {
+                            selectedDate = date
+                        }
                 }
             }
             .padding()
         }
     }
     
+    // MARK: - Private Methods
     private func getDaysFromToday(for date: Date) -> String {
         let calendar = Calendar.current
         let days = calendar.dateComponents(
@@ -100,6 +84,35 @@ struct CalendarScrollView: View {
             Constants.Texts.tomorrow
         } else {
             "+ \(days) дн."
+        }
+    }
+}
+
+// MARK: - Views
+private extension CalendarScrollView {
+    
+    func DateView(_ date: Date) -> some View {
+        VStack(spacing: 4) {
+            Text(weekdayFormatter.string(from: date))
+                .foregroundStyle(.secondary)
+                .fontWeight(.medium)
+            Text(dateFormatter.string(from: date))
+            Text(getDaysFromToday(for: date))
+                .font(Constants.Fonts.juraFootnote)
+        }
+        .font(Constants.Fonts.juraBody)
+        .frame(width: 55, height: 60)
+        .padding(8)
+        .background {
+            // TODO: тут тоже надо че-то придумать с дизайном
+            RoundedRectangle(cornerRadius: 10)
+                .fill(
+                    Calendar.current.isDate(
+                        date,
+                        inSameDayAs: selectedDate)
+                    ? .secondary.opacity(0.6)
+                    : Color.clear)
+                .stroke(.primary, lineWidth: 0.3)
         }
     }
 }

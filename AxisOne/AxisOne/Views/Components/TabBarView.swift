@@ -20,9 +20,7 @@ struct TabBarView: View {
         .frame(height: 60)
         .background {
             RoundedRectangle(cornerRadius: 20)
-                .fill(
-                    .thickMaterial
-                        .shadow(.drop(color: .primary.opacity(0.2), radius: 5)))
+                .fillWithShadow()
         }
         .padding(.horizontal)
         .padding(.bottom, 40)

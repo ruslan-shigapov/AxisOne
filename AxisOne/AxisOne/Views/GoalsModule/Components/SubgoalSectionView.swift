@@ -86,6 +86,7 @@ private extension SubgoalSectionView {
                     Text(isCompletedHidden ? "Показать" : "Скрыть")
                     Text("заверш.")
                 }
+                .foregroundStyle(.accent)
                 .textCase(.none)
             }
         }

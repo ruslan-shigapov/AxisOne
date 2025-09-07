@@ -12,11 +12,6 @@ struct MainNavigationBarView: View {
     // MARK: - Private Properties
     @AppStorage("isCalendarExpanded")
     private var isCalendarExpanded: Bool = true
-    
-    private var isInCurrentDates: Bool {
-        Calendar.current.isDateInToday(selectedDate) ||
-        Calendar.current.isDateInYesterday(selectedDate)
-    }
         
     // MARK: - Public Properties
     @Binding var selectedDate: Date
@@ -27,7 +22,7 @@ struct MainNavigationBarView: View {
     // MARK: - Body
     var body: some View {
         VStack(spacing: 12) {
-            ToolBarView()
+            ToolbarView()
             TitleView()
             if isCalendarExpanded {
                 CalendarScrollView(selectedDate: $selectedDate)
@@ -52,11 +47,7 @@ struct MainNavigationBarView: View {
             .padding(.top, 8)
         }
         .background {
-            RoundedRectangle(cornerRadius: 20)
-                .fill(
-                    .thickMaterial
-                        .shadow(.drop(color: .primary.opacity(0.2), radius: 5)))
-                .offset(y: -100)
+            BackgroundView()
         }
     }
     
@@ -77,10 +68,10 @@ struct MainNavigationBarView: View {
 // MARK: - Views
 private extension MainNavigationBarView {
     
-    func ToolBarView() -> some View {
+    func ToolbarView() -> some View {
         HStack(spacing: 20) {
             Spacer()
-            if isInCurrentDates {
+            if selectedDate.isInRecentDates {
                 Button {
                     isCompletedSubgoalsHidden.toggle()
                 } label: {
@@ -104,9 +95,9 @@ private extension MainNavigationBarView {
                 .font(Constants.Fonts.juraLargeTitle)
             if !isCalendarExpanded {
                 Text(format(selectedDate))
-                    .font(Constants.Fonts.juraBoldTitle)
+                    .font(Constants.Fonts.juraHeadline)
                     .foregroundStyle(.secondary)
-                    .offset(y: 4)
+                    .offset(y: 5)
             }
             Spacer()
             Button {
@@ -120,9 +111,25 @@ private extension MainNavigationBarView {
                     : "chevron.right")
             }
             .foregroundStyle(.primary)
-            .fontWeight(.semibold)
+            .fontWeight(.medium)
         }
         .padding(.horizontal)
+    }
+    
+    func BackgroundView() -> some View {
+        ZStack {
+            // TODO: придумать что-нибудь с отображением
+            Rectangle()
+                .fill(.accent)
+                .mask(
+                    LinearGradient(
+                        gradient: Gradient(colors: [.clear, .white]),
+                        startPoint: .bottom,
+                        endPoint: .top))
+            RoundedRectangle(cornerRadius: 20)
+                .offset(y: -100)
+                .fillWithShadow()
+        }
     }
 }
 

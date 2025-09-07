@@ -49,8 +49,7 @@ struct SubgoalView: View {
         } else if isToday {
             subgoal.isCompleted
             ? false
-            : timeOfDay.order < TimesOfDay.getValue(
-                from: .now).order
+            : timeOfDay.order < TimesOfDay.getValue(from: .now).order
         } else {
             false
         }
@@ -76,37 +75,24 @@ struct SubgoalView: View {
     // MARK: - Body
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                if let lifeArea {
-                    CapsuleView(
-                        color: subgoal.isActive ? lifeArea.color : .clear,
-                        title: subgoal.goal?.lifeArea)
-                }
-                CapsuleView(color: .clear, title: subgoal.type)
-                if let time = subgoal.time,
-                   !(isToday && subgoal.todayMoved != nil) &&
-                    !(isYesterday && subgoal.yesterdayMoved != nil) {
-                    ExactTimeView(time)
-                }
-            }
+            BarView()
             HStack(spacing: 12) {
-                if let subgoalType = SubgoalTypes(
-                    rawValue: subgoal.type ?? ""),
+                if let subgoalType = SubgoalTypes(rawValue: subgoal.type ?? ""),
                    subgoalType != SubgoalTypes.focus {
                     CheckmarkImageView(isCompleted: isCompleted)
-                    .onTapGesture {
-                        if currentDate.isInRecentDates {
-                            withAnimation(.snappy) {
-                                toggleCompletion()
-                            }
-                        } else {
-                            if subgoalType == .habit {
-                                isErrorAlertPresented = true
+                        .onTapGesture {
+                            if currentDate.isInRecentDates {
+                                withAnimation(.snappy) {
+                                    toggleCompletion()
+                                }
                             } else {
-                                isConfirmationAlertPresented = true
+                                if subgoalType == .habit {
+                                    isErrorAlertPresented = true
+                                } else {
+                                    isConfirmationAlertPresented = true
+                                }
                             }
                         }
-                    }
                 }
                 RowTextView(
                     primaryText: subgoal.title ?? "",
@@ -123,20 +109,14 @@ struct SubgoalView: View {
         }
         .swipeActions(allowsFullSwipe: currentDate.isInRecentDates) {
             if subgoal.type != SubgoalTypes.focus.rawValue,
-               currentDate.isInRecentDates &&
-                !(subgoal.type == SubgoalTypes.inbox.rawValue &&
-                subgoal.deadline == nil) {
+               currentDate.isInRecentDates,
+               !(subgoal.type == SubgoalTypes.inbox.rawValue &&
+                 subgoal.deadline == nil) {
                 SwipeActionButtonView(type: .reschedule) {
                     isConfirmationDialogPresented = true
                 }
             }
-            SwipeActionButtonView(type: .delete) {
-                do {
-                    try subgoalService.delete(subgoal)
-                } catch {
-                    print(error)
-                }
-            }
+            DeleteSwipeActionButton()
         }
         .sheet(isPresented: $isModalViewPresented) {
             DetailSubgoalView(
@@ -153,14 +133,7 @@ struct SubgoalView: View {
         ) {
             ForEach(TimesOfDay.allCases.dropLast()) { value in
                 Button(value.rawValue) {
-                    do {
-                        try subgoalService.reschedule(
-                            subgoal,
-                            to: value,
-                            isToday: isToday)
-                    } catch {
-                        print(error)
-                    }
+                    reschedule(to: value)
                 }
                 .disabled(timeOfDay == value)
             }
@@ -171,13 +144,7 @@ struct SubgoalView: View {
             isPresented: $isConfirmationAlertPresented,
             actions: {
                 Button("Да") {
-                    withAnimation(.snappy) {
-                        do {
-                            try subgoalService.completeNow(subgoal)
-                        } catch {
-                            print(error)
-                        }
-                    }
+                    completeNow()
                 }
                 Button("Нет", role: .cancel) {}
             }
@@ -208,13 +175,50 @@ struct SubgoalView: View {
             print(error)
         }
     }
+    
+    private func reschedule(to timeOfDay: TimesOfDay) {
+        do {
+            try subgoalService.reschedule(
+                subgoal,
+                to: timeOfDay,
+                isToday: isToday)
+        } catch {
+            print(error)
+        }
+    }
+    
+    private func completeNow() {
+        withAnimation(.snappy) {
+            do {
+                try subgoalService.completeNow(subgoal)
+            } catch {
+                print(error)
+            }
+        }
+    }
 }
 
 // MARK: - Views
 private extension SubgoalView {
     
-    func CapsuleView(color: Color, title: String?) -> some View {
-        Text(title ?? "")
+    func BarView() -> some View {
+        HStack {
+            if let lifeArea {
+                CapsuleView(
+                    color: subgoal.isActive ? lifeArea.color : .clear,
+                    title: subgoal.goal?.lifeArea ?? "")
+            }
+            CapsuleView(color: .clear, title: subgoal.type ?? "")
+            if let time = subgoal.time,
+               !(isToday && subgoal.todayMoved != nil) &&
+                !(isYesterday && subgoal.yesterdayMoved != nil) {
+                ExactTimeView(time)
+            }
+        }
+    }
+    
+    func CapsuleView(color: Color, title: String) -> some View {
+        Text(title)
             .font(Constants.Fonts.juraFootnote)
             .frame(width: 90, height: 24)
             .background {
@@ -232,6 +236,16 @@ private extension SubgoalView {
                 .imageScale(.small)
         }
         .foregroundStyle(subgoal.isCompleted ? .secondary : .primary)
+    }
+    
+    func DeleteSwipeActionButton() -> some View {
+        SwipeActionButtonView(type: .delete) {
+            do {
+                try subgoalService.delete(subgoal)
+            } catch {
+                print(error)
+            }
+        }
     }
 }
 

@@ -22,7 +22,7 @@ struct TimeOfDayPickerView: View {
                     .fill(.accent)
                     .frame(width: segmentWidth, height: size.height)
                     .offset(x: getOffset(for: segmentWidth))
-                HStack(spacing: 0) {
+                HStack {
                     ForEach(timesOfDay) { timeOfDay in
                         Image(systemName: timeOfDay.imageName)
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -41,7 +41,7 @@ struct TimeOfDayPickerView: View {
             }
             .background {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(.thickMaterial)
+                    .fillWithShadow()
             }
         }
         .frame(height: 30)

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SubgoalTypeView: View {
     
-    // MARK: - Private Properties
     @FetchRequest
     private var subgoals: FetchedResults<Subgoal>
     
@@ -23,31 +22,16 @@ struct SubgoalTypeView: View {
             ]))
     private var inLineSubgoals: FetchedResults<Subgoal>
     
-    // MARK: - Public Properties
     let type: SubgoalTypes
     let date: Date
     
-    // MARK: - Body
     var body: some View {
         NavigationStack {
             List {
                 if type == .inbox {
-                    NavigationLink(
-                        destination: DetailSubgoalView(
-                            subgoals: .constant([]),
-                            isModified: .constant(false))
-                    ) {
-                        RowLabelView(type: .link)
-                    }
+                    SubgoalLink()
                     if !inLineSubgoals.isEmpty {
-                        Section {
-                            ForEach(inLineSubgoals) {
-                                SubgoalView(subgoal: $0, currentDate: date)
-                            }
-                        } header: {
-                            Text("На очереди")
-                                .font(Constants.Fonts.juraMediumSubheadline)
-                        }
+                        InLineSection()
                     }
                 }
                 SubgoalSectionsView(
@@ -62,7 +46,6 @@ struct SubgoalTypeView: View {
         }
     }
     
-    // MARK: - Initialize
     init(type: SubgoalTypes, date: Date) {
         self.type = type
         self.date = date
@@ -72,7 +55,6 @@ struct SubgoalTypeView: View {
             predicate: SubgoalFilter.predicate(for: date, types: [type]))
     }
     
-    // MARK: - Private Methods
     private func getHeaderText() -> String {
         let calendar = Calendar.current
         return if calendar.isDateInToday(date) {
@@ -83,6 +65,30 @@ struct SubgoalTypeView: View {
             Constants.Texts.tomorrow
         } else {
             date.formatted(date: .long, time: .omitted)
+        }
+    }
+}
+
+private extension SubgoalTypeView {
+    
+    func SubgoalLink() -> some View {
+        NavigationLink(
+            destination: DetailSubgoalView(
+                subgoals: .constant([]),
+                isModified: .constant(false))
+        ) {
+            RowLabelView(type: .link)
+        }
+    }
+    
+    func InLineSection() -> some View {
+        Section {
+            ForEach(inLineSubgoals) {
+                SubgoalView(subgoal: $0, currentDate: date)
+            }
+        } header: {
+            Text("На очереди")
+                .font(Constants.Fonts.juraMediumSubheadline)
         }
     }
 }

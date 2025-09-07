@@ -9,7 +9,6 @@ import SwiftUI
 
 struct MainView: View {
     
-    // MARK: - Private Properties
     @FetchRequest(
         entity: Subgoal.entity(),
         sortDescriptors: [],
@@ -25,7 +24,6 @@ struct MainView: View {
     @State private var selectedDate = Date()
     @State private var selectedTimeOfDay = TimesOfDay.getValue(from: .now)
     
-    // MARK: - Body
     var body: some View {
         VStack {
             MainNavigationBarView(

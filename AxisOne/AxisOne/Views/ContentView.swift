@@ -18,27 +18,18 @@ struct ContentView: View {
         TabView(selection: $selectedTab) {
             ForEach(Tabs.allCases) { tab in
                 NavigationStack {
-                    ZStack(alignment: .bottom) {
-                        tab.view
-                            .navigationTitle(tab.rawValue)
-                            .toolbar(tab == .main ? .hidden : .visible)
-                            .toolbar(.hidden, for: .tabBar)
-                            .background(
-                                colorScheme == .dark
-                                ? Constants.Colors.darkBackground
-                                : Constants.Colors.lightBackground)
-                            .scrollContentBackground(.hidden)
-                        Rectangle()
-                            .fill(.ultraThinMaterial)
-                            .mask(
-                                LinearGradient(
-                                    gradient: Gradient(
-                                        colors: [.clear, .black]),
-                                    startPoint: .top,
-                                    endPoint: .bottom))
-                            .frame(height: 130)
-                        TabBarView(activeTab: $selectedTab)
-                    }
+                    tab.view
+                        .navigationTitle(tab.rawValue)
+                        .toolbar(tab == .main ? .hidden : .visible)
+                        .toolbar(.hidden, for: .tabBar)
+                        .background(Color("Background"))
+                        .scrollContentBackground(.hidden)
+                        .safeAreaInset(edge: .bottom) {
+                            ZStack(alignment: .bottom) {
+                                MaskedRectangle()
+                                TabBarView(activeTab: $selectedTab)
+                            }
+                        }
                     .ignoresSafeArea(edges: .bottom)
                 }
             }
@@ -51,6 +42,20 @@ struct ContentView: View {
                 print(error)
             }
         }
+    }
+}
+
+private extension ContentView {
+    
+    func MaskedRectangle() -> some View {
+        Rectangle()
+            .fill(.ultraThinMaterial)
+            .mask(
+                LinearGradient(
+                    gradient: Gradient(colors: [.clear, .black]),
+                    startPoint: .top,
+                    endPoint: .bottom))
+            .frame(height: 100)
     }
 }
 

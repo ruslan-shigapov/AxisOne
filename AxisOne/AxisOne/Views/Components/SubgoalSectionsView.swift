@@ -30,25 +30,11 @@ struct SubgoalSectionsView: View {
     let isCompletedHidden: Bool
     
     var body: some View {
-        Section {
-            if filteredSubgoals.isEmpty {
-                RowLabelView(type: .empty, text: emptyRowText)
-            } else {
-                SubgoalViews(filteredSubgoals)
-            }
-        } header: {
-            Text(title)
-                .font(Constants.Fonts.juraMediumSubheadline)
-        }
+        MainSection()
         if !completedSubgoals.isEmpty,
            !isCompletedHidden,
            date.isInRecentDates {
-            Section {
-                SubgoalViews(completedSubgoals)
-            } header: {
-                Text("Выполнено")
-                    .font(Constants.Fonts.juraMediumSubheadline)
-            }
+            CompletedSection()
         }
     }
     
@@ -68,10 +54,35 @@ struct SubgoalSectionsView: View {
         }
         return true
     }
+}
+
+private extension SubgoalSectionsView {
+    
+    func MainSection() -> some View {
+        Section {
+            if filteredSubgoals.isEmpty {
+                RowLabelView(type: .empty, text: emptyRowText)
+            } else {
+                SubgoalViews(filteredSubgoals)
+            }
+        } header: {
+            Text(title)
+                .font(Constants.Fonts.juraMediumSubheadline)
+        }
+    }
     
     private func SubgoalViews(_ subgoals: [Subgoal]) -> some View {
         ForEach(subgoals) {
             SubgoalView(subgoal: $0, currentDate: date)
+        }
+    }
+    
+    func CompletedSection() -> some View {
+        Section {
+            SubgoalViews(completedSubgoals)
+        } header: {
+            Text("Выполнено")
+                .font(Constants.Fonts.juraMediumSubheadline)
         }
     }
 }

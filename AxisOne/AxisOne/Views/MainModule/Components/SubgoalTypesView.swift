@@ -9,14 +9,11 @@ import SwiftUI
 
 struct SubgoalTypesView: View {
     
-    // MARK: - Private Properties
     @FetchRequest
     private var subgoals: FetchedResults<Subgoal>
     
-    // MARK: - Public Properties
     let date: Date
     
-    // MARK: - Body
     var body: some View {
         HStack {
             ForEach(SubgoalTypes.allCases) { type in
@@ -32,7 +29,6 @@ struct SubgoalTypesView: View {
         }
     }
     
-    // MARK: - Initialize
     init(date: Date) {
         self.date = date
         _subgoals = FetchRequest(
@@ -43,7 +39,6 @@ struct SubgoalTypesView: View {
                 types: SubgoalTypes.allCases))
     }
     
-    // MARK: - Private Methods
     private func getSubgoalCount(_ type: SubgoalTypes) -> Int {
         subgoals
             .filter {
@@ -53,9 +48,7 @@ struct SubgoalTypesView: View {
                 }
                 if $0.type == SubgoalTypes.habit.rawValue,
                    let startDate = $0.startDate,
-                   let frequency = Frequencies(
-                    rawValue: $0.frequency ?? ""
-                   ) {
+                   let frequency = Frequencies(rawValue: $0.frequency ?? "") {
                     return frequency.isNecessary(
                         for: date,
                         startDate: startDate)
@@ -66,7 +59,6 @@ struct SubgoalTypesView: View {
     }
 }
 
-// MARK: - Views
 private extension SubgoalTypesView {
     
     func SubgoalTypeCircleView(
