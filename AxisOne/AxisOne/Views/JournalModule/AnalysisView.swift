@@ -97,10 +97,7 @@ struct AnalysisView: View {
             thoughts = reflections.first?.thoughts ?? ""
         }
         .navigationTitle("Самоанализ")
-        .background(
-            colorScheme == .dark
-            ? Constants.Colors.darkBackground
-            : Constants.Colors.lightBackground)
+        .background(Color("Background"))
         .scrollContentBackground(.hidden)
         .toolbar {
             ToolbarItem {

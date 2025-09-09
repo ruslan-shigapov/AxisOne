@@ -186,10 +186,8 @@ final class SubgoalService {
     ) throws {
         let goal = Goal(context: context)
         goal.lifeArea = lifeArea.rawValue
-        goal.title = title.trimmingCharacters(
-            in: .whitespacesAndNewlines)
-        goal.notes = notes.trimmingCharacters(
-            in: .whitespacesAndNewlines)
+        goal.title = title
+        goal.notes = notes
         goal.order = try getGoalOrder(in: lifeArea.rawValue)
         context.delete(subgoal)
         try saveContext {

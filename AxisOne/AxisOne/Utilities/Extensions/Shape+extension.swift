@@ -12,6 +12,6 @@ extension Shape {
     func fillWithShadow() -> some View {
         self.fill(
             .thickMaterial
-                .shadow(.drop(color: .primary.opacity(0.2), radius: 5)))
+                .shadow(.drop(color: .black.opacity(0.2), radius: 5)))
     }
 }

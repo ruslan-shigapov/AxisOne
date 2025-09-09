@@ -9,21 +9,27 @@ import SwiftUI
 
 struct GoalView: View {
     
+    // MARK: - Private Properties
     @Environment(\.goalService) private var goalService
 
     @State private var isModalViewPresented = false
+    @State private var isAlertPresented = false
     
     private var lifeAreaColor: Color? {
         LifeAreas(rawValue: goal.lifeArea ?? "")?.color
     }
     
+    // MARK: - Public Properties
     @ObservedObject var goal: Goal
     
+    // MARK: - Body
     var body: some View {
         HStack(spacing: 12) {
             CheckmarkImageView(isCompleted: goal.isCompleted)
                 .onTapGesture {
-                    toggleComplete()
+                    withAnimation(.snappy) {
+                        toggleComplete()
+                    }
                 }
             RowTextView(
                 primaryText: goal.title ?? "",
@@ -46,19 +52,45 @@ struct GoalView: View {
         .sheet(isPresented: $isModalViewPresented) {
             DetailGoalView(goal: goal)
         }
+        .deleteAlert(
+            isPresented: $isAlertPresented,
+            messageText: """
+            Данное действие также приведет к удалению всех подцелей этой цели.  
+            """
+        ) {
+            withAnimation(.snappy) {
+                delete()
+            }
+        }
     }
     
+    // MARK: - Private Methods
     private func toggleComplete() {
-        withAnimation(.snappy) {
-            do {
-                try goalService.toggleComplete(of: goal)
-            } catch {
-                print(error)
-            }
+        do {
+            try goalService.toggleComplete(of: goal)
+        } catch {
+            print(error)
+        }
+    }
+    
+    private func toggleActive() {
+        do {
+            try goalService.toggleActive(of: goal)
+        } catch {
+            print(error)
+        }
+    }
+    
+    private func delete() {
+        do {
+            try goalService.delete(goal)
+        } catch {
+            print(error)
         }
     }
 }
 
+// MARK: - Views
 private extension GoalView {
     
     func ToggleActiveSwipeActionButton() -> some View {
@@ -66,21 +98,15 @@ private extension GoalView {
             type: .toggleActive(isActive: goal.isActive),
             activationColor: lifeAreaColor
         ) {
-            do {
-                try goalService.toggleActive(of: goal)
-            } catch {
-                print(error)
+            withAnimation(.snappy) {
+                toggleActive()
             }
         }
     }
     
     func DeleteSwipeActionButton() -> some View {
         SwipeActionButtonView(type: .delete) {
-            do {
-                try goalService.delete(goal)
-            } catch {
-                print(error)
-            }
+            isAlertPresented = true
         }
     }
 }

@@ -43,6 +43,8 @@ struct SubgoalTypeView: View {
             }
             .navigationTitle(type.pluralValue)
             .navigationBarTitleDisplayMode(.inline)
+            .background(Color("Background"))
+            .scrollContentBackground(.hidden)
         }
     }
     

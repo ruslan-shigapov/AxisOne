@@ -25,7 +25,7 @@ struct SwipeActionButtonView: View {
     private var tint: Color? {
         switch type {
         case .toggleActive(let isActive): isActive ? .gray : activationColor
-        case .delete: nil
+        case .delete: .red
         case .reschedule: .accent
         }
     }
@@ -35,10 +35,8 @@ struct SwipeActionButtonView: View {
     let action: () -> Void
     
     var body: some View {
-        Button(role: type == .delete ? .destructive : nil) {
-            withAnimation(.snappy) {
-                action()
-            }
+        Button {
+            action()
         } label: {
             Image(systemName: type.imageName)
         }

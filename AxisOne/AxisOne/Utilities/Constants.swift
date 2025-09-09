@@ -14,6 +14,7 @@ enum Constants {
         static let edit = "Править"
         static let cancel = "Отменить"
         static let done = "Готово"
+        static let delete = "Удалить"
         static let today = "Сегодня"
         static let yesterday = "Вчера"
         static let tomorrow = "Завтра"
@@ -30,11 +31,5 @@ enum Constants {
         static let juraMediumSubheadline = Font.custom("Jura-Medium", size: 15)
         static let juraMediumFootnote = Font.custom("Jura-Medium", size: 13)
         static let juraFootnote = Font.custom("Jura", size: 13)
-    }
-    
-    // MARK: - Colors
-    enum Colors {
-        static let darkBackground = Color("DarkBackground")
-        static let lightBackground = Color("LightBackground")
     }
 }

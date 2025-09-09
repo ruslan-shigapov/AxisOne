@@ -40,10 +40,7 @@ struct SettingsView: View {
             updateInboxTriage()
         }
         .navigationTitle("Настройки")
-        .background(
-            colorScheme == .dark
-            ? Constants.Colors.darkBackground
-            : Constants.Colors.lightBackground)
+        .background(Color("Background"))
         .scrollContentBackground(.hidden)
     }
     

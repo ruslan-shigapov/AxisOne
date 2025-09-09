@@ -93,7 +93,10 @@ final class GoalService {
         context.rollback()
     }
     
-    func hasDuplicate(by title: String, excludingGoal: Goal?) throws -> Bool {
+    func hasDuplicate(
+        by title: String,
+        excludingGoal: Goal? = nil
+    ) throws -> Bool {
         let fetchRequest = Goal.fetchRequest()
         var predicates: [NSPredicate] = [
             .init(

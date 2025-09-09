@@ -203,7 +203,7 @@ private extension DetailSubgoalView {
     }
     
     func DeleteButton(for subgoal: Subgoal) -> some View {
-        DeleteButtonView(title: "Удалить подцель") {
+        DeleteButtonView {
             if isModalPresentation {
                 do {
                     try subgoalService.delete(subgoal)

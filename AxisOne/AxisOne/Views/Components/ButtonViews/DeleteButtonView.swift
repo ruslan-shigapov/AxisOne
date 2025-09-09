@@ -11,19 +11,17 @@ struct DeleteButtonView: View {
     
     @State private var isAlertPresented = false
 
-    let title: String
+    var message: String?
     let action: () -> Void
     
     var body: some View {
-        Button(title, role: .destructive) {
+        Button(Constants.Texts.delete, role: .destructive) {
             isAlertPresented = true
         }
         .font(Constants.Fonts.juraMediumBody)
-        .alert("Вы уверены?", isPresented: $isAlertPresented) {
-            Button("Удалить", role: .destructive) {
-                action()
-            }
-            Button("Отмена", role: .cancel) {}
-        }
+        .deleteAlert(
+            isPresented: $isAlertPresented,
+            messageText: message,
+            action: action)
     }
 }

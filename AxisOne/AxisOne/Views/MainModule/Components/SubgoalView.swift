@@ -13,6 +13,7 @@ struct SubgoalView: View {
     @Environment(\.subgoalService) private var subgoalService
     
     @State private var isModalViewPresented = false
+    @State private var isDeleteAlertPresented = false
     @State private var isConfirmationDialogPresented = false
     @State private var isConfirmationAlertPresented = false
     @State private var isErrorAlertPresented = false
@@ -103,7 +104,6 @@ struct SubgoalView: View {
         }
         .listRowInsets(EdgeInsets())
         .padding(12)
-        .contentShape(.rect)
         .onTapGesture {
             isModalViewPresented = true
         }
@@ -133,11 +133,18 @@ struct SubgoalView: View {
         ) {
             ForEach(TimesOfDay.allCases.dropLast()) { value in
                 Button(value.rawValue) {
-                    reschedule(to: value)
+                    withAnimation(.snappy) {
+                        reschedule(to: value)
+                    }
                 }
                 .disabled(timeOfDay == value)
             }
-            Button("Отмена", role: .cancel) {}
+            Button(Constants.Texts.cancel, role: .cancel) {}
+        }
+        .deleteAlert(isPresented: $isDeleteAlertPresented) {
+            withAnimation(.snappy) {
+                delete()
+            }
         }
         .alert(
             "Вы уверены?",
@@ -196,6 +203,14 @@ struct SubgoalView: View {
             }
         }
     }
+    
+    private func delete() {
+        do {
+            try subgoalService.delete(subgoal)
+        } catch {
+            print(error)
+        }
+    }
 }
 
 // MARK: - Views
@@ -240,11 +255,7 @@ private extension SubgoalView {
     
     func DeleteSwipeActionButton() -> some View {
         SwipeActionButtonView(type: .delete) {
-            do {
-                try subgoalService.delete(subgoal)
-            } catch {
-                print(error)
-            }
+            isDeleteAlertPresented = true
         }
     }
 }

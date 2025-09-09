@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		E40E86CE2E10035800ED6DCA /* DetailSubgoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40E86CD2E10035800ED6DCA /* DetailSubgoalView.swift */; };
 		E40E86D02E1025A900ED6DCA /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40E86CF2E1025A900ED6DCA /* GoalView.swift */; };
+		E41AC0B92E7020B0002041CF /* View+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41AC0B82E7020B0002041CF /* View+extension.swift */; };
 		E41E9D292E6989F10095CE13 /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E9D282E6989F10095CE13 /* Tabs.swift */; };
 		E41E9D2B2E698A1A0095CE13 /* LifeAreas.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E9D2A2E698A1A0095CE13 /* LifeAreas.swift */; };
 		E41E9D2D2E698A320095CE13 /* SubgoalTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E9D2C2E698A320095CE13 /* SubgoalTypes.swift */; };
@@ -72,6 +73,7 @@
 /* Begin PBXFileReference section */
 		E40E86CD2E10035800ED6DCA /* DetailSubgoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSubgoalView.swift; sourceTree = "<group>"; };
 		E40E86CF2E1025A900ED6DCA /* GoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalView.swift; sourceTree = "<group>"; };
+		E41AC0B82E7020B0002041CF /* View+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+extension.swift"; sourceTree = "<group>"; };
 		E41E9D282E6989F10095CE13 /* Tabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tabs.swift; sourceTree = "<group>"; };
 		E41E9D2A2E698A1A0095CE13 /* LifeAreas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeAreas.swift; sourceTree = "<group>"; };
 		E41E9D2C2E698A320095CE13 /* SubgoalTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalTypes.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 				E4CF3D512E54FF36007D27A7 /* Environment+DataServices.swift */,
 				E472EDE72E5C7CD2004E2364 /* Date+extension.swift */,
 				E43AA6A32E6D7AC4003E8E60 /* Shape+extension.swift */,
+				E41AC0B82E7020B0002041CF /* View+extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -242,7 +245,6 @@
 		E4563B292E0FEA050075B178 /* JournalModule */ = {
 			isa = PBXGroup;
 			children = (
-				E4CE0EF02E5705FC00AA8709 /* Components */,
 				E4563B1D2E0FE4DE0075B178 /* JournalView.swift */,
 				E493E6A02E1928DC009CDDDE /* AnalysisView.swift */,
 				E45F9C592E3AA0CE00B1B9D7 /* SummaryView.swift */,
@@ -291,13 +293,6 @@
 				E49ACC792E452BD200BC0EF4 /* RowLabelView.swift */,
 				E4B676942E54DD8400B4940A /* LabeledDateView.swift */,
 				E4AF46212E51B79500E43833 /* SubgoalSectionsView.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		E4CE0EF02E5705FC00AA8709 /* Components */ = {
-			isa = PBXGroup;
-			children = (
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -484,6 +479,7 @@
 				E4B676992E54E59800B4940A /* DateGroupView.swift in Sources */,
 				E4C06C992E44A34100EB0A76 /* CheckmarkImageView.swift in Sources */,
 				E4CDF5F22E2BD778004A118C /* ReflectionFilter.swift in Sources */,
+				E41AC0B92E7020B0002041CF /* View+extension.swift in Sources */,
 				E4EF52432E0FCFB400D5B7FE /* AxisOneApp.swift in Sources */,
 				E4AF462B2E53479800E43833 /* GoalListView.swift in Sources */,
 				E4CF3D582E5516BB007D27A7 /* SubgoalService.swift in Sources */,

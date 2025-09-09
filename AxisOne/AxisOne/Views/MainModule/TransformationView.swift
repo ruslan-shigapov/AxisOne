@@ -11,6 +11,7 @@ struct TransformationView: View {
     
     // MARK: - Private Properties
     @Environment(\.subgoalService) private var subgoalService
+    @Environment(\.goalService) private var goalService
     
     @FetchRequest(
         entity: Goal.entity(),
@@ -21,6 +22,7 @@ struct TransformationView: View {
     @State private var selectedLifeArea: LifeAreas = .health
     @State private var selectedGoal: Goal?
     @State private var isGoalsPresented: Bool = false
+    @State private var isAlertPresented: Bool = false
     
     // MARK: - Public Properties
     let subgoal: Subgoal
@@ -29,48 +31,22 @@ struct TransformationView: View {
     // MARK: - Body
     var body: some View {
         List {
-            Section("Цель") {
-                ButtonMenuView(
-                    title: "Сфера жизни",
-                    items: LifeAreas.allCases,
-                    selectedItem: $selectedLifeArea,
-                    itemText: { $0.rawValue },
-                    itemColor: { $0.color })
-                SaveButton {
-                    saveAsGoal()
-                    dismiss()
-                }
-            }
-            Section("Задачу") {
-                LabeledContent("Родительская цель") {
-                    Text(selectedGoal == nil ? "Не выбрана" : "Выбрана")
-                        .fontWeight(.medium)
-                        .foregroundStyle(
-                            selectedGoal != nil ? .accent : .secondary)
-                }
-                .font(Constants.Fonts.juraBody)
-                .contentShape(.rect)
-                .onTapGesture {
-                    withAnimation(.snappy) {
-                        isGoalsPresented.toggle()
-                    }
-                }
-                if isGoalsPresented {
-                    UncompletedGoalsView()
-                }
-                SaveButton {
-                    saveAsTask()
-                    dismiss()
-                }
-                .disabled(selectedGoal == nil)
-            }
+            ToGoalSection()
+            ToTaskSection()
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text("Преобразовать в")
+                Text("Преобразовать")
                     .font(Constants.Fonts.juraHeadline)
             }
+        }
+        .alert(
+            "Попробуйте снова",
+            isPresented: $isAlertPresented,
+            actions: {}
+        ) {
+            Text("Цель с таким названием уже существует.")
         }
     }
     
@@ -106,12 +82,66 @@ struct TransformationView: View {
 // MARK: - Views
 private extension TransformationView {
     
+    func ToGoalSection() -> some View {
+        Section("В цель") {
+            ButtonMenuView(
+                title: "Сфера жизни",
+                items: LifeAreas.allCases,
+                selectedItem: $selectedLifeArea,
+                itemText: { $0.rawValue },
+                itemColor: { $0.color })
+            SaveButton {
+                do {
+                    if try goalService.hasDuplicate(
+                        by: subgoal.title ?? ""
+                    ) {
+                        isAlertPresented = true
+                        return
+                    }
+                } catch {
+                    print(error)
+                }
+                saveAsGoal()
+                dismiss()
+            }
+        }
+    }
+    
     func SaveButton(action: @escaping () -> Void) -> some View {
         Button("Сохранить") {
             action()
         }
         .font(Constants.Fonts.juraMediumBody)
         .frame(maxWidth: .infinity)
+    }
+    
+    func ToTaskSection() -> some View {
+        Section("В задачу") {
+            LabeledGoalIndicator()
+                .onTapGesture {
+                    withAnimation(.snappy) {
+                        isGoalsPresented.toggle()
+                    }
+                }
+            if isGoalsPresented {
+                UncompletedGoalsView()
+            }
+            SaveButton {
+                saveAsTask()
+                dismiss()
+            }
+            .disabled(selectedGoal == nil)
+        }
+    }
+    
+    func LabeledGoalIndicator() -> some View {
+        LabeledContent("Родительская цель") {
+            Text(selectedGoal == nil ? "Не выбрана" : "Выбрана")
+                .fontWeight(.medium)
+                .foregroundStyle(selectedGoal != nil ? .accent : .secondary)
+        }
+        .font(Constants.Fonts.juraBody)
+        .contentShape(.rect)
     }
     
     func UncompletedGoalsView() -> some View {

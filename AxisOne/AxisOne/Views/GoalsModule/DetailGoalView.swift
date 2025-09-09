@@ -131,7 +131,11 @@ private extension DetailGoalView {
     }
     
     func DeleteButton(for goal: Goal) -> some View {
-        DeleteButtonView(title: "Удалить цель") {
+        DeleteButtonView(
+            message: """
+            Данное действие также приведет к удалению всех подцелей этой цели.
+            """
+        ) {
             do {
                 try goalService.delete(goal)
             } catch {

@@ -11,7 +11,7 @@ enum SubgoalTypes: String, CaseIterable, Identifiable {
     case habit = "Привычка"
     case milestone = "Веха"
     case focus = "Фокус"
-    case inbox = "Входящие"
+    case inbox = "Входящее"
     
     var imageName: String {
         switch self {
@@ -61,7 +61,7 @@ enum SubgoalTypes: String, CaseIterable, Identifiable {
         case .habit: "Привычки"
         case .milestone: "Вехи"
         case .focus: "Фокусы"
-        case .inbox: self.rawValue
+        case .inbox: "Входящие"
         }
     }
     
