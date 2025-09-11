@@ -1,5 +1,5 @@
 //
-//  SummaryView.swift
+//  ReportView.swift
 //  AxisOne
 //
 //  Created by Ruslan Shigapov on 30.07.2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SummaryView: View {
+struct ReportView: View {
     
     @Environment(\.dismiss) private var dismiss
     

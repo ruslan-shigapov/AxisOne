@@ -12,7 +12,7 @@ struct ContentView: View {
     @Environment(\.subgoalService) private var subgoalService
     @Environment(\.colorScheme) private var colorScheme
     
-    @State private var selectedTab: Tabs = .main
+    @State private var selectedTab: Tabs = .journal
     
     var body: some View {
         TabView(selection: $selectedTab) {

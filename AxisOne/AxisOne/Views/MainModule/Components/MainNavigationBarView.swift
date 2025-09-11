@@ -47,7 +47,9 @@ struct MainNavigationBarView: View {
             .padding(.top, 8)
         }
         .background {
-            BackgroundView()
+            RoundedRectangle(cornerRadius: 20)
+                .offset(y: -100)
+                .fillWithShadow()
         }
     }
     
@@ -114,22 +116,6 @@ private extension MainNavigationBarView {
             .fontWeight(.medium)
         }
         .padding(.horizontal)
-    }
-    
-    func BackgroundView() -> some View {
-        ZStack {
-            // TODO: придумать что-нибудь с отображением
-            Rectangle()
-                .fill(.accent)
-                .mask(
-                    LinearGradient(
-                        gradient: Gradient(colors: [.clear, .white]),
-                        startPoint: .bottom,
-                        endPoint: .top))
-            RoundedRectangle(cornerRadius: 20)
-                .offset(y: -100)
-                .fillWithShadow()
-        }
     }
 }
 

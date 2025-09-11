@@ -216,7 +216,7 @@ private extension AnalysisView {
                 }
                 Image(systemName: subgoal.isCompleted
                       ? "checkmark.circle.fill"
-                      : "circle")
+                      : "xmark.circle.fill")
                 .foregroundStyle(rawCount > 2 ? .accent : .gray)
             }
         } label: {

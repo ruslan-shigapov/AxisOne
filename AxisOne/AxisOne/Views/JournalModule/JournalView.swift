@@ -9,7 +9,6 @@ import SwiftUI
 
 struct JournalView: View {
     
-    // MARK: - Private Properties
     @FetchRequest(
         entity: Subgoal.entity(),
         sortDescriptors: [],
@@ -23,9 +22,7 @@ struct JournalView: View {
         sortDescriptors: [],
         predicate: ReflectionFilter.predicate(for: .now))
     private var reflections: FetchedResults<Reflection>
-    
-    @State private var isModalViewPresented = false
-    
+            
     private var groupedSubgoals: [TimesOfDay: [Subgoal]] {
         Dictionary(grouping: subgoals) {
             if let exactTime = $0.time {
@@ -37,16 +34,23 @@ struct JournalView: View {
         }
     }
     
-    // MARK: - Body
     var body: some View {
         ZStack {
-            if groupedSubgoals.isEmpty {
-                EmptyStateView(
-                    primaryText: "На сегодня нет активных подцелей для самоанализа")
-            } else {
-                List {
-                    TimeOfDaySectionView()
-                    SummarySectionView()
+            List {
+                if groupedSubgoals.isEmpty {
+                    EmptyStateView(
+                        primaryText: """
+                    На сегодня нет активных подцелей для самоанализа
+                    """)
+                } else {
+                    // TODO: может стоит объединить эти вью?
+                    TimeOfDaySectionView(
+                        groupedSubgoals: groupedSubgoals,
+                        reflections: reflections)
+                    SummarySectionView(
+                        groupedSubgoals: groupedSubgoals,
+                        reflections: reflections,
+                        subgoals: subgoals)
                 }
             }
         }
@@ -55,118 +59,6 @@ struct JournalView: View {
                 NavigationLink(destination: HistoryView()) {
                     ToolbarButtonImageView(type: .history)
                 }
-            }
-        }
-        .sheet(isPresented: $isModalViewPresented) {
-            SummaryView(date: .now)
-        }
-    }
-    
-    // MARK: - Private Methods
-    private func getGroupedValues() -> [(LifeAreas, String, Double)] {
-        let reflectedSubgoals = reflections
-            .compactMap { $0.reactions as? Set<Reaction> }
-            .flatMap { $0 }
-            .compactMap { $0.subgoal }
-        return LifeAreas.allCases.map { lifeArea in
-            let matching = reflectedSubgoals.filter {
-                let subgoalLifeArea = LifeAreas(
-                    rawValue: $0.goal?.lifeArea ?? "")
-                return subgoalLifeArea == lifeArea
-            }
-            let allSubgoals = subgoals.filter {
-                $0.goal?.lifeArea ?? "" == lifeArea.rawValue
-            }
-                .count
-            let completed = matching.filter(\.isCompleted).count
-            let progress = allSubgoals > 0
-            ? Double(completed) / Double(allSubgoals)
-            : 0
-            return (lifeArea, "\(completed)/\(allSubgoals)", progress)
-        }
-    }
-}
-
-// MARK: - Views
-private extension JournalView {
-    
-    func TimeOfDaySectionView() -> some View {
-        Section {
-            ForEach(
-                TimesOfDay.allCases.filter { groupedSubgoals.keys.contains($0) }
-            ) { timeOfDay in
-                    NavigationLink(
-                        destination: AnalysisView(
-                            timeOfDay: timeOfDay,
-                            subgoals: groupedSubgoals[timeOfDay] ?? [])
-                    ) {
-                        TimeOfDayRowView(timeOfDay)
-                    }
-                    .font(Constants.Fonts.juraBody)
-                }
-        } header: {
-            Text("Время дня")
-                .font(Constants.Fonts.juraMediumSubheadline)
-        }
-    }
-    
-    func TimeOfDayRowView(_ timeOfDay: TimesOfDay) -> some View {
-        LabeledContent(timeOfDay.rawValue) {
-            HStack {
-                CheckmarkImageView(for: timeOfDay)
-                    .foregroundStyle(.accent)
-                Text(String(groupedSubgoals[timeOfDay]?.count ?? 0))
-            }
-        }
-    }
-    
-    func CheckmarkImageView(for timeOfDay: TimesOfDay) -> some View {
-        groupedSubgoals.keys.contains(timeOfDay) &&
-        reflections.contains(
-            where: { $0.timeOfDay ?? "" == timeOfDay.rawValue })
-        ? Image(systemName: "checkmark")
-        : Image(systemName: "")
-    }
-    
-    func SummarySectionView() -> some View {
-        Section {
-            if reflections.isEmpty {
-                RowLabelView(type: .empty, text: "Пока недостаточно данных")
-            } else {
-                VStack {
-                    ForEach(
-                        getGroupedValues(), id: \.0.rawValue
-                    ) { lifeArea, text, progress in
-                        LabeledContent {
-                            ProgressView(value: progress)
-                                .frame(width: 150)
-                                .tint(lifeArea.color)
-                        } label: {
-                            VStack(alignment: .leading) {
-                                Text(lifeArea.rawValue)
-                                    .fontWeight(.medium)
-                                Text(text)
-                                    .font(Constants.Fonts.juraFootnote)
-                            }
-                        }
-                        .foregroundStyle(lifeArea.color)
-                        .font(Constants.Fonts.juraBody)
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .contentShape(Rectangle())
-                .onTapGesture {
-                    isModalViewPresented = true
-                }
-            }
-        } header: {
-            Text("Итоги")
-                .font(Constants.Fonts.juraMediumSubheadline)
-        } footer: {
-            if !reflections.isEmpty {
-                let ending = reflections.count == 1 ? "анализа" : "анализов"
-                Text("Данные на основе \(reflections.count) само\(ending). Нажмите, чтобы узнать подробнее.")
-                    .font(Constants.Fonts.juraFootnote)
             }
         }
     }

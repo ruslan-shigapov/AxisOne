@@ -45,7 +45,7 @@ struct HistoryView: View {
                         isModalPresented = true
                     }
                     .sheet(isPresented: $isModalPresented) {
-                        SummaryView(date: date)
+                        ReportView(date: date)
                     }
                     .swipeActions {
                         SwipeActionButtonView(type: .delete) {
