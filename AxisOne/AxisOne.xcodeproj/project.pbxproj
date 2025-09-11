@@ -7,137 +7,138 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E40E86CE2E10035800ED6DCA /* DetailSubgoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40E86CD2E10035800ED6DCA /* DetailSubgoalView.swift */; };
-		E40E86D02E1025A900ED6DCA /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40E86CF2E1025A900ED6DCA /* GoalView.swift */; };
-		E41AC0B92E7020B0002041CF /* View+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41AC0B82E7020B0002041CF /* View+extension.swift */; };
-		E41E9D292E6989F10095CE13 /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E9D282E6989F10095CE13 /* Tabs.swift */; };
-		E41E9D2B2E698A1A0095CE13 /* LifeAreas.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E9D2A2E698A1A0095CE13 /* LifeAreas.swift */; };
-		E41E9D2D2E698A320095CE13 /* SubgoalTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E9D2C2E698A320095CE13 /* SubgoalTypes.swift */; };
-		E41E9D2F2E698A5D0095CE13 /* Frequencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E9D2E2E698A5D0095CE13 /* Frequencies.swift */; };
-		E41E9D312E698A750095CE13 /* TimesOfDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E9D302E698A750095CE13 /* TimesOfDay.swift */; };
-		E41E9D352E698AA00095CE13 /* Feelings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E9D342E698AA00095CE13 /* Feelings.swift */; };
-		E42BDFF42E606573002E15C9 /* TransformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BDFF32E606573002E15C9 /* TransformationView.swift */; };
-		E43AA6A42E6D7AC4003E8E60 /* Shape+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43AA6A32E6D7AC4003E8E60 /* Shape+extension.swift */; };
-		E43B6FEB2E66F11600BCF40F /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E43B6FEA2E66F11600BCF40F /* TabBarView.swift */; };
-		E4563B1A2E0FE4CA0075B178 /* GoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B192E0FE4CA0075B178 /* GoalsView.swift */; };
-		E4563B1C2E0FE4D30075B178 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B1B2E0FE4D30075B178 /* MainView.swift */; };
-		E4563B1E2E0FE4DE0075B178 /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B1D2E0FE4DE0075B178 /* JournalView.swift */; };
-		E4563B222E0FE5450075B178 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B212E0FE5450075B178 /* Constants.swift */; };
-		E4563B242E0FE96A0075B178 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4563B232E0FE96A0075B178 /* SettingsView.swift */; };
-		E45F9C5A2E3AA0CE00B1B9D7 /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F9C592E3AA0CE00B1B9D7 /* SummaryView.swift */; };
-		E45F9C5C2E3B635800B1B9D7 /* CalendarScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E45F9C5B2E3B635800B1B9D7 /* CalendarScrollView.swift */; };
-		E472EDE82E5C7CD2004E2364 /* Date+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E472EDE72E5C7CD2004E2364 /* Date+extension.swift */; };
-		E493E69D2E19264E009CDDDE /* SubgoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E493E69C2E19264E009CDDDE /* SubgoalView.swift */; };
-		E493E69F2E19270F009CDDDE /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E493E69E2E19270F009CDDDE /* HistoryView.swift */; };
-		E493E6A12E1928DC009CDDDE /* AnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E493E6A02E1928DC009CDDDE /* AnalysisView.swift */; };
-		E49ACC7A2E452BD200BC0EF4 /* RowLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49ACC792E452BD200BC0EF4 /* RowLabelView.swift */; };
-		E4AF46202E51050900E43833 /* SubgoalTypesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AF461F2E51050900E43833 /* SubgoalTypesView.swift */; };
-		E4AF46222E51B79500E43833 /* SubgoalSectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AF46212E51B79500E43833 /* SubgoalSectionsView.swift */; };
-		E4AF46262E51C87600E43833 /* TimeOfDayPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AF46252E51C87600E43833 /* TimeOfDayPickerView.swift */; };
-		E4AF462B2E53479800E43833 /* GoalListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AF462A2E53479800E43833 /* GoalListView.swift */; };
-		E4AF462F2E549FF800E43833 /* SubgoalSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AF462E2E549FF800E43833 /* SubgoalSectionView.swift */; };
-		E4B6768D2E54CFA400B4940A /* SubgoalTypeSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B6768C2E54CFA400B4940A /* SubgoalTypeSectionView.swift */; };
-		E4B676952E54DD8400B4940A /* LabeledDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B676942E54DD8400B4940A /* LabeledDateView.swift */; };
-		E4B676972E54DE3A00B4940A /* TimeGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B676962E54DE3A00B4940A /* TimeGroupView.swift */; };
-		E4B676992E54E59800B4940A /* DateGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B676982E54E59800B4940A /* DateGroupView.swift */; };
-		E4B6769B2E54E76700B4940A /* CompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B6769A2E54E76700B4940A /* CompletionView.swift */; };
-		E4B6769D2E54E82900B4940A /* SaveSubgoalButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4B6769C2E54E82900B4940A /* SaveSubgoalButtonView.swift */; };
-		E4C06C992E44A34100EB0A76 /* CheckmarkImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06C982E44A34100EB0A76 /* CheckmarkImageView.swift */; };
-		E4C06C9D2E44A4CA00EB0A76 /* SwipeActionButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06C9C2E44A4CA00EB0A76 /* SwipeActionButtonView.swift */; };
-		E4C06C9F2E44B46900EB0A76 /* RowTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06C9E2E44B46900EB0A76 /* RowTextView.swift */; };
-		E4C06CA12E44BFD500EB0A76 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06CA02E44BFD500EB0A76 /* EmptyStateView.swift */; };
-		E4C06CA32E44C19600EB0A76 /* ToolbarButtonImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06CA22E44C19600EB0A76 /* ToolbarButtonImageView.swift */; };
-		E4C06CA52E44D28600EB0A76 /* TextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06CA42E44D28600EB0A76 /* TextFieldView.swift */; };
-		E4C06CA72E44D64E00EB0A76 /* ButtonMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06CA62E44D64E00EB0A76 /* ButtonMenuView.swift */; };
-		E4C06CAF2E44E98B00EB0A76 /* DeleteButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C06CAE2E44E98B00EB0A76 /* DeleteButtonView.swift */; };
-		E4CCAE342E45F0A0001703C9 /* SubgoalSorter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CCAE332E45F0A0001703C9 /* SubgoalSorter.swift */; };
-		E4CCAE3C2E47395D001703C9 /* ToolbarTextButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CCAE3B2E47395D001703C9 /* ToolbarTextButtonView.swift */; };
-		E4CCAE402E475010001703C9 /* ToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CCAE3F2E475010001703C9 /* ToggleView.swift */; };
-		E4CDF5F22E2BD778004A118C /* ReflectionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CDF5F12E2BD778004A118C /* ReflectionFilter.swift */; };
-		E4CE0EEF2E55B97000AA8709 /* MainNavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CE0EEE2E55B97000AA8709 /* MainNavigationBarView.swift */; };
-		E4CF3D522E54FF36007D27A7 /* Environment+DataServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CF3D512E54FF36007D27A7 /* Environment+DataServices.swift */; };
-		E4CF3D542E54FFDB007D27A7 /* GoalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CF3D532E54FFDB007D27A7 /* GoalService.swift */; };
-		E4CF3D582E5516BB007D27A7 /* SubgoalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4CF3D572E5516BB007D27A7 /* SubgoalService.swift */; };
-		E4EF52422E0FCFB400D5B7FE /* AxisOne.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523B2E0FCFB400D5B7FE /* AxisOne.xcdatamodeld */; };
-		E4EF52432E0FCFB400D5B7FE /* AxisOneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523C2E0FCFB400D5B7FE /* AxisOneApp.swift */; };
-		E4EF52442E0FCFB400D5B7FE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523D2E0FCFB400D5B7FE /* ContentView.swift */; };
-		E4EF52452E0FCFB400D5B7FE /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4EF523F2E0FCFB400D5B7FE /* Persistence.swift */; };
-		E4EF52462E0FCFB400D5B7FE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4EF52392E0FCFB400D5B7FE /* Assets.xcassets */; };
-		E4F8124C2E0FF539007CDA87 /* DetailGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F8124B2E0FF539007CDA87 /* DetailGoalView.swift */; };
-		E4FA157F2E24053800AF7873 /* SubgoalTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FA157E2E24053800AF7873 /* SubgoalTypeView.swift */; };
-		E4FA15832E264BD300AF7873 /* SubgoalFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FA15822E264BD300AF7873 /* SubgoalFilter.swift */; };
-		E4FF634D2E38F936004A36A1 /* Jura.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4FF634C2E38F936004A36A1 /* Jura.ttf */; };
-		E4FF63522E39230D004A36A1 /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = E4FF63502E39230D004A36A1 /* OFL.txt */; };
+		E4BDC0C32E72C7440002AF5B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E4BDC0B62E72C7440002AF5B /* Assets.xcassets */; };
+		E4BDC0C92E72C7D30002AF5B /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = E4BDC0C72E72C7D30002AF5B /* OFL.txt */; };
+		E4BDC0CA2E72C7D30002AF5B /* Jura.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4BDC0C62E72C7D30002AF5B /* Jura.ttf */; };
+		E4BDC11B2E72C81C0002AF5B /* TransformationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1162E72C81C0002AF5B /* TransformationView.swift */; };
+		E4BDC11C2E72C81C0002AF5B /* ToolbarButtonImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0ED2E72C81C0002AF5B /* ToolbarButtonImageView.swift */; };
+		E4BDC11D2E72C81C0002AF5B /* RowLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0F52E72C81C0002AF5B /* RowLabelView.swift */; };
+		E4BDC11E2E72C81C0002AF5B /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1132E72C81C0002AF5B /* MainView.swift */; };
+		E4BDC11F2E72C81C0002AF5B /* ToolbarTextButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0E72E72C81C0002AF5B /* ToolbarTextButtonView.swift */; };
+		E4BDC1202E72C81C0002AF5B /* SubgoalSectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0F82E72C81C0002AF5B /* SubgoalSectionsView.swift */; };
+		E4BDC1212E72C81C0002AF5B /* Date+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0DA2E72C81C0002AF5B /* Date+extension.swift */; };
+		E4BDC1222E72C81C0002AF5B /* ButtonMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0EF2E72C81C0002AF5B /* ButtonMenuView.swift */; };
+		E4BDC1232E72C81C0002AF5B /* TimesOfDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0D22E72C81C0002AF5B /* TimesOfDay.swift */; };
+		E4BDC1242E72C81C0002AF5B /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1092E72C81C0002AF5B /* HistoryView.swift */; };
+		E4BDC1252E72C81C0002AF5B /* LifeAreas.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0CF2E72C81C0002AF5B /* LifeAreas.swift */; };
+		E4BDC1262E72C81C0002AF5B /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0D72E72C81C0002AF5B /* Persistence.swift */; };
+		E4BDC1272E72C81C0002AF5B /* RowTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0F62E72C81C0002AF5B /* RowTextView.swift */; };
+		E4BDC1282E72C81C0002AF5B /* SubgoalTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0D02E72C81C0002AF5B /* SubgoalTypes.swift */; };
+		E4BDC1292E72C81C0002AF5B /* DateGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0E92E72C81C0002AF5B /* DateGroupView.swift */; };
+		E4BDC12A2E72C81C0002AF5B /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0FF2E72C81C0002AF5B /* GoalView.swift */; };
+		E4BDC12B2E72C81C0002AF5B /* Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0D12E72C81C0002AF5B /* Tabs.swift */; };
+		E4BDC12C2E72C81C0002AF5B /* SubgoalFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0E02E72C81C0002AF5B /* SubgoalFilter.swift */; };
+		E4BDC12D2E72C81C0002AF5B /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0E32E72C81C0002AF5B /* Constants.swift */; };
+		E4BDC12E2E72C81C0002AF5B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1182E72C81C0002AF5B /* ContentView.swift */; };
+		E4BDC12F2E72C81C0002AF5B /* Feelings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0CD2E72C81C0002AF5B /* Feelings.swift */; };
+		E4BDC1302E72C81C0002AF5B /* TimeOfDayPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1112E72C81C0002AF5B /* TimeOfDayPickerView.swift */; };
+		E4BDC1312E72C81C0002AF5B /* CompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0FD2E72C81C0002AF5B /* CompletionView.swift */; };
+		E4BDC1322E72C81C0002AF5B /* LabeledDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0F22E72C81C0002AF5B /* LabeledDateView.swift */; };
+		E4BDC1332E72C81C0002AF5B /* SaveSubgoalButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1002E72C81C0002AF5B /* SaveSubgoalButtonView.swift */; };
+		E4BDC1342E72C81C0002AF5B /* DetailGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1042E72C81C0002AF5B /* DetailGoalView.swift */; };
+		E4BDC1352E72C81C0002AF5B /* AxisOneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0CB2E72C81C0002AF5B /* AxisOneApp.swift */; };
+		E4BDC1362E72C81C0002AF5B /* Environment+DataServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0DB2E72C81C0002AF5B /* Environment+DataServices.swift */; };
+		E4BDC1382E72C81C0002AF5B /* TextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0FA2E72C81C0002AF5B /* TextFieldView.swift */; };
+		E4BDC1392E72C81C0002AF5B /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0F92E72C81C0002AF5B /* TabBarView.swift */; };
+		E4BDC13A2E72C81C0002AF5B /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0F12E72C81C0002AF5B /* EmptyStateView.swift */; };
+		E4BDC13C2E72C81C0002AF5B /* SwipeActionButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0E62E72C81C0002AF5B /* SwipeActionButtonView.swift */; };
+		E4BDC13D2E72C81C0002AF5B /* Shape+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0DC2E72C81C0002AF5B /* Shape+extension.swift */; };
+		E4BDC13E2E72C81C0002AF5B /* AxisOne.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0D42E72C81C0002AF5B /* AxisOne.xcdatamodeld */; };
+		E4BDC13F2E72C81C0002AF5B /* MainNavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC10E2E72C81C0002AF5B /* MainNavigationBarView.swift */; };
+		E4BDC1402E72C81C0002AF5B /* GoalListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0FE2E72C81C0002AF5B /* GoalListView.swift */; };
+		E4BDC1412E72C81C0002AF5B /* DeleteButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0E52E72C81C0002AF5B /* DeleteButtonView.swift */; };
+		E4BDC1422E72C81C0002AF5B /* DetailSubgoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1052E72C81C0002AF5B /* DetailSubgoalView.swift */; };
+		E4BDC1432E72C81C0002AF5B /* SubgoalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0D82E72C81C0002AF5B /* SubgoalService.swift */; };
+		E4BDC1442E72C81C0002AF5B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1142E72C81C0002AF5B /* SettingsView.swift */; };
+		E4BDC1452E72C81C0002AF5B /* CheckmarkImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0EC2E72C81C0002AF5B /* CheckmarkImageView.swift */; };
+		E4BDC1462E72C81C0002AF5B /* SubgoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1102E72C81C0002AF5B /* SubgoalView.swift */; };
+		E4BDC1482E72C81C0002AF5B /* SubgoalTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1152E72C81C0002AF5B /* SubgoalTypeView.swift */; };
+		E4BDC1492E72C81C0002AF5B /* SubgoalSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1012E72C81C0002AF5B /* SubgoalSectionView.swift */; };
+		E4BDC14A2E72C81C0002AF5B /* GoalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0D62E72C81C0002AF5B /* GoalService.swift */; };
+		E4BDC14B2E72C81C0002AF5B /* TimeGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0EA2E72C81C0002AF5B /* TimeGroupView.swift */; };
+		E4BDC14C2E72C81C0002AF5B /* AnalysisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1082E72C81C0002AF5B /* AnalysisView.swift */; };
+		E4BDC14D2E72C81C0002AF5B /* CalendarScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC10D2E72C81C0002AF5B /* CalendarScrollView.swift */; };
+		E4BDC14E2E72C81C0002AF5B /* SubgoalSorter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0E12E72C81C0002AF5B /* SubgoalSorter.swift */; };
+		E4BDC14F2E72C81C0002AF5B /* GoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1062E72C81C0002AF5B /* GoalsView.swift */; };
+		E4BDC1512E72C81C0002AF5B /* SubgoalTypeSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1022E72C81C0002AF5B /* SubgoalTypeSectionView.swift */; };
+		E4BDC1522E72C81C0002AF5B /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC10A2E72C81C0002AF5B /* JournalView.swift */; };
+		E4BDC1532E72C81C0002AF5B /* SummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC10B2E72C81C0002AF5B /* SummaryView.swift */; };
+		E4BDC1542E72C81C0002AF5B /* SubgoalTypesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC10F2E72C81C0002AF5B /* SubgoalTypesView.swift */; };
+		E4BDC1552E72C81C0002AF5B /* Frequencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0CE2E72C81C0002AF5B /* Frequencies.swift */; };
+		E4BDC1562E72C81C0002AF5B /* ToggleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0FB2E72C81C0002AF5B /* ToggleView.swift */; };
+		E4BDC1572E72C81C0002AF5B /* ReflectionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0DF2E72C81C0002AF5B /* ReflectionFilter.swift */; };
+		E4BDC1582E72C81C0002AF5B /* View+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0DD2E72C81C0002AF5B /* View+extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E40E86CD2E10035800ED6DCA /* DetailSubgoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSubgoalView.swift; sourceTree = "<group>"; };
-		E40E86CF2E1025A900ED6DCA /* GoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalView.swift; sourceTree = "<group>"; };
-		E41AC0B82E7020B0002041CF /* View+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+extension.swift"; sourceTree = "<group>"; };
-		E41E9D282E6989F10095CE13 /* Tabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tabs.swift; sourceTree = "<group>"; };
-		E41E9D2A2E698A1A0095CE13 /* LifeAreas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeAreas.swift; sourceTree = "<group>"; };
-		E41E9D2C2E698A320095CE13 /* SubgoalTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalTypes.swift; sourceTree = "<group>"; };
-		E41E9D2E2E698A5D0095CE13 /* Frequencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Frequencies.swift; sourceTree = "<group>"; };
-		E41E9D302E698A750095CE13 /* TimesOfDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesOfDay.swift; sourceTree = "<group>"; };
-		E41E9D342E698AA00095CE13 /* Feelings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feelings.swift; sourceTree = "<group>"; };
-		E42BDFF32E606573002E15C9 /* TransformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformationView.swift; sourceTree = "<group>"; };
-		E43AA6A32E6D7AC4003E8E60 /* Shape+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shape+extension.swift"; sourceTree = "<group>"; };
-		E43B6FEA2E66F11600BCF40F /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
-		E4563B192E0FE4CA0075B178 /* GoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsView.swift; sourceTree = "<group>"; };
-		E4563B1B2E0FE4D30075B178 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		E4563B1D2E0FE4DE0075B178 /* JournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalView.swift; sourceTree = "<group>"; };
-		E4563B212E0FE5450075B178 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		E4563B232E0FE96A0075B178 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		E45F9C592E3AA0CE00B1B9D7 /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
-		E45F9C5B2E3B635800B1B9D7 /* CalendarScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarScrollView.swift; sourceTree = "<group>"; };
-		E472EDE72E5C7CD2004E2364 /* Date+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+extension.swift"; sourceTree = "<group>"; };
-		E493E69C2E19264E009CDDDE /* SubgoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalView.swift; sourceTree = "<group>"; };
-		E493E69E2E19270F009CDDDE /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
-		E493E6A02E1928DC009CDDDE /* AnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisView.swift; sourceTree = "<group>"; };
-		E49ACC792E452BD200BC0EF4 /* RowLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowLabelView.swift; sourceTree = "<group>"; };
-		E4AF461F2E51050900E43833 /* SubgoalTypesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalTypesView.swift; sourceTree = "<group>"; };
-		E4AF46212E51B79500E43833 /* SubgoalSectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalSectionsView.swift; sourceTree = "<group>"; };
-		E4AF46252E51C87600E43833 /* TimeOfDayPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeOfDayPickerView.swift; sourceTree = "<group>"; };
-		E4AF462A2E53479800E43833 /* GoalListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalListView.swift; sourceTree = "<group>"; };
-		E4AF462E2E549FF800E43833 /* SubgoalSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalSectionView.swift; sourceTree = "<group>"; };
-		E4B6768C2E54CFA400B4940A /* SubgoalTypeSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalTypeSectionView.swift; sourceTree = "<group>"; };
-		E4B676942E54DD8400B4940A /* LabeledDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledDateView.swift; sourceTree = "<group>"; };
-		E4B676962E54DE3A00B4940A /* TimeGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeGroupView.swift; sourceTree = "<group>"; };
-		E4B676982E54E59800B4940A /* DateGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateGroupView.swift; sourceTree = "<group>"; };
-		E4B6769A2E54E76700B4940A /* CompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionView.swift; sourceTree = "<group>"; };
-		E4B6769C2E54E82900B4940A /* SaveSubgoalButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveSubgoalButtonView.swift; sourceTree = "<group>"; };
-		E4C06C982E44A34100EB0A76 /* CheckmarkImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckmarkImageView.swift; sourceTree = "<group>"; };
-		E4C06C9C2E44A4CA00EB0A76 /* SwipeActionButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeActionButtonView.swift; sourceTree = "<group>"; };
-		E4C06C9E2E44B46900EB0A76 /* RowTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowTextView.swift; sourceTree = "<group>"; };
-		E4C06CA02E44BFD500EB0A76 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
-		E4C06CA22E44C19600EB0A76 /* ToolbarButtonImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButtonImageView.swift; sourceTree = "<group>"; };
-		E4C06CA42E44D28600EB0A76 /* TextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldView.swift; sourceTree = "<group>"; };
-		E4C06CA62E44D64E00EB0A76 /* ButtonMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonMenuView.swift; sourceTree = "<group>"; };
-		E4C06CAE2E44E98B00EB0A76 /* DeleteButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteButtonView.swift; sourceTree = "<group>"; };
-		E4CCAE332E45F0A0001703C9 /* SubgoalSorter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalSorter.swift; sourceTree = "<group>"; };
-		E4CCAE3B2E47395D001703C9 /* ToolbarTextButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarTextButtonView.swift; sourceTree = "<group>"; };
-		E4CCAE3F2E475010001703C9 /* ToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleView.swift; sourceTree = "<group>"; };
-		E4CDF5F12E2BD778004A118C /* ReflectionFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflectionFilter.swift; sourceTree = "<group>"; };
-		E4CE0EEE2E55B97000AA8709 /* MainNavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationBarView.swift; sourceTree = "<group>"; };
-		E4CF3D512E54FF36007D27A7 /* Environment+DataServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Environment+DataServices.swift"; sourceTree = "<group>"; };
-		E4CF3D532E54FFDB007D27A7 /* GoalService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalService.swift; sourceTree = "<group>"; };
-		E4CF3D572E5516BB007D27A7 /* SubgoalService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalService.swift; sourceTree = "<group>"; };
-		E4EF52392E0FCFB400D5B7FE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E4EF523A2E0FCFB400D5B7FE /* AxisOne.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AxisOne.entitlements; sourceTree = "<group>"; };
-		E4EF523C2E0FCFB400D5B7FE /* AxisOneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AxisOneApp.swift; sourceTree = "<group>"; };
-		E4EF523D2E0FCFB400D5B7FE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		E4EF523E2E0FCFB400D5B7FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E4EF523F2E0FCFB400D5B7FE /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
-		E4EF52412E0FCFB400D5B7FE /* AxisOne.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AxisOne.xcdatamodel; sourceTree = "<group>"; };
-		E4F8124B2E0FF539007CDA87 /* DetailGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGoalView.swift; sourceTree = "<group>"; };
-		E4FA157E2E24053800AF7873 /* SubgoalTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalTypeView.swift; sourceTree = "<group>"; };
-		E4FA15822E264BD300AF7873 /* SubgoalFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalFilter.swift; sourceTree = "<group>"; };
-		E4FF634C2E38F936004A36A1 /* Jura.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Jura.ttf; sourceTree = "<group>"; };
-		E4FF63502E39230D004A36A1 /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
+		E4BDC0A02E72C6A40002AF5B /* AxisOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AxisOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4BDC0B62E72C7440002AF5B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E4BDC0B72E72C7440002AF5B /* AxisOne.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AxisOne.entitlements; sourceTree = "<group>"; };
+		E4BDC0BB2E72C7440002AF5B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E4BDC0C62E72C7D30002AF5B /* Jura.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Jura.ttf; sourceTree = "<group>"; };
+		E4BDC0C72E72C7D30002AF5B /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
+		E4BDC0CB2E72C81C0002AF5B /* AxisOneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AxisOneApp.swift; sourceTree = "<group>"; };
+		E4BDC0CD2E72C81C0002AF5B /* Feelings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feelings.swift; sourceTree = "<group>"; };
+		E4BDC0CE2E72C81C0002AF5B /* Frequencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Frequencies.swift; sourceTree = "<group>"; };
+		E4BDC0CF2E72C81C0002AF5B /* LifeAreas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifeAreas.swift; sourceTree = "<group>"; };
+		E4BDC0D02E72C81C0002AF5B /* SubgoalTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalTypes.swift; sourceTree = "<group>"; };
+		E4BDC0D12E72C81C0002AF5B /* Tabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tabs.swift; sourceTree = "<group>"; };
+		E4BDC0D22E72C81C0002AF5B /* TimesOfDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesOfDay.swift; sourceTree = "<group>"; };
+		E4BDC0D62E72C81C0002AF5B /* GoalService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalService.swift; sourceTree = "<group>"; };
+		E4BDC0D72E72C81C0002AF5B /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		E4BDC0D82E72C81C0002AF5B /* SubgoalService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalService.swift; sourceTree = "<group>"; };
+		E4BDC0DA2E72C81C0002AF5B /* Date+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+extension.swift"; sourceTree = "<group>"; };
+		E4BDC0DB2E72C81C0002AF5B /* Environment+DataServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Environment+DataServices.swift"; sourceTree = "<group>"; };
+		E4BDC0DC2E72C81C0002AF5B /* Shape+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shape+extension.swift"; sourceTree = "<group>"; };
+		E4BDC0DD2E72C81C0002AF5B /* View+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+extension.swift"; sourceTree = "<group>"; };
+		E4BDC0DF2E72C81C0002AF5B /* ReflectionFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReflectionFilter.swift; sourceTree = "<group>"; };
+		E4BDC0E02E72C81C0002AF5B /* SubgoalFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalFilter.swift; sourceTree = "<group>"; };
+		E4BDC0E12E72C81C0002AF5B /* SubgoalSorter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalSorter.swift; sourceTree = "<group>"; };
+		E4BDC0E32E72C81C0002AF5B /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		E4BDC0E52E72C81C0002AF5B /* DeleteButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteButtonView.swift; sourceTree = "<group>"; };
+		E4BDC0E62E72C81C0002AF5B /* SwipeActionButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeActionButtonView.swift; sourceTree = "<group>"; };
+		E4BDC0E72E72C81C0002AF5B /* ToolbarTextButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarTextButtonView.swift; sourceTree = "<group>"; };
+		E4BDC0E92E72C81C0002AF5B /* DateGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateGroupView.swift; sourceTree = "<group>"; };
+		E4BDC0EA2E72C81C0002AF5B /* TimeGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeGroupView.swift; sourceTree = "<group>"; };
+		E4BDC0EC2E72C81C0002AF5B /* CheckmarkImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckmarkImageView.swift; sourceTree = "<group>"; };
+		E4BDC0ED2E72C81C0002AF5B /* ToolbarButtonImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarButtonImageView.swift; sourceTree = "<group>"; };
+		E4BDC0EF2E72C81C0002AF5B /* ButtonMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonMenuView.swift; sourceTree = "<group>"; };
+		E4BDC0F12E72C81C0002AF5B /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
+		E4BDC0F22E72C81C0002AF5B /* LabeledDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledDateView.swift; sourceTree = "<group>"; };
+		E4BDC0F52E72C81C0002AF5B /* RowLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowLabelView.swift; sourceTree = "<group>"; };
+		E4BDC0F62E72C81C0002AF5B /* RowTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowTextView.swift; sourceTree = "<group>"; };
+		E4BDC0F82E72C81C0002AF5B /* SubgoalSectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalSectionsView.swift; sourceTree = "<group>"; };
+		E4BDC0F92E72C81C0002AF5B /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
+		E4BDC0FA2E72C81C0002AF5B /* TextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldView.swift; sourceTree = "<group>"; };
+		E4BDC0FB2E72C81C0002AF5B /* ToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleView.swift; sourceTree = "<group>"; };
+		E4BDC0FD2E72C81C0002AF5B /* CompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionView.swift; sourceTree = "<group>"; };
+		E4BDC0FE2E72C81C0002AF5B /* GoalListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalListView.swift; sourceTree = "<group>"; };
+		E4BDC0FF2E72C81C0002AF5B /* GoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalView.swift; sourceTree = "<group>"; };
+		E4BDC1002E72C81C0002AF5B /* SaveSubgoalButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveSubgoalButtonView.swift; sourceTree = "<group>"; };
+		E4BDC1012E72C81C0002AF5B /* SubgoalSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalSectionView.swift; sourceTree = "<group>"; };
+		E4BDC1022E72C81C0002AF5B /* SubgoalTypeSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalTypeSectionView.swift; sourceTree = "<group>"; };
+		E4BDC1042E72C81C0002AF5B /* DetailGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailGoalView.swift; sourceTree = "<group>"; };
+		E4BDC1052E72C81C0002AF5B /* DetailSubgoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailSubgoalView.swift; sourceTree = "<group>"; };
+		E4BDC1062E72C81C0002AF5B /* GoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsView.swift; sourceTree = "<group>"; };
+		E4BDC1082E72C81C0002AF5B /* AnalysisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisView.swift; sourceTree = "<group>"; };
+		E4BDC1092E72C81C0002AF5B /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		E4BDC10A2E72C81C0002AF5B /* JournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalView.swift; sourceTree = "<group>"; };
+		E4BDC10B2E72C81C0002AF5B /* SummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryView.swift; sourceTree = "<group>"; };
+		E4BDC10D2E72C81C0002AF5B /* CalendarScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarScrollView.swift; sourceTree = "<group>"; };
+		E4BDC10E2E72C81C0002AF5B /* MainNavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigationBarView.swift; sourceTree = "<group>"; };
+		E4BDC10F2E72C81C0002AF5B /* SubgoalTypesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalTypesView.swift; sourceTree = "<group>"; };
+		E4BDC1102E72C81C0002AF5B /* SubgoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalView.swift; sourceTree = "<group>"; };
+		E4BDC1112E72C81C0002AF5B /* TimeOfDayPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeOfDayPickerView.swift; sourceTree = "<group>"; };
+		E4BDC1132E72C81C0002AF5B /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		E4BDC1142E72C81C0002AF5B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E4BDC1152E72C81C0002AF5B /* SubgoalTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalTypeView.swift; sourceTree = "<group>"; };
+		E4BDC1162E72C81C0002AF5B /* TransformationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformationView.swift; sourceTree = "<group>"; };
+		E4BDC1182E72C81C0002AF5B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		E4BDC11A2E72C81C0002AF5B /* AxisOne.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AxisOne.xcdatamodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		E4EF52202E0EF53A00D5B7FE /* Frameworks */ = {
+		E4BDC09D2E72C6A40002AF5B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -147,245 +148,254 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		E41E9D232E6980170095CE13 /* Utilities */ = {
+		E4BDC0972E72C6A40002AF5B = {
 			isa = PBXGroup;
 			children = (
-				E41E9D252E6982780095CE13 /* Extensions */,
-				E41E9D262E6982880095CE13 /* Helpers */,
-				E4563B212E0FE5450075B178 /* Constants.swift */,
-			);
-			path = Utilities;
-			sourceTree = "<group>";
-		};
-		E41E9D252E6982780095CE13 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				E4CF3D512E54FF36007D27A7 /* Environment+DataServices.swift */,
-				E472EDE72E5C7CD2004E2364 /* Date+extension.swift */,
-				E43AA6A32E6D7AC4003E8E60 /* Shape+extension.swift */,
-				E41AC0B82E7020B0002041CF /* View+extension.swift */,
-			);
-			path = Extensions;
-			sourceTree = "<group>";
-		};
-		E41E9D262E6982880095CE13 /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				E4FA15822E264BD300AF7873 /* SubgoalFilter.swift */,
-				E4CCAE332E45F0A0001703C9 /* SubgoalSorter.swift */,
-				E4CDF5F12E2BD778004A118C /* ReflectionFilter.swift */,
-			);
-			path = Helpers;
-			sourceTree = "<group>";
-		};
-		E41E9D272E6988290095CE13 /* Enums */ = {
-			isa = PBXGroup;
-			children = (
-				E41E9D282E6989F10095CE13 /* Tabs.swift */,
-				E41E9D2A2E698A1A0095CE13 /* LifeAreas.swift */,
-				E41E9D2C2E698A320095CE13 /* SubgoalTypes.swift */,
-				E41E9D2E2E698A5D0095CE13 /* Frequencies.swift */,
-				E41E9D302E698A750095CE13 /* TimesOfDay.swift */,
-				E41E9D342E698AA00095CE13 /* Feelings.swift */,
-			);
-			path = Enums;
-			sourceTree = "<group>";
-		};
-		E41E9D382E69A4370095CE13 /* ImageViews */ = {
-			isa = PBXGroup;
-			children = (
-				E4C06CA22E44C19600EB0A76 /* ToolbarButtonImageView.swift */,
-				E4C06C982E44A34100EB0A76 /* CheckmarkImageView.swift */,
-			);
-			path = ImageViews;
-			sourceTree = "<group>";
-		};
-		E41E9D392E69A45C0095CE13 /* ButtonViews */ = {
-			isa = PBXGroup;
-			children = (
-				E4CCAE3B2E47395D001703C9 /* ToolbarTextButtonView.swift */,
-				E4C06C9C2E44A4CA00EB0A76 /* SwipeActionButtonView.swift */,
-				E4C06CAE2E44E98B00EB0A76 /* DeleteButtonView.swift */,
-			);
-			path = ButtonViews;
-			sourceTree = "<group>";
-		};
-		E41E9D3B2E6C41640095CE13 /* GroupViews */ = {
-			isa = PBXGroup;
-			children = (
-				E4B676982E54E59800B4940A /* DateGroupView.swift */,
-				E4B676962E54DE3A00B4940A /* TimeGroupView.swift */,
-			);
-			path = GroupViews;
-			sourceTree = "<group>";
-		};
-		E4563B272E0FE9B10075B178 /* MainModule */ = {
-			isa = PBXGroup;
-			children = (
-				E4B676A02E54EE2000B4940A /* Components */,
-				E4563B1B2E0FE4D30075B178 /* MainView.swift */,
-				E4FA157E2E24053800AF7873 /* SubgoalTypeView.swift */,
-				E42BDFF32E606573002E15C9 /* TransformationView.swift */,
-				E4563B232E0FE96A0075B178 /* SettingsView.swift */,
-			);
-			path = MainModule;
-			sourceTree = "<group>";
-		};
-		E4563B282E0FE9C90075B178 /* GoalsModule */ = {
-			isa = PBXGroup;
-			children = (
-				E4AF46292E533F5E00E43833 /* Components */,
-				E4563B192E0FE4CA0075B178 /* GoalsView.swift */,
-				E4F8124B2E0FF539007CDA87 /* DetailGoalView.swift */,
-				E40E86CD2E10035800ED6DCA /* DetailSubgoalView.swift */,
-			);
-			path = GoalsModule;
-			sourceTree = "<group>";
-		};
-		E4563B292E0FEA050075B178 /* JournalModule */ = {
-			isa = PBXGroup;
-			children = (
-				E4563B1D2E0FE4DE0075B178 /* JournalView.swift */,
-				E493E6A02E1928DC009CDDDE /* AnalysisView.swift */,
-				E45F9C592E3AA0CE00B1B9D7 /* SummaryView.swift */,
-				E493E69E2E19270F009CDDDE /* HistoryView.swift */,
-			);
-			path = JournalModule;
-			sourceTree = "<group>";
-		};
-		E4AF46292E533F5E00E43833 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				E4AF462A2E53479800E43833 /* GoalListView.swift */,
-				E40E86CF2E1025A900ED6DCA /* GoalView.swift */,
-				E4AF462E2E549FF800E43833 /* SubgoalSectionView.swift */,
-				E4B6768C2E54CFA400B4940A /* SubgoalTypeSectionView.swift */,
-				E4B6769A2E54E76700B4940A /* CompletionView.swift */,
-				E4B6769C2E54E82900B4940A /* SaveSubgoalButtonView.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		E4B676A02E54EE2000B4940A /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				E4CE0EEE2E55B97000AA8709 /* MainNavigationBarView.swift */,
-				E45F9C5B2E3B635800B1B9D7 /* CalendarScrollView.swift */,
-				E4AF461F2E51050900E43833 /* SubgoalTypesView.swift */,
-				E4AF46252E51C87600E43833 /* TimeOfDayPickerView.swift */,
-				E493E69C2E19264E009CDDDE /* SubgoalView.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		E4C06C972E44A32800EB0A76 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				E41E9D392E69A45C0095CE13 /* ButtonViews */,
-				E41E9D382E69A4370095CE13 /* ImageViews */,
-				E41E9D3B2E6C41640095CE13 /* GroupViews */,
-				E43B6FEA2E66F11600BCF40F /* TabBarView.swift */,
-				E4C06CA02E44BFD500EB0A76 /* EmptyStateView.swift */,
-				E4C06C9E2E44B46900EB0A76 /* RowTextView.swift */,
-				E4C06CA62E44D64E00EB0A76 /* ButtonMenuView.swift */,
-				E4C06CA42E44D28600EB0A76 /* TextFieldView.swift */,
-				E4CCAE3F2E475010001703C9 /* ToggleView.swift */,
-				E49ACC792E452BD200BC0EF4 /* RowLabelView.swift */,
-				E4B676942E54DD8400B4940A /* LabeledDateView.swift */,
-				E4AF46212E51B79500E43833 /* SubgoalSectionsView.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		E4EF521A2E0EF53A00D5B7FE = {
-			isa = PBXGroup;
-			children = (
-				E4EF52402E0FCFB400D5B7FE /* AxisOne */,
+				E4BDC0BD2E72C7440002AF5B /* AxisOne */,
+				E4BDC0A12E72C6A40002AF5B /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		E4EF52402E0FCFB400D5B7FE /* AxisOne */ = {
+		E4BDC0A12E72C6A40002AF5B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E4EF52482E0FCFB900D5B7FE /* App */,
-				E4EF52492E0FCFC900D5B7FE /* Models */,
-				E4EF524A2E0FCFD800D5B7FE /* Views */,
-				E41E9D232E6980170095CE13 /* Utilities */,
-				E4EF524B2E0FCFE600D5B7FE /* Services */,
-				E4EF524C2E0FCFED00D5B7FE /* Resources */,
+				E4BDC0A02E72C6A40002AF5B /* AxisOne.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E4BDC0BD2E72C7440002AF5B /* AxisOne */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC0CC2E72C81C0002AF5B /* App */,
+				E4BDC0D52E72C81C0002AF5B /* Models */,
+				E4BDC1192E72C81C0002AF5B /* Views */,
+				E4BDC0E42E72C81C0002AF5B /* Utilities */,
+				E4BDC0D92E72C81C0002AF5B /* Services */,
+				E4BDC0C52E72C7490002AF5B /* Resources */,
 			);
 			path = AxisOne;
 			sourceTree = "<group>";
 		};
-		E4EF52482E0FCFB900D5B7FE /* App */ = {
+		E4BDC0C52E72C7490002AF5B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				E4EF523C2E0FCFB400D5B7FE /* AxisOneApp.swift */,
-			);
-			path = App;
-			sourceTree = "<group>";
-		};
-		E4EF52492E0FCFC900D5B7FE /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				E41E9D272E6988290095CE13 /* Enums */,
-				E4EF523B2E0FCFB400D5B7FE /* AxisOne.xcdatamodeld */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		E4EF524A2E0FCFD800D5B7FE /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				E4C06C972E44A32800EB0A76 /* Components */,
-				E4563B282E0FE9C90075B178 /* GoalsModule */,
-				E4563B272E0FE9B10075B178 /* MainModule */,
-				E4563B292E0FEA050075B178 /* JournalModule */,
-				E4EF523D2E0FCFB400D5B7FE /* ContentView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		E4EF524B2E0FCFE600D5B7FE /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				E4EF523F2E0FCFB400D5B7FE /* Persistence.swift */,
-				E4CF3D532E54FFDB007D27A7 /* GoalService.swift */,
-				E4CF3D572E5516BB007D27A7 /* SubgoalService.swift */,
-			);
-			path = Services;
-			sourceTree = "<group>";
-		};
-		E4EF524C2E0FCFED00D5B7FE /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				E4FF634B2E38F926004A36A1 /* Fonts */,
-				E4EF52392E0FCFB400D5B7FE /* Assets.xcassets */,
-				E4EF523A2E0FCFB400D5B7FE /* AxisOne.entitlements */,
-				E4EF523E2E0FCFB400D5B7FE /* Info.plist */,
+				E4BDC0C82E72C7D30002AF5B /* Fonts */,
+				E4BDC0B62E72C7440002AF5B /* Assets.xcassets */,
+				E4BDC0B72E72C7440002AF5B /* AxisOne.entitlements */,
+				E4BDC0BB2E72C7440002AF5B /* Info.plist */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		E4FF634B2E38F926004A36A1 /* Fonts */ = {
+		E4BDC0C82E72C7D30002AF5B /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				E4FF634C2E38F936004A36A1 /* Jura.ttf */,
-				E4FF63502E39230D004A36A1 /* OFL.txt */,
+				E4BDC0C62E72C7D30002AF5B /* Jura.ttf */,
+				E4BDC0C72E72C7D30002AF5B /* OFL.txt */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		E4BDC0CC2E72C81C0002AF5B /* App */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC0CB2E72C81C0002AF5B /* AxisOneApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		E4BDC0D32E72C81C0002AF5B /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC0D12E72C81C0002AF5B /* Tabs.swift */,
+				E4BDC0CF2E72C81C0002AF5B /* LifeAreas.swift */,
+				E4BDC0D02E72C81C0002AF5B /* SubgoalTypes.swift */,
+				E4BDC0CE2E72C81C0002AF5B /* Frequencies.swift */,
+				E4BDC0D22E72C81C0002AF5B /* TimesOfDay.swift */,
+				E4BDC0CD2E72C81C0002AF5B /* Feelings.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		E4BDC0D52E72C81C0002AF5B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC0D32E72C81C0002AF5B /* Enums */,
+				E4BDC0D42E72C81C0002AF5B /* AxisOne.xcdatamodeld */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E4BDC0D92E72C81C0002AF5B /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC0D72E72C81C0002AF5B /* Persistence.swift */,
+				E4BDC0D62E72C81C0002AF5B /* GoalService.swift */,
+				E4BDC0D82E72C81C0002AF5B /* SubgoalService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		E4BDC0DE2E72C81C0002AF5B /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC0DB2E72C81C0002AF5B /* Environment+DataServices.swift */,
+				E4BDC0DA2E72C81C0002AF5B /* Date+extension.swift */,
+				E4BDC0DC2E72C81C0002AF5B /* Shape+extension.swift */,
+				E4BDC0DD2E72C81C0002AF5B /* View+extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		E4BDC0E22E72C81C0002AF5B /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC0E02E72C81C0002AF5B /* SubgoalFilter.swift */,
+				E4BDC0E12E72C81C0002AF5B /* SubgoalSorter.swift */,
+				E4BDC0DF2E72C81C0002AF5B /* ReflectionFilter.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		E4BDC0E42E72C81C0002AF5B /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC0DE2E72C81C0002AF5B /* Extensions */,
+				E4BDC0E22E72C81C0002AF5B /* Helpers */,
+				E4BDC0E32E72C81C0002AF5B /* Constants.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		E4BDC0E82E72C81C0002AF5B /* ButtonViews */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC0E72E72C81C0002AF5B /* ToolbarTextButtonView.swift */,
+				E4BDC0E62E72C81C0002AF5B /* SwipeActionButtonView.swift */,
+				E4BDC0E52E72C81C0002AF5B /* DeleteButtonView.swift */,
+			);
+			path = ButtonViews;
+			sourceTree = "<group>";
+		};
+		E4BDC0EB2E72C81C0002AF5B /* GroupViews */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC0E92E72C81C0002AF5B /* DateGroupView.swift */,
+				E4BDC0EA2E72C81C0002AF5B /* TimeGroupView.swift */,
+			);
+			path = GroupViews;
+			sourceTree = "<group>";
+		};
+		E4BDC0EE2E72C81C0002AF5B /* ImageViews */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC0ED2E72C81C0002AF5B /* ToolbarButtonImageView.swift */,
+				E4BDC0EC2E72C81C0002AF5B /* CheckmarkImageView.swift */,
+			);
+			path = ImageViews;
+			sourceTree = "<group>";
+		};
+		E4BDC0FC2E72C81C0002AF5B /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC0E82E72C81C0002AF5B /* ButtonViews */,
+				E4BDC0EE2E72C81C0002AF5B /* ImageViews */,
+				E4BDC0EB2E72C81C0002AF5B /* GroupViews */,
+				E4BDC0F92E72C81C0002AF5B /* TabBarView.swift */,
+				E4BDC0F12E72C81C0002AF5B /* EmptyStateView.swift */,
+				E4BDC0F62E72C81C0002AF5B /* RowTextView.swift */,
+				E4BDC0EF2E72C81C0002AF5B /* ButtonMenuView.swift */,
+				E4BDC0FA2E72C81C0002AF5B /* TextFieldView.swift */,
+				E4BDC0FB2E72C81C0002AF5B /* ToggleView.swift */,
+				E4BDC0F52E72C81C0002AF5B /* RowLabelView.swift */,
+				E4BDC0F22E72C81C0002AF5B /* LabeledDateView.swift */,
+				E4BDC0F82E72C81C0002AF5B /* SubgoalSectionsView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		E4BDC1032E72C81C0002AF5B /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC0FD2E72C81C0002AF5B /* CompletionView.swift */,
+				E4BDC0FE2E72C81C0002AF5B /* GoalListView.swift */,
+				E4BDC0FF2E72C81C0002AF5B /* GoalView.swift */,
+				E4BDC1002E72C81C0002AF5B /* SaveSubgoalButtonView.swift */,
+				E4BDC1012E72C81C0002AF5B /* SubgoalSectionView.swift */,
+				E4BDC1022E72C81C0002AF5B /* SubgoalTypeSectionView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		E4BDC1072E72C81C0002AF5B /* GoalsModule */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC1032E72C81C0002AF5B /* Components */,
+				E4BDC1042E72C81C0002AF5B /* DetailGoalView.swift */,
+				E4BDC1052E72C81C0002AF5B /* DetailSubgoalView.swift */,
+				E4BDC1062E72C81C0002AF5B /* GoalsView.swift */,
+			);
+			path = GoalsModule;
+			sourceTree = "<group>";
+		};
+		E4BDC10C2E72C81C0002AF5B /* JournalModule */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC1082E72C81C0002AF5B /* AnalysisView.swift */,
+				E4BDC1092E72C81C0002AF5B /* HistoryView.swift */,
+				E4BDC10A2E72C81C0002AF5B /* JournalView.swift */,
+				E4BDC10B2E72C81C0002AF5B /* SummaryView.swift */,
+			);
+			path = JournalModule;
+			sourceTree = "<group>";
+		};
+		E4BDC1122E72C81C0002AF5B /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC10D2E72C81C0002AF5B /* CalendarScrollView.swift */,
+				E4BDC10E2E72C81C0002AF5B /* MainNavigationBarView.swift */,
+				E4BDC10F2E72C81C0002AF5B /* SubgoalTypesView.swift */,
+				E4BDC1102E72C81C0002AF5B /* SubgoalView.swift */,
+				E4BDC1112E72C81C0002AF5B /* TimeOfDayPickerView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		E4BDC1172E72C81C0002AF5B /* MainModule */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC1122E72C81C0002AF5B /* Components */,
+				E4BDC1132E72C81C0002AF5B /* MainView.swift */,
+				E4BDC1142E72C81C0002AF5B /* SettingsView.swift */,
+				E4BDC1152E72C81C0002AF5B /* SubgoalTypeView.swift */,
+				E4BDC1162E72C81C0002AF5B /* TransformationView.swift */,
+			);
+			path = MainModule;
+			sourceTree = "<group>";
+		};
+		E4BDC1192E72C81C0002AF5B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E4BDC0FC2E72C81C0002AF5B /* Components */,
+				E4BDC1072E72C81C0002AF5B /* GoalsModule */,
+				E4BDC10C2E72C81C0002AF5B /* JournalModule */,
+				E4BDC1172E72C81C0002AF5B /* MainModule */,
+				E4BDC1182E72C81C0002AF5B /* ContentView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E4EF52222E0EF53A00D5B7FE /* AxisOne */ = {
+		E4BDC09F2E72C6A40002AF5B /* AxisOne */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E4EF52342E0EF53C00D5B7FE /* Build configuration list for PBXNativeTarget "AxisOne" */;
+			buildConfigurationList = E4BDC0B12E72C6A50002AF5B /* Build configuration list for PBXNativeTarget "AxisOne" */;
 			buildPhases = (
-				E4EF521F2E0EF53A00D5B7FE /* Sources */,
-				E4EF52202E0EF53A00D5B7FE /* Frameworks */,
-				E4EF52212E0EF53A00D5B7FE /* Resources */,
+				E4BDC09C2E72C6A40002AF5B /* Sources */,
+				E4BDC09D2E72C6A40002AF5B /* Frameworks */,
+				E4BDC09E2E72C6A40002AF5B /* Resources */,
 			);
 			buildRules = (
 			);
@@ -395,125 +405,126 @@
 			packageProductDependencies = (
 			);
 			productName = AxisOne;
+			productReference = E4BDC0A02E72C6A40002AF5B /* AxisOne.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		E4EF521B2E0EF53A00D5B7FE /* Project object */ = {
+		E4BDC0982E72C6A40002AF5B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
-					E4EF52222E0EF53A00D5B7FE = {
+					E4BDC09F2E72C6A40002AF5B = {
 						CreatedOnToolsVersion = 16.4;
 					};
 				};
 			};
-			buildConfigurationList = E4EF521E2E0EF53A00D5B7FE /* Build configuration list for PBXProject "AxisOne" */;
+			buildConfigurationList = E4BDC09B2E72C6A40002AF5B /* Build configuration list for PBXProject "AxisOne" */;
 			developmentRegion = ru;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
 				ru,
 			);
-			mainGroup = E4EF521A2E0EF53A00D5B7FE;
+			mainGroup = E4BDC0972E72C6A40002AF5B;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = E4EF521A2E0EF53A00D5B7FE;
+			productRefGroup = E4BDC0A12E72C6A40002AF5B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E4EF52222E0EF53A00D5B7FE /* AxisOne */,
+				E4BDC09F2E72C6A40002AF5B /* AxisOne */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		E4EF52212E0EF53A00D5B7FE /* Resources */ = {
+		E4BDC09E2E72C6A40002AF5B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4FF63522E39230D004A36A1 /* OFL.txt in Resources */,
-				E4EF52462E0FCFB400D5B7FE /* Assets.xcassets in Resources */,
-				E4FF634D2E38F936004A36A1 /* Jura.ttf in Resources */,
+				E4BDC0C92E72C7D30002AF5B /* OFL.txt in Resources */,
+				E4BDC0CA2E72C7D30002AF5B /* Jura.ttf in Resources */,
+				E4BDC0C32E72C7440002AF5B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		E4EF521F2E0EF53A00D5B7FE /* Sources */ = {
+		E4BDC09C2E72C6A40002AF5B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4CF3D542E54FFDB007D27A7 /* GoalService.swift in Sources */,
-				E41E9D2B2E698A1A0095CE13 /* LifeAreas.swift in Sources */,
-				E4B676952E54DD8400B4940A /* LabeledDateView.swift in Sources */,
-				E49ACC7A2E452BD200BC0EF4 /* RowLabelView.swift in Sources */,
-				E4C06C9D2E44A4CA00EB0A76 /* SwipeActionButtonView.swift in Sources */,
-				E4CCAE342E45F0A0001703C9 /* SubgoalSorter.swift in Sources */,
-				E493E69D2E19264E009CDDDE /* SubgoalView.swift in Sources */,
-				E4EF52422E0FCFB400D5B7FE /* AxisOne.xcdatamodeld in Sources */,
-				E4CCAE402E475010001703C9 /* ToggleView.swift in Sources */,
-				E40E86CE2E10035800ED6DCA /* DetailSubgoalView.swift in Sources */,
-				E4C06CAF2E44E98B00EB0A76 /* DeleteButtonView.swift in Sources */,
-				E45F9C5C2E3B635800B1B9D7 /* CalendarScrollView.swift in Sources */,
-				E4AF46202E51050900E43833 /* SubgoalTypesView.swift in Sources */,
-				E4CF3D522E54FF36007D27A7 /* Environment+DataServices.swift in Sources */,
-				E4563B1C2E0FE4D30075B178 /* MainView.swift in Sources */,
-				E4563B1A2E0FE4CA0075B178 /* GoalsView.swift in Sources */,
-				E4563B242E0FE96A0075B178 /* SettingsView.swift in Sources */,
-				E4B6769B2E54E76700B4940A /* CompletionView.swift in Sources */,
-				E4C06CA52E44D28600EB0A76 /* TextFieldView.swift in Sources */,
-				E4563B222E0FE5450075B178 /* Constants.swift in Sources */,
-				E493E6A12E1928DC009CDDDE /* AnalysisView.swift in Sources */,
-				E493E69F2E19270F009CDDDE /* HistoryView.swift in Sources */,
-				E4C06CA12E44BFD500EB0A76 /* EmptyStateView.swift in Sources */,
-				E4C06C9F2E44B46900EB0A76 /* RowTextView.swift in Sources */,
-				E4FA15832E264BD300AF7873 /* SubgoalFilter.swift in Sources */,
-				E4AF46222E51B79500E43833 /* SubgoalSectionsView.swift in Sources */,
-				E472EDE82E5C7CD2004E2364 /* Date+extension.swift in Sources */,
-				E4B676992E54E59800B4940A /* DateGroupView.swift in Sources */,
-				E4C06C992E44A34100EB0A76 /* CheckmarkImageView.swift in Sources */,
-				E4CDF5F22E2BD778004A118C /* ReflectionFilter.swift in Sources */,
-				E41AC0B92E7020B0002041CF /* View+extension.swift in Sources */,
-				E4EF52432E0FCFB400D5B7FE /* AxisOneApp.swift in Sources */,
-				E4AF462B2E53479800E43833 /* GoalListView.swift in Sources */,
-				E4CF3D582E5516BB007D27A7 /* SubgoalService.swift in Sources */,
-				E4CE0EEF2E55B97000AA8709 /* MainNavigationBarView.swift in Sources */,
-				E41E9D2D2E698A320095CE13 /* SubgoalTypes.swift in Sources */,
-				E40E86D02E1025A900ED6DCA /* GoalView.swift in Sources */,
-				E4FA157F2E24053800AF7873 /* SubgoalTypeView.swift in Sources */,
-				E43AA6A42E6D7AC4003E8E60 /* Shape+extension.swift in Sources */,
-				E41E9D352E698AA00095CE13 /* Feelings.swift in Sources */,
-				E43B6FEB2E66F11600BCF40F /* TabBarView.swift in Sources */,
-				E4CCAE3C2E47395D001703C9 /* ToolbarTextButtonView.swift in Sources */,
-				E4B6769D2E54E82900B4940A /* SaveSubgoalButtonView.swift in Sources */,
-				E41E9D292E6989F10095CE13 /* Tabs.swift in Sources */,
-				E4563B1E2E0FE4DE0075B178 /* JournalView.swift in Sources */,
-				E4B6768D2E54CFA400B4940A /* SubgoalTypeSectionView.swift in Sources */,
-				E4EF52442E0FCFB400D5B7FE /* ContentView.swift in Sources */,
-				E4AF462F2E549FF800E43833 /* SubgoalSectionView.swift in Sources */,
-				E4C06CA32E44C19600EB0A76 /* ToolbarButtonImageView.swift in Sources */,
-				E41E9D2F2E698A5D0095CE13 /* Frequencies.swift in Sources */,
-				E41E9D312E698A750095CE13 /* TimesOfDay.swift in Sources */,
-				E42BDFF42E606573002E15C9 /* TransformationView.swift in Sources */,
-				E4B676972E54DE3A00B4940A /* TimeGroupView.swift in Sources */,
-				E45F9C5A2E3AA0CE00B1B9D7 /* SummaryView.swift in Sources */,
-				E4C06CA72E44D64E00EB0A76 /* ButtonMenuView.swift in Sources */,
-				E4F8124C2E0FF539007CDA87 /* DetailGoalView.swift in Sources */,
-				E4EF52452E0FCFB400D5B7FE /* Persistence.swift in Sources */,
-				E4AF46262E51C87600E43833 /* TimeOfDayPickerView.swift in Sources */,
+				E4BDC11B2E72C81C0002AF5B /* TransformationView.swift in Sources */,
+				E4BDC11C2E72C81C0002AF5B /* ToolbarButtonImageView.swift in Sources */,
+				E4BDC11D2E72C81C0002AF5B /* RowLabelView.swift in Sources */,
+				E4BDC11E2E72C81C0002AF5B /* MainView.swift in Sources */,
+				E4BDC11F2E72C81C0002AF5B /* ToolbarTextButtonView.swift in Sources */,
+				E4BDC1202E72C81C0002AF5B /* SubgoalSectionsView.swift in Sources */,
+				E4BDC1212E72C81C0002AF5B /* Date+extension.swift in Sources */,
+				E4BDC1222E72C81C0002AF5B /* ButtonMenuView.swift in Sources */,
+				E4BDC1232E72C81C0002AF5B /* TimesOfDay.swift in Sources */,
+				E4BDC1242E72C81C0002AF5B /* HistoryView.swift in Sources */,
+				E4BDC1252E72C81C0002AF5B /* LifeAreas.swift in Sources */,
+				E4BDC1262E72C81C0002AF5B /* Persistence.swift in Sources */,
+				E4BDC1272E72C81C0002AF5B /* RowTextView.swift in Sources */,
+				E4BDC1282E72C81C0002AF5B /* SubgoalTypes.swift in Sources */,
+				E4BDC1292E72C81C0002AF5B /* DateGroupView.swift in Sources */,
+				E4BDC12A2E72C81C0002AF5B /* GoalView.swift in Sources */,
+				E4BDC12B2E72C81C0002AF5B /* Tabs.swift in Sources */,
+				E4BDC12C2E72C81C0002AF5B /* SubgoalFilter.swift in Sources */,
+				E4BDC12D2E72C81C0002AF5B /* Constants.swift in Sources */,
+				E4BDC12E2E72C81C0002AF5B /* ContentView.swift in Sources */,
+				E4BDC12F2E72C81C0002AF5B /* Feelings.swift in Sources */,
+				E4BDC1302E72C81C0002AF5B /* TimeOfDayPickerView.swift in Sources */,
+				E4BDC1312E72C81C0002AF5B /* CompletionView.swift in Sources */,
+				E4BDC1322E72C81C0002AF5B /* LabeledDateView.swift in Sources */,
+				E4BDC1332E72C81C0002AF5B /* SaveSubgoalButtonView.swift in Sources */,
+				E4BDC1342E72C81C0002AF5B /* DetailGoalView.swift in Sources */,
+				E4BDC1352E72C81C0002AF5B /* AxisOneApp.swift in Sources */,
+				E4BDC1362E72C81C0002AF5B /* Environment+DataServices.swift in Sources */,
+				E4BDC1382E72C81C0002AF5B /* TextFieldView.swift in Sources */,
+				E4BDC1392E72C81C0002AF5B /* TabBarView.swift in Sources */,
+				E4BDC13A2E72C81C0002AF5B /* EmptyStateView.swift in Sources */,
+				E4BDC13C2E72C81C0002AF5B /* SwipeActionButtonView.swift in Sources */,
+				E4BDC13D2E72C81C0002AF5B /* Shape+extension.swift in Sources */,
+				E4BDC13E2E72C81C0002AF5B /* AxisOne.xcdatamodeld in Sources */,
+				E4BDC13F2E72C81C0002AF5B /* MainNavigationBarView.swift in Sources */,
+				E4BDC1402E72C81C0002AF5B /* GoalListView.swift in Sources */,
+				E4BDC1412E72C81C0002AF5B /* DeleteButtonView.swift in Sources */,
+				E4BDC1422E72C81C0002AF5B /* DetailSubgoalView.swift in Sources */,
+				E4BDC1432E72C81C0002AF5B /* SubgoalService.swift in Sources */,
+				E4BDC1442E72C81C0002AF5B /* SettingsView.swift in Sources */,
+				E4BDC1452E72C81C0002AF5B /* CheckmarkImageView.swift in Sources */,
+				E4BDC1462E72C81C0002AF5B /* SubgoalView.swift in Sources */,
+				E4BDC1482E72C81C0002AF5B /* SubgoalTypeView.swift in Sources */,
+				E4BDC1492E72C81C0002AF5B /* SubgoalSectionView.swift in Sources */,
+				E4BDC14A2E72C81C0002AF5B /* GoalService.swift in Sources */,
+				E4BDC14B2E72C81C0002AF5B /* TimeGroupView.swift in Sources */,
+				E4BDC14C2E72C81C0002AF5B /* AnalysisView.swift in Sources */,
+				E4BDC14D2E72C81C0002AF5B /* CalendarScrollView.swift in Sources */,
+				E4BDC14E2E72C81C0002AF5B /* SubgoalSorter.swift in Sources */,
+				E4BDC14F2E72C81C0002AF5B /* GoalsView.swift in Sources */,
+				E4BDC1512E72C81C0002AF5B /* SubgoalTypeSectionView.swift in Sources */,
+				E4BDC1522E72C81C0002AF5B /* JournalView.swift in Sources */,
+				E4BDC1532E72C81C0002AF5B /* SummaryView.swift in Sources */,
+				E4BDC1542E72C81C0002AF5B /* SubgoalTypesView.swift in Sources */,
+				E4BDC1552E72C81C0002AF5B /* Frequencies.swift in Sources */,
+				E4BDC1562E72C81C0002AF5B /* ToggleView.swift in Sources */,
+				E4BDC1572E72C81C0002AF5B /* ReflectionFilter.swift in Sources */,
+				E4BDC1582E72C81C0002AF5B /* View+extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		E4EF52352E0EF53C00D5B7FE /* Debug */ = {
+		E4BDC0B22E72C6A50002AF5B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -525,13 +536,12 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AxisOne/Resources/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Axis One";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -549,7 +559,7 @@
 			};
 			name = Debug;
 		};
-		E4EF52362E0EF53C00D5B7FE /* Release */ = {
+		E4BDC0B32E72C6A50002AF5B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -561,13 +571,12 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AxisOne/Resources/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "Axis One";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -585,7 +594,7 @@
 			};
 			name = Release;
 		};
-		E4EF52372E0EF53C00D5B7FE /* Debug */ = {
+		E4BDC0B42E72C6A50002AF5B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -649,7 +658,7 @@
 			};
 			name = Debug;
 		};
-		E4EF52382E0EF53C00D5B7FE /* Release */ = {
+		E4BDC0B52E72C6A50002AF5B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -709,20 +718,20 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E4EF521E2E0EF53A00D5B7FE /* Build configuration list for PBXProject "AxisOne" */ = {
+		E4BDC09B2E72C6A40002AF5B /* Build configuration list for PBXProject "AxisOne" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E4EF52372E0EF53C00D5B7FE /* Debug */,
-				E4EF52382E0EF53C00D5B7FE /* Release */,
+				E4BDC0B42E72C6A50002AF5B /* Debug */,
+				E4BDC0B52E72C6A50002AF5B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E4EF52342E0EF53C00D5B7FE /* Build configuration list for PBXNativeTarget "AxisOne" */ = {
+		E4BDC0B12E72C6A50002AF5B /* Build configuration list for PBXNativeTarget "AxisOne" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				E4EF52352E0EF53C00D5B7FE /* Debug */,
-				E4EF52362E0EF53C00D5B7FE /* Release */,
+				E4BDC0B22E72C6A50002AF5B /* Debug */,
+				E4BDC0B32E72C6A50002AF5B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -730,17 +739,17 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		E4EF523B2E0FCFB400D5B7FE /* AxisOne.xcdatamodeld */ = {
+		E4BDC0D42E72C81C0002AF5B /* AxisOne.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				E4EF52412E0FCFB400D5B7FE /* AxisOne.xcdatamodel */,
+				E4BDC11A2E72C81C0002AF5B /* AxisOne.xcdatamodel */,
 			);
-			currentVersion = E4EF52412E0FCFB400D5B7FE /* AxisOne.xcdatamodel */;
+			currentVersion = E4BDC11A2E72C81C0002AF5B /* AxisOne.xcdatamodel */;
 			path = AxisOne.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};
 /* End XCVersionGroup section */
 	};
-	rootObject = E4EF521B2E0EF53A00D5B7FE /* Project object */;
+	rootObject = E4BDC0982E72C6A40002AF5B /* Project object */;
 }
