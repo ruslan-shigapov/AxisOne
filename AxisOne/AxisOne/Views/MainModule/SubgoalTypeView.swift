@@ -34,7 +34,7 @@ struct SubgoalTypeView: View {
                         InLineSection()
                     }
                 }
-                SubgoalSectionsView(
+                SubgoalListSectionsView(
                     date: date,
                     subgoals: subgoals,
                     title: getHeaderText(),

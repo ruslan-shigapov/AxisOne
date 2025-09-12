@@ -15,7 +15,7 @@
 		E4BDC11D2E72C81C0002AF5B /* RowLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0F52E72C81C0002AF5B /* RowLabelView.swift */; };
 		E4BDC11E2E72C81C0002AF5B /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC1132E72C81C0002AF5B /* MainView.swift */; };
 		E4BDC11F2E72C81C0002AF5B /* ToolbarTextButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0E72E72C81C0002AF5B /* ToolbarTextButtonView.swift */; };
-		E4BDC1202E72C81C0002AF5B /* SubgoalSectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0F82E72C81C0002AF5B /* SubgoalSectionsView.swift */; };
+		E4BDC1202E72C81C0002AF5B /* SubgoalListSectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0F82E72C81C0002AF5B /* SubgoalListSectionsView.swift */; };
 		E4BDC1212E72C81C0002AF5B /* Date+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0DA2E72C81C0002AF5B /* Date+extension.swift */; };
 		E4BDC1222E72C81C0002AF5B /* ButtonMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0EF2E72C81C0002AF5B /* ButtonMenuView.swift */; };
 		E4BDC1232E72C81C0002AF5B /* TimesOfDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BDC0D22E72C81C0002AF5B /* TimesOfDay.swift */; };
@@ -109,7 +109,7 @@
 		E4BDC0F22E72C81C0002AF5B /* LabeledDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabeledDateView.swift; sourceTree = "<group>"; };
 		E4BDC0F52E72C81C0002AF5B /* RowLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowLabelView.swift; sourceTree = "<group>"; };
 		E4BDC0F62E72C81C0002AF5B /* RowTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowTextView.swift; sourceTree = "<group>"; };
-		E4BDC0F82E72C81C0002AF5B /* SubgoalSectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalSectionsView.swift; sourceTree = "<group>"; };
+		E4BDC0F82E72C81C0002AF5B /* SubgoalListSectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubgoalListSectionsView.swift; sourceTree = "<group>"; };
 		E4BDC0F92E72C81C0002AF5B /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		E4BDC0FA2E72C81C0002AF5B /* TextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldView.swift; sourceTree = "<group>"; };
 		E4BDC0FB2E72C81C0002AF5B /* ToggleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleView.swift; sourceTree = "<group>"; };
@@ -314,7 +314,7 @@
 				E4BDC0FB2E72C81C0002AF5B /* ToggleView.swift */,
 				E4BDC0F52E72C81C0002AF5B /* RowLabelView.swift */,
 				E4BDC0F22E72C81C0002AF5B /* LabeledDateView.swift */,
-				E4BDC0F82E72C81C0002AF5B /* SubgoalSectionsView.swift */,
+				E4BDC0F82E72C81C0002AF5B /* SubgoalListSectionsView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -479,7 +479,7 @@
 				E4BDC11D2E72C81C0002AF5B /* RowLabelView.swift in Sources */,
 				E4BDC11E2E72C81C0002AF5B /* MainView.swift in Sources */,
 				E4BDC11F2E72C81C0002AF5B /* ToolbarTextButtonView.swift in Sources */,
-				E4BDC1202E72C81C0002AF5B /* SubgoalSectionsView.swift in Sources */,
+				E4BDC1202E72C81C0002AF5B /* SubgoalListSectionsView.swift in Sources */,
 				E4BDC1212E72C81C0002AF5B /* Date+extension.swift in Sources */,
 				E4BDC1222E72C81C0002AF5B /* ButtonMenuView.swift in Sources */,
 				E4BDC1232E72C81C0002AF5B /* TimesOfDay.swift in Sources */,

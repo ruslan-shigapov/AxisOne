@@ -101,8 +101,7 @@ private extension CalendarScrollView {
                 .font(Constants.Fonts.juraFootnote)
         }
         .font(Constants.Fonts.juraBody)
-        .frame(width: 55, height: 60)
-        .padding(8)
+        .frame(width: 65, height: 75)
         .background {
             // TODO: тут тоже надо че-то придумать с дизайном
             RoundedRectangle(cornerRadius: 10)

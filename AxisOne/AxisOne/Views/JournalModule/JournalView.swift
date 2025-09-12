@@ -36,13 +36,13 @@ struct JournalView: View {
     
     var body: some View {
         ZStack {
-            List {
-                if groupedSubgoals.isEmpty {
-                    EmptyStateView(
-                        primaryText: """
+            if groupedSubgoals.isEmpty {
+                EmptyStateView(
+                    primaryText: """
                     На сегодня нет активных подцелей для самоанализа
                     """)
-                } else {
+            } else {
+                List {
                     // TODO: может стоит объединить эти вью?
                     TimeOfDaySectionView(
                         groupedSubgoals: groupedSubgoals,

@@ -21,7 +21,9 @@ struct SummarySectionView: View {
     var body: some View {
         Section {
             if reflections.isEmpty {
-                RowLabelView(type: .empty, text: "Пока недостаточно данных")
+                VStack {
+                    RowLabelView(type: .empty, text: "Пока недостаточно данных")
+                }
             } else {
                 SummaryView()
                     .onTapGesture {
@@ -33,7 +35,8 @@ struct SummarySectionView: View {
                 .font(Constants.Fonts.juraMediumSubheadline)
         } footer: {
             if !reflections.isEmpty {
-                FooterView()
+                Text("Коснитесь сводки, чтобы узнать подробнее.")
+                    .font(Constants.Fonts.juraFootnote)
             }
         }
         .sheet(isPresented: $isModalViewPresented) {
@@ -42,6 +45,12 @@ struct SummarySectionView: View {
     }
     
     // MARK: - Private Methods
+    private func getProgress() -> Double {
+        let groupedSubgoalsCount = groupedSubgoals.count
+        let reflectionsCount = reflections.count
+        return Double(reflectionsCount) / Double(groupedSubgoalsCount)
+    }
+    
     private func getGroupedValues() -> [(LifeAreas, String, Double)] {
         let reflectedSubgoals = reflections
             .compactMap { $0.reactions as? Set<Reaction> }
@@ -92,16 +101,6 @@ private extension SummarySectionView {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(.rect)
-    }
-    
-    @ViewBuilder
-    func FooterView() -> some View {
-        let ending = reflections.count == 1 ? "анализа" : "анализов"
-        Text("""
-        Данные на основе \(reflections.count) само\(ending). \
-        Нажмите, чтобы узнать подробнее.
-        """)
-        .font(Constants.Fonts.juraFootnote)
     }
 }
 

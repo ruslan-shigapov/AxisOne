@@ -32,7 +32,7 @@ struct MainView: View {
                 selectedTimeOfDay: $selectedTimeOfDay,
                 subgoals: subgoals)
             List {
-                SubgoalSectionsView(
+                SubgoalListSectionsView(
                     date: selectedDate,
                     subgoals: subgoals,
                     title: selectedTimeOfDay.rawValue,
