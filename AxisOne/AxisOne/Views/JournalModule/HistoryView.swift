@@ -10,11 +10,8 @@ import SwiftUI
 struct HistoryView: View {
 
     @Environment(\.managedObjectContext) private var context
-    @Environment(\.colorScheme) private var colorScheme
 
-    @FetchRequest(
-        entity: Reflection.entity(),
-        sortDescriptors: [])
+    @FetchRequest(entity: Reflection.entity(), sortDescriptors: [])
     private var reflections: FetchedResults<Reflection>
     
     @State private var isModalPresented = false
@@ -26,47 +23,67 @@ struct HistoryView: View {
     }
         
     var body: some View {
-        List {
-            Section("") {
-                ForEach(
-                    groupedReflections.sorted { $0.key > $1.key }, id: \.key
-                ) { date, reflections in
-                    HStack {
-                        Text(date.formatted(date: .long, time: .omitted))
-                        Spacer()
-                        Text("#\(reflections.count)")
-                            .fontWeight(.bold)
-                            .foregroundStyle(.accent)
-                    }
-                    .font(.custom("Jura", size: 17))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        isModalPresented = true
-                    }
-                    .sheet(isPresented: $isModalPresented) {
-                        ReportView(date: date)
-                    }
-                    .swipeActions {
-                        SwipeActionButtonView(type: .delete) {
-                            reflections.forEach {
-                                context.delete($0)
-                            }
-                            try? context.save()
-                        }
-                    }
-                }
+        ZStack {
+            if reflections.isEmpty {
+                EmptyStateView(
+                    primaryText: "Здесь будут отображаться все ваши отчеты.")
+            } else {
+                ReportList()
             }
         }
         .navigationTitle("История")
         .background(Color("Background"))
         .scrollContentBackground(.hidden)
     }
+    
+    
+    private func formatForHeader(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "LLLL yyyy"
+        return formatter.string(from: date)
+    }
+    
+    private func formatForRow(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d MMMM, EEEE"
+        return formatter.string(from: date)
+    }
+}
+
+private extension HistoryView {
+    
+    func ReportList() -> some View {
+        List {
+            ForEach(
+                groupedReflections.sorted { $0.key > $1.key }, id: \.key
+            ) { date, reflections in
+                Section(formatForHeader(date)) {
+                    Text(formatForRow(date))
+                        .font(Constants.Fonts.juraBody)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            isModalPresented = true
+                        }
+                        .sheet(isPresented: $isModalPresented) {
+                            ReportView(date: date)
+                        }
+                        .swipeActions {
+                            SwipeActionButtonView(type: .delete) {
+                                reflections.forEach {
+                                    context.delete($0)
+                                }
+                                try? context.save()
+                            }
+                        }
+                }
+            }
+        }
+    }
 }
 
 #Preview {
-    ContentView()
-        .environment(
-            \.managedObjectContext,
-             PersistenceController.shared.container.viewContext)
+    let context = PersistenceController.shared.container.viewContext
+    HistoryView()
+        .environment(\.managedObjectContext, context)
 }

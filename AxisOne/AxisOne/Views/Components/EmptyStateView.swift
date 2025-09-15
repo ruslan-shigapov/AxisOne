@@ -24,5 +24,6 @@ struct EmptyStateView: View {
         .font(Constants.Fonts.juraBody)
         .multilineTextAlignment(.center)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding()
     }
 }
